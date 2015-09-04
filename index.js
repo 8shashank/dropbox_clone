@@ -35,7 +35,11 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var encrypt = require("./lib/sync/authentication").encrypt;
+
+var crypto = require ('crypto');
+function encrypt(message){
+    return crypto.createHash('sha1').update(message).digest('hex');
+}
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -93,6 +97,20 @@ function scheduleChangeCheck(when,repeat){
 
 var encryptCredential = encrypt(argv.credential);
 
+var onConnectionSuccess = function(message, handler){
+
+    /*
+        sync.fsHandlers.dnode = handler;
+        scheduleChangeCheck(1000,true);
+        */
+}
+
+var onConnectionError = function(errorMessage){
+    console.log(errorMessage);
+    process.exit(1);
+    // #TODO: Find a better way to end the connection
+}
+
 dnodeClient.connect(
     {
         host:argv.server,
@@ -100,15 +118,7 @@ dnodeClient.connect(
         username: argv.username,
         credential: encryptCredential
     },
-    function(handler){
-        /*
-        sync.fsHandlers.dnode = handler;
-        scheduleChangeCheck(1000,true);
-        */
-    },
-    function(errorMessage){
-        console.log(errorMessage);
-        process.exit(1);
-    });
+    onConnectionSuccess,
+    onConnectionError);
 
 
