@@ -5,14 +5,21 @@ var fs = require('fs');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
-    .example('dropbox --directory1 dnode://test-data/folder1 --directory2 file://test-data/folder2', '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
-    .demand(['d1','d2'])
+    .example('dropbox -u username -c credential --d1 dnode://test-data/folder1 --d2 file://test-data/folder2', 
+            '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
+    .demand(['u','c','d1','d2'])
+    .alias('u', 'username')
+    .nargs('u', 1)
+    .describe('u', 'The dropbox username')
+    .alias('c', 'credential')
+    .nargs('c', 1)
+    .describe('c', 'The password to the given username')
     .alias('d1', 'directory1')
     .nargs('d1', 1)
-    .describe('d1', 'The first directory to sync (e.g., dnode://test-data/folder1)')
+    .describe('d1', 'The remote directory to sync')
     .alias('d2', 'directory2')
     .nargs('d2', 1)
-    .describe('d2', 'The second directory to sync (e.g., file://test-data/folder2)')
+    .describe('d2', 'The local directory to sync')
     .describe('s', 'The sync server (defaults to 127.0.0.1)')
     .default('s',"127.0.0.1","127.0.0.1")
     .alias('s', 'server')
@@ -28,7 +35,7 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-
+var encrypt = require("./lib/sync/authentication").encrypt;
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -79,14 +86,29 @@ function checkForChanges(){
 function scheduleChangeCheck(when,repeat){
     setTimeout(function(){
         checkForChanges();
-
-        if(repeat){scheduleChangeCheck(when,repeat)}
+        if(repeat) {scheduleChangeCheck(when,repeat)}
     },when);
 }
 
-dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
-    sync.fsHandlers.dnode = handler;
-    scheduleChangeCheck(1000,true);
-});
+
+var encryptCredential = encrypt(argv.credential);
+
+dnodeClient.connect(
+    {
+        host:argv.server,
+        port:argv.port,
+        username: argv.username,
+        credential: encryptCredential
+    },
+    function(handler){
+        /*
+        sync.fsHandlers.dnode = handler;
+        scheduleChangeCheck(1000,true);
+        */
+    },
+    function(errorMessage){
+        console.log(errorMessage);
+        process.exit(1);
+    });
 
 
