@@ -13,3 +13,5 @@
 2. When updating the changelog, the file path that is being copied from is passed to `UpdLog`, instead of the file path that is being copied to.
 
 3. There was a redundant method definition in `sync.js`.
+
+4. Two of the Sync Module tests in `tests.js` required conflicting file states, so one of them would always fail.
