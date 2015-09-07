@@ -13,3 +13,4 @@ This module sends a given email address an update of the files that were modifie
 1. Error handling in the emailUpdates function in updateemailer.js can be condensed to one line. Also, changed the errors in the createEmailBody function in index.js from console.log(err) to console.error(err).
 2. The contents of both folders should be the same, so putting the folder name when naming the modified files is superfluous (why not "folder2/test.txt" instead of "folder1/test.txt"?).
 3. If a file added was created before the timespan and added to folder1, it will not be added as a modified file. This is able to be fixed by checking both folder1 and folder2 for modified files and comparing them.
+4. Changed some formatting with if statements in the createEmailBody function in updateemailer.js.
