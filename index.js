@@ -40,7 +40,8 @@ var syncFile = function(fromPath,toPath){
     var trgHandler = sync.getHandler(toPath);
 
     srcHandler.readFile(fromPath,function(base64Data){
-
+    //THIS FEATURE REQUIRES THAT THE MOMENT PACKAGE BE INSTALLED.
+    //OTHERWISE THIS WILL NOT RUN
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
             rl.question("Enter your username: ", function(answer) {

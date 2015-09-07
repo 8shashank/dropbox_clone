@@ -13,6 +13,8 @@ a command line argument starts with "dnode://", then the client uses the server 
 about that folder. If the folder starts with "file://", then the client uses local file operations
 to read/sync the directory.
 
+This application requires that the Node module Moment be installed in the folder containing index.js.
+
 ## Installation
 
 To install the application globally on your machine, run the following as an administrator from
