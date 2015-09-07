@@ -33,7 +33,7 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var versions = require(".lib/versions/versions");
+var versions = require("./lib/versions/versions");
 
 
 var syncFile = function(fromPath,toPath){
