@@ -1,3 +1,33 @@
+
+Features Added
+==============
+
+	#Authentication Method
+		+ Add authentication.js
+		
+		- Dropbox client will require a pair of username and credential to run.
+		- Credentials will be stored in a file under the server root or given path.
+
+	#Sync multi-level directories
+		+ Move Pipeline to a separate file
+		+ Move/Refactor the (original)sync.js to (new)check.js
+		+ Add a sync.js to handle pipeline actions.
+
+		- You can create ultimate levels of sub-directories/files to be sync.
+
+# TODO (for this project)
+
+	Use getHandlers in sync.js.
+	Add test units for newly added features.
+
+# Todos (for NodeJS)
+
+	Learn about variable scope & async calls. 
+	Learn how to debug in Node.JS.
+
+
+============================================================================
+
 # Dropbox Application
 
 ## Overview
