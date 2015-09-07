@@ -75,8 +75,13 @@ function checkForChanges(){
     var nameExistingConfig = argv.configuration
     if (typeof nameExistingConfig !== "undefined" && typeof nameExistingConfig !== "null") {
         var paths = rememberSetupConfig();
-        path1 = paths[0];
-        path2 = paths[1];
+        if (0 in paths && 1 in paths) {
+            path1 = paths[0];
+            path2 = paths[1];
+        } else {
+            path1 = argv.directory1;
+            path1 = argv.directory2;
+        }
     } else {
         path1 = argv.directory1;
         path2 = argv.directory2;
