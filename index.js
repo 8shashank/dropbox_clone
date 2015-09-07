@@ -91,11 +91,14 @@ function checkForChanges(){
         rslt.trgPath = path2;
 
         if (argv.v >= 1) {
-            rslt.srcFilesToSave = sync.getFilesToBeOverwritten(path1, rslt.syncToSrc);
-            rslt.trgFilesToSave = sync.getFilesToBeOverwritten(path2, rslt.syncToTrg);
+            sync.getFilesToBeOverwritten(path1,path2,rslt.syncToSrc,rslt.syncToTrg,function(files) {
+                rslt.srcFilesToSave = files.overwriteFiles1;
+                rslt.trgFilesToSave = files.overwriteFiles2;
+                writePipeline.exec(rslt);
+            });
+        } else {
+            writePipeline.exec(rslt);
         }
-
-        writePipeline.exec(rslt);
     });
 }
 
