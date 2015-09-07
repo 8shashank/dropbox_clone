@@ -30,6 +30,7 @@ var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
+// keeps track of the last time dropbox was updated
 var lastUpdate = null;
 
 var syncFile = function(fromPath,toPath){
@@ -110,6 +111,7 @@ function del(fileName) {
     console.log('Deleting ' + fileName);
 }
 
+// allows the user to add a new file to the directories
 function add(fileName) {
     if (!fileName) {
         console.log('Please enter a file to add');
@@ -120,6 +122,7 @@ function add(fileName) {
     var handler1 = sync.getHandler(path1);
     var handler2 = sync.getHandler(path2);
     try {
+        // adss file to both directories
         handler1.writeFile(path1, 'new File', function(){});
         handler2.writeFile(path1, 'new File', function(){});
         lastUpdate = new Date();
@@ -132,6 +135,7 @@ function add(fileName) {
     console.log('Adding ' + fileName);
 }
 
+// returns the last time dropbox was updated
 function lastUpdated() {
     if (lastUpdate) {
         console.log('Files last updated on ' + formatTime(lastUpdate));
@@ -140,6 +144,7 @@ function lastUpdated() {
     }
 }
 
+// formats a timestamp into something more readable for the user
 function formatTime(time) {
     var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
