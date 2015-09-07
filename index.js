@@ -94,7 +94,7 @@ var watcherOpts = {
 // Only watch local directories
 if(uris.getProtocol(argv.directory1) !== 'dnode'){
     // Removes file/dnode from beginning of path for watchers
-    var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
+    var dir1 = uris.getPath(argv.directory1);
     var watcher1 = chokidar.watch(dir1, watcherOpts);
     watcher1
       .on('all', changeDetected)
@@ -107,7 +107,7 @@ if(uris.getProtocol(argv.directory1) !== 'dnode'){
 }
 
 if(uris.getProtocol(argv.directory2) !== 'dnode'){
-    var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
+    var dir2 = uris.getPath(argv.directory2);
     var watcher2 = chokidar.watch(dir2, watcherOpts);
     watcher2
       .on('all', changeDetected)
