@@ -6,4 +6,8 @@ Added a file called changelog.txt that acts as a log for activity in the test-da
 
 ## Suggested Improvements
 
-1. You can remove all the
+1. It should be loggin the path of the file that is being updated to the updated log
+
+2. Only the path of the file being changed is passed to the function. Timestamp is handled by the function being called
+
+3. 
