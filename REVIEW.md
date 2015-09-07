@@ -15,3 +15,4 @@ N/A
 1. Fixed unhandled else branch when catching an error in versions.js.
 2. Renamed string constant to make it more obvious that it is supposed to be a constant value
 3. Replaced all double quotes in version.js with single quotes for consistency
+4. Fixed constantly catching errors when trying to create an existing directory
