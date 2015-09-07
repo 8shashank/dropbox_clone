@@ -26,7 +26,7 @@ app.post('/Submit', function(request, response){
             console.log("\"" + fields.textArea + "\"");
             console.log("Reply to " + fields.userName + " at " + fields.userEmail);
 
-            var path = 'ClientMessageLog/commentlog.txt';
+            var path = 'commentlog.txt';
             var buffer = new Buffer("At timestamp " + today.toUTCString() + ", user "
                 + fields.userName + " with email " + fields.userEmail + " commented: " + fields.textArea + "\n");
 
