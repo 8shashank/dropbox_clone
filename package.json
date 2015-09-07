@@ -17,6 +17,7 @@
     "dnode": "^1.2.1",
     "lodash": "^3.10.1",
     "nodemailer": "^1.4.0",
+    "simplesets": "^1.2.0",
     "validator": "^4.0.5",
     "yargs": "^3.19.0"
   }

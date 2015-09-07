@@ -123,13 +123,14 @@ var emailUpdates = function (emailAddress, hours){
         return;
     }
 
-    var path = uris.getPath(argv.directory1);
+    var path1 = uris.getPath(argv.directory1);
+    var path2 = uris.getPath(argv.directory2);
 
     if (!hours){
         hours = 24;
     }
 
-    updateEmailer.emailUpdates(path, emailAddress, hours);
+    updateEmailer.emailUpdates(path1, path2, emailAddress, hours);
 };
 
 // To add valid operations, map user input to the desired function
