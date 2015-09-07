@@ -41,8 +41,7 @@ function writeToLog(path){
         var shortPath = path.split('/');
         fs.appendFile('Log.txt', answer + " edited file " + shortPath[shortPath.length - 1] + " "
             + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
-            if (err)
-                throw err;
+            if (err) throw err;
         });
     });
 }
