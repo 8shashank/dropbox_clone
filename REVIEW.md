@@ -9,3 +9,4 @@ The code’s unit testing methodology is to create one unit test per concrete clas
 ## Suggested Improvements
 
 1. Should probably add .idea to .gitignore in order to keep commit history free from dev configs.
+2. fs.readFileSync() only needs the 'utf8' flag to specify reading as a string, no need for toString()
