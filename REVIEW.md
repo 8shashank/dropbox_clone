@@ -10,4 +10,6 @@ Writes to a log file every time the files are synced. Keeps track of which file 
 
 2. Should not log that the change has occurred until the change has occurred
 
-3. 
+3. renamed variables for better meaning
+
+4. 

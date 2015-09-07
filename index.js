@@ -30,7 +30,7 @@ var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
-function WriteToFile(record) { //write to log file
+function WriteToLog(filePath) { //write to log file
     var file = require('fs');
     var path = 'Records';
     var date = new Date();
@@ -44,7 +44,7 @@ function WriteToFile(record) { //write to log file
         });
     }
 
-    record = record + ' changed on ' + timeStamp + "\r\n";
+    record = filePath + ' changed on ' + timeStamp + "\r\n";
     file.appendFile('Records/log.txt', record, function (err) { //file name, data type, callback
         if (err){
             throw err
@@ -58,7 +58,7 @@ var syncFile = function(fromPath,toPath){
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
-            WriteToFile(toPath);
+            WriteToLog(toPath);
             console.log("Copied "+fromPath+" to "+toPath);
         })
     });
