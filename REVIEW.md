@@ -15,3 +15,5 @@
 3. There was a redundant method definition in `sync.js`.
 
 4. Two of the Sync Module tests in `tests.js` required conflicting file states, so one of them would always fail.
+
+5. The `.idea` folder added by WebStorm is not necessary to track with Git.
