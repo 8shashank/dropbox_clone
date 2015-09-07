@@ -122,7 +122,7 @@ function add(fileName) {
     var handler1 = sync.getHandler(path1);
     var handler2 = sync.getHandler(path2);
     try {
-        // adss file to both directories
+        // adds file to both directories
         handler1.writeFile(path1, 'new File', function(){});
         handler2.writeFile(path1, 'new File', function(){});
         lastUpdate = new Date();
