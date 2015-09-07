@@ -92,31 +92,23 @@ var watcherOpts = {
 
 
 // Only watch local directories
-if(uris.getProtocol(argv.directory1) !== 'dnode'){
-    // Removes file/dnode from beginning of path for watchers
-    var dir1 = uris.getPath(argv.directory1);
-    var watcher1 = chokidar.watch(dir1, watcherOpts);
-    watcher1
-      .on('all', changeDetected)
-      .on('error', function(error) {
-        console.log('Uncaught error', error);
-      })
-      .on('ready', function() {
-        console.log('watching', dir1);
-      });
-}
-
-if(uris.getProtocol(argv.directory2) !== 'dnode'){
-    var dir2 = uris.getPath(argv.directory2);
-    var watcher2 = chokidar.watch(dir2, watcherOpts);
-    watcher2
-      .on('all', changeDetected)
-      .on('error', function(error) {
-        console.log('Uncaught error', error);
-      })
-      .on('ready', function() {
-        console.log('watching', dir2);
-      });
+function createWatcher(dir){
+    if(uris.getProtocol(dir) !== 'dnode'){
+        // Removes file/dnode from beginning of path for watchers
+        var path = uris.getPath(dir);
+        var watcher = chokidar.watch(path, watcherOpts);
+        watcher
+            .on('all', changeDetected)
+            .on('error', function(error) {
+                console.log('Uncaught error', error);
+            })
+            .on('ready', function() {
+                console.log('watching', dir);
+            });
+        return watcher;
+    } else {
+        return null;
+    }
 }
 
 function del(fileName) {
@@ -181,6 +173,8 @@ function getUserInput(){
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
+    var watcher1 = createWatcher(argv.directory1);
+    var watcher2 = createWatcher(argv.directory2);
     checkForChanges();
     getUserInput();
 });
