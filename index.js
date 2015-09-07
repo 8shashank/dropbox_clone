@@ -70,7 +70,7 @@ function UpdLog(change)
     var d = new Date();
 
     //Create string for log
-    var str = 'Updated ' + change + ' - ' + d+'\n';
+    var str = 'Updated ' + change + ' - ' + d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear() + 'at' + d.getHours() + ':' + d.getMinutes() + '.' + d.getSeconds() + '\n';
 
     //Update consolelog.txt with change
     fs.appendFile('changelog.txt', str , function (err) {

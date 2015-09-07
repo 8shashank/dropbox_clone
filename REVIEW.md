@@ -10,4 +10,6 @@ Added a file called changelog.txt that acts as a log for activity in the test-da
 
 2. Only the path of the file being changed is passed to the function. Timestamp is handled by the function being called
 
-3. 
+3. Format the date and time being logged
+
+4. 
