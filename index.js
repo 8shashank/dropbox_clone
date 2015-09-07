@@ -29,16 +29,26 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
+var readLine = readline.createInterface(process.stdin, process.stdout);
 
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
-
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
         })
+        readLine.question("Please provide your username: ", function(answer) {
+            readLine.close();
+            fs.appendFile('DirectoryModifications.txt', answer + " modified " + fromPath
+                    /* + " (" + calculateFileSizeInBytes(fromPath) + "bytes)"*/ + "\n",
+                    function (err) {
+                if (err) {
+                    throw err;
+                }
+            });
+        });
     });
 }
 
@@ -53,6 +63,7 @@ writePipeline.addAction({
         return data;
     }
 });
+
 writePipeline.addAction({
     exec:function(data){
         _.each(data.syncToTrg, function(toTrg){
@@ -76,6 +87,15 @@ function checkForChanges(){
         writePipeline.exec(rslt);
     });
 }
+
+// helper function
+/*
+function calculateFileSizeInBytes(filename) {
+    var stats = fs.stat(filename, function(err, stats){});
+    var fileSizeInBytes = stats["size"];
+    return fileSizeInBytes;
+}
+*/
 
 var timer;
 function scheduleChangeCheck(when,repeat){
@@ -113,41 +133,9 @@ var userOps = {
     delete: del
 };
 
-function getUserInput(){
-    console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
 
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    rl.prompt();
-    rl.on('line', function(line) {
-        var args = line.trim().split(' ');
-        var operation = args.shift();
-
-        if(operation == 'quit') {
-            rl.close();
-            clearTimeout(timer);
-            dnodeClient.end();
-            return;
-        } else if (operation == 'help') {
-            for (var op in userOps) {
-                if (userOps.hasOwnProperty(op)) {
-                    console.log(' * ' + op);
-                }
-            }
-        } else if (userOps.hasOwnProperty(operation)) {
-            userOps[operation].apply(this, args);
-        } else {
-            console.log("Unknown option");
-        }
-        rl.prompt();
-    });
-}
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
     scheduleChangeCheck(1000,true);
-    getUserInput();
 });
