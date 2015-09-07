@@ -52,21 +52,7 @@ var syncFile = function(fromPath,toPath){
                         throw err;
                 });
             });
-
-            /*fs.stat('Log.txt', function(err, stat) {
-               if (err == null) {
-                   //file exists
-                   console.log(username);
-                   fs.appendFile('Log.txt', username + " " + moment().format('MMMM Do YYYY, h:mm:ss a') + '\n', function(err) {
-                      if(err)
-                      throw error;
-                   });
-               } else if (err.code == 'ENOENT') {
-                   //file does not exist; first log
-                   fs.writeFile('log.txt', username + " " + moment().format('MMMM Do YYYY, h:mm:ss a') + '\n');
-               }
-            });*/
-        })
+            
 
     });
 }
