@@ -16,6 +16,8 @@
   "dependencies": {
     "delivery": "0.0.3",
     "dnode": "^1.2.1",
+    "express": "4.13.3",
+    "formidable": "1.x",
     "lodash": "^3.10.1",
     "yargs": "^3.19.0"
   }
