@@ -30,6 +30,10 @@ var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
+var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -117,12 +121,14 @@ var userOps = {
         dnodeClient.connect({host:argv.server, port:argv.port},function(handler){ // callback function upon connection
             handler.login(username,password, // try to login upon connected to the server
             function() {
-                delete handler['login'];
+                delete handler.login;
                 sync.fsHandlers.dnode = handler;
+                rl.prompt();
                 scheduleChangeCheck(1000, true);
             },
             function(){
                 console.log("Login failed");
+                rl.prompt();
             });
         });
     }
@@ -130,11 +136,6 @@ var userOps = {
 
 function getUserInput(){
     console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
-
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
 
     rl.setPrompt("[Disconnected]>");
     rl.prompt();
