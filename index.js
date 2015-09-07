@@ -77,8 +77,10 @@ function checkForChanges(){
 }
 
 function scheduleChangeCheck(when,repeat){
+    //REVIEW COMMENT: what is the purpose of this section if there is no user input?
     setTimeout(function(){
         checkForChanges();
+
 
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
