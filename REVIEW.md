@@ -11,3 +11,4 @@ This code provides configurability to a simple dropbox implementation through th
 
 1. There is a possible bug in checking for existing configurations during function checkForChanges(). JavaScript generally requires checking for both undefined and null for object existence.
 2. When defining the paths, there's an error when the config file exists but does not contain the correct amount of paths.
+3. Rather than casting buffer to string, fs.readFileSync can be used with utf8 encoding option.

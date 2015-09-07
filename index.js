@@ -109,7 +109,7 @@ function rememberSetupConfig() {
     var nameExistingConfig = argv.configuration;
     var arr = [];
     if (typeof nameExistingConfig !== "undefined" && typeof nameExistingConfig !== "null") {
-        var rawData = fs.readFileSync(__dirname + '/config.txt').toString();
+        var rawData = fs.readFileSync(__dirname + '/config.txt', 'utf8');
         var tempArr = rawData.split(" ");
         for (var i = 0; i < tempArr.length; i++) {
             if (tempArr[i] === nameExistingConfig) {
