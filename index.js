@@ -30,7 +30,6 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var uris = require('./lib/sync/dropboxuris');
 
 
 var syncFile = function(fromPath,toPath){
@@ -108,25 +107,9 @@ var watcherOpts = {
   persistent: true    // Keeps running until program ends
 };
 
-
-// Only watch local directories
-function startWatcher(dir){
-    if(uris.getProtocol(dir) !== 'dnode'){
-        // Removes file/dnode from beginning of path for watchers
-        var path = uris.getPath(dir);
-        var watcher = chokidar.watch(path, watcherOpts);
-        watcher
-            .on('all', changeDetected)
-            .on('error', function(error) {
-                console.log('Uncaught error', error);
-            })
-            .on('ready', function() {
-                console.log('watching', dir);
-            });
-        return watcher;
-    } else {
-        return null;
-    }
+function startWatcher(dir,opts,onEvent){
+    var handler = sync.getHandler(dir);
+    handler.watch(dir,opts,onEvent);
 }
 
 function del(fileName) {
@@ -191,8 +174,8 @@ function getUserInput(){
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
-    var watcher1 = startWatcher(argv.directory1);
-    var watcher2 = startWatcher(argv.directory2);
+    startWatcher(argv.directory1,watcherOpts,changeDetected);
+    startWatcher(argv.directory2,watcherOpts,changeDetected);
     checkForChanges();
     getUserInput();
 });
