@@ -114,12 +114,12 @@ var emailUpdates = function (emailAddress, hours){
                 'For example: "emailupdates bob@bob.com 15" \n' +
                 'Bob will get an email giving him his updates for the past 15 hours. \n' +
                 'If you do not enter a number of hours, it will default to 24 hours.';
-        console.log(errorMessage);
+        console.error(errorMessage);
         return;
     }
 
     if (hours < 0){
-        console.log("Please enter a positive number of hours");
+        console.error("Please enter a positive number of hours");
         return;
     }
 
