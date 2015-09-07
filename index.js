@@ -20,6 +20,7 @@ var argv = require('yargs')
     .alias('i', 'ignore')
     .nargs('i', 1)
     .describe('i', 'Indicate which files in the directories to ignore from sync process (e.g. //test-data/folder1')
+    .default('i', 1)
     .describe('s', 'The sync server (defaults to 127.0.0.1)')
     .default('s',"127.0.0.1","127.0.0.1")
     .alias('s', 'server')
@@ -70,17 +71,16 @@ writePipeline.addAction({
     }
 });
 
-var ignoredFiles = {}
+var ignoredPath = argv.ignore;
 function ignore() {
-    ignoredFiles = argv.i;
-
+    var ignoredFiles = argv.ignore;
 }
 
 function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
 
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt, ignoredFiles) {
+    sync.compare(path1,path2,sync.filesMatchNameAndSize, ignoredPath, function(rslt) {
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;
@@ -91,7 +91,7 @@ function checkForChanges(){
 
 function scheduleChangeCheck(when,repeat){
     setTimeout(function(){
-        if (syncOptionIsOn()) {
+        if (syncIsActive()) {
             checkForChanges();
         }
 
@@ -99,7 +99,7 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
-function syncOptionIsOn() {
+function syncIsActive() {
     return argv.a;
 }
 
