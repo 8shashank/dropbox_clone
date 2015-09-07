@@ -13,3 +13,4 @@ N/A
 ## Suggested Improvements
 
 1. Fixed unhandled else branch when catching an error in versions.js.
+2. Renamed string constant to make it more obvious that it is supposed to be a constant value

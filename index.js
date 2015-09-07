@@ -47,6 +47,7 @@ var syncFile = function(fromPath,toPath){
     });
 };
 
+var timer;
 var writePipeline = new Pipeline();
 writePipeline.addAction({
     exec:function(data){
@@ -108,7 +109,6 @@ function checkForChanges(){
     });
 }
 
-var timer;
 function scheduleChangeCheck(when,repeat){
     timer = setTimeout(function(){
         checkForChanges();
