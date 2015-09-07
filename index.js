@@ -25,13 +25,20 @@ var argv = require('yargs')
     .epilog('Apache License V2 2015, Jules White')
     .argv;
 
+var promptedUpdate = false;
 
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
-var syncFile = function(fromPath,toPath){
+var syncFile = function(fromPath,toPath) {
+    //promptedUpdate = true;
+    var time = new Date();
+    console.log("change detected! directories were synced at " + time.getMonth() + "/" + time.getDay() + "/"  +
+        time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+    //getUserInput();
+
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
@@ -40,6 +47,7 @@ var syncFile = function(fromPath,toPath){
             console.log("Copied "+fromPath+" to "+toPath);
         })
     });
+
 }
 
 var writePipeline = new Pipeline();
@@ -114,7 +122,9 @@ var userOps = {
 };
 
 function getUserInput(){
-    console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
+    if (!promptedUpdate) {
+        console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
+    }
 
     var rl = readline.createInterface({
         input: process.stdin,
@@ -125,6 +135,17 @@ function getUserInput(){
     rl.on('line', function(line) {
         var args = line.trim().split(' ');
         var operation = args.shift();
+
+        if (promptedUpdate) {
+            if (operation == 'update') {
+                return;
+            } else if (operation == 'exit') {
+                promptedUpdate = false;
+                return;
+            } else {
+                console.log("unknown entry");
+            }
+        }
 
         if(operation == 'quit') {
             rl.close();
