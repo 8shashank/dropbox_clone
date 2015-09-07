@@ -8,9 +8,9 @@ For this project, I extended the Dropbox server/client implementation to allow t
 
 To install this application globally on your machine, run the following instructions on your machine from the directory containing index.js:
 
-`
+```
 sudo npm install -g
-`
+```
 
 ##Usage
 Assume that you have the following folder structure:
@@ -26,15 +26,36 @@ dropbox-server
 
 Next, you will need to start the client. This will have to be run from a second terminal window. Cd to the same folder, "test-data", run the following:
 
-`
+```
 dropbox --d1 dnode://folder1 --d2 file://folder2
-`
+```
 
 Finally, you will need to start the web page that will display the directory. In a third terminal window, cd to the directory containing index.js, and run the following:
 
 ```
-http-server
+http-server test-data
 ```
+
+You should see something like the following:
+
+```
+Edward Yun:assignment2-handin edwardyun$ http-server
+Starting up http-server, serving ./ on: http://0.0.0.0:8081
+Hit CTRL-C to stop the server
+```
+
+The website is now running on your localhost. If you run
+```
+ifconfig
+```
+from your terminal, you can view the same webpage on a global IP address that anybody on your same network can view. It will look something like
+```
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	ether b8:e8:56:32:6e:c4 
+	inet6 fe80::bae8:56ff:fe32:6ec4%en0 prefixlen 64 scopeid 0x4 
+	inet **10.66.163.50** netmask 0xffff0000 broadcast 10.66.255.255
+```
+Append ":8081", or whatever the earlier ending was, to view your directory.
 
 Whatever you put into folder1 or folder2 will be copied to the other folder, and the website after you refresh the page. 
 
