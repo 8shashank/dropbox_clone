@@ -98,3 +98,6 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
 //                driver.
 
 
+//REVIEW COMMENT: I may be understanding this code poorly, but I'm confused at what added functionality is presented
+//                here to the dropbox application other than additional unit testing. If I'm mistaken, please ignore
+//                this comment.
