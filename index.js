@@ -80,7 +80,25 @@ function checkForChanges(){
 }
 
 function changeDetected(change, path){
-    console.log('Watcher detected', change, 'at path', path);
+    switch (change){
+        case 'add':
+            console.log('Watcher event detected: File', path, 'was added');
+            break;
+        case 'addDir':
+            console.log('Watcher event detected: Directory', path, 'was added');
+            break;
+        case 'change':
+            console.log('Watcher event detected: File', path, 'was changed');
+            break;
+        case 'unlink':
+            console.log('Watcher event detected: File', path, 'was removed');
+            break;
+        case 'unlinkDir':
+            console.log('Watcher event detected: Directory', path, 'was removed');
+            break;
+        default:
+            console.log('Watcher detected unknown event at path', path);
+    }
     checkForChanges();
 }
 
@@ -92,7 +110,7 @@ var watcherOpts = {
 
 
 // Only watch local directories
-function createWatcher(dir){
+function startWatcher(dir){
     if(uris.getProtocol(dir) !== 'dnode'){
         // Removes file/dnode from beginning of path for watchers
         var path = uris.getPath(dir);
@@ -173,8 +191,8 @@ function getUserInput(){
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
-    var watcher1 = createWatcher(argv.directory1);
-    var watcher2 = createWatcher(argv.directory2);
+    var watcher1 = startWatcher(argv.directory1);
+    var watcher2 = startWatcher(argv.directory2);
     checkForChanges();
     getUserInput();
 });
