@@ -99,6 +99,7 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
+// checks to see if the argv for 'c' has been defined and then calls on that configuration
 function rememberSetupConfig() {
     var nameExistingConfig = argv.configuration;
     var arr = [];
@@ -115,6 +116,7 @@ function rememberSetupConfig() {
     }
 }
 
+// checks to see if the arv for 'sc' has been defined and then creates that configuation
 function createSetupConfig() {
     var nametoSetConfig = argv.setconfiguration;
     var path1 = argv.directory1;
