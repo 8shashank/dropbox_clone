@@ -49,8 +49,12 @@ var syncFile = function(fromPath,toPath){
             console.log('mp3 found!');
             echo('track/upload').post({
                 filetype: path.extname(fromPath).substr(1)
-            }, 'application/octet-stream', function (json) {
-                console.log(json.response);
+            }, 'application/octet-stream', function (err, json) {
+                if(err){
+                    console.log('Error:', err);
+                } else {
+                    console.log(json.response);
+                }
             });
         }
     });

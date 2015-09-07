@@ -14,3 +14,4 @@ N/A
 
 1. Added echojs to package.json for portability
 2. Removed IDE data directory and updated .gitignore to prevent it from being added in the future
+3. Added error handling to echo post call
