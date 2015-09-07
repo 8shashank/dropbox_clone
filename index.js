@@ -35,25 +35,28 @@ var rl = readline.createInterface({
     output: process.stdout
 });
 
+function writeToLog(path){
+    rl.question("Enter your username: ", function(answer) {
+        rl.close();
+        var shortPath = path.split('/');
+        fs.appendFile('Log.txt', answer + " edited file " + shortPath[shortPath.length - 1] + " "
+            + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
+            if (err)
+                throw err;
+        });
+    });
+}
+
 var syncFile = function(fromPath,toPath){
-    var srcHandler = sync.getHandler(fromPath);
-    var trgHandler = sync.getHandler(toPath);
+    var srcHandler = sync.getHandler(fromPath); //being read
+    var trgHandler = sync.getHandler(toPath); //being written
+
 
     srcHandler.readFile(fromPath,function(base64Data){
-
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
-            rl.question("Enter your username: ", function(answer) {
-                rl.close();
-                var shortPath = fromPath.split('/');
-                fs.appendFile('Log.txt', answer + " edited file " + shortPath[shortPath.length - 1] + " "
-                    + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
-                    if (err)
-                        throw err;
-                });
-            });
-            
-
+            writeToLog(fromPath);
+        })
     });
 }
 
