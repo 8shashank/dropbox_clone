@@ -99,12 +99,14 @@ function initiateTwitter(){
         , access_token_secret: 'xjmXeXsigPoDBYFY6ZGMDPKds0wQibf8iOZ599k1cs0R1'
     })
 
-    var acceptableExt = ["gif","png", "webp", "jpeg"];
+    var acceptableExt = [".gif",".png", ".webp", ".jpeg"];
 
     //Upload media to Twitter
     Twitter.upload = function uploadToTwitter(fileToUpload){
+
         var acceptable = false;
         var extension = path.extname(fileToUpload);
+
         for (var key in acceptableExt){
             if (extension === acceptableExt[key])
             {
@@ -117,14 +119,16 @@ function initiateTwitter(){
             Twitter.post('media/upload', { media_data: mediaContent }, function (err, data, response) {
 
                 var mediaIdStr = data.media_id_string;
-                console.log(mediaIdStr);
-                console.log(data);
                 var params = { media_ids: [mediaIdStr]};
 
                 Twitter.post('statuses/update', params, function (err, data, response) {
-                    console.log(data);
+                    console.log(fileToUpload + " uploaded.");
                 })
             })
+        }
+        else
+        {
+            console.log(fileToUpload + " has unsupported format.");
         }
     };
 
@@ -149,10 +153,11 @@ function serverHandler(path) {
     }
 
     printFileNames = function(myFiles){
-        console.log(myFiles);
+        console.log("Files in server folder:");
         for (var key in myFiles){
             console.log(myFiles[key]);
         }
+        console.log("\n");
     }
 
     return {
@@ -166,8 +171,7 @@ var rl = readline.createInterface({
     output: process.stdout
 });
 
-rl.question("Enter 'exit' to exit", function(answer) {
-    if (answer != "exit") {
+rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
             var sHandler = serverHandler(uris.getPath(argv.directory1));
@@ -181,8 +185,6 @@ rl.question("Enter 'exit' to exit", function(answer) {
                 socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
             }
         }
-
-    }
     rl.close();
 });
 
