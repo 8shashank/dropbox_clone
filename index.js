@@ -49,9 +49,9 @@ writePipeline.addAction({
     exec:function(data){
         _.each(data.syncToSrc, function(toSrc){
             var fromPath = data.trgPath + "/" + toSrc;
-            console.log("data: " + data + " toSrc: " + toSrc + " fromPath " + fromPath);
+            //console.log("data: " + data + " toSrc: " + toSrc + " fromPath " + fromPath);
             var toPath = data.srcPath + "/" + toSrc;
-            console.log("data: " + data + " toSrc: " + toSrc + " trgPath " + toPath);
+            //console.log("data: " + data + " toSrc: " + toSrc + " trgPath " + toPath);
             if(checkNoSyncFile(toSrc)){
                 syncFile(fromPath,toPath);
             }
@@ -141,10 +141,10 @@ function writeFile(filenosync){
 
 // Wrote a function to take in a file name and check if it's in the no sync list.
 // Returns true if file is not found in no sync file. Returns false if it is and no sync.
-function checkNoSyncFile(filename){
+function checkNoSyncFile(filename) {
     var array = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
-    if(array.indexOf(filename) === -1){
+    if (array.indexOf(filename) === -1) {
         //console.log(filename + " was not found in log.");
         return true;
     }
@@ -154,8 +154,33 @@ function checkNoSyncFile(filename){
     }
 }
 
+function askUserInput(){
+    console.log("Press 1 to add file to no sync log or 2 to sync files. ");
+
+    var r1 = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    r1.prompt();
+    r1.on('line', function (line) {
+        if(line === "1"){
+            r1.close();
+            fileNeverSync();
+        }
+        else if (line === "2"){
+            r1.close()
+            scheduleChangeCheck(1000,true);
+        }
+        else{
+            r1.close();
+            console.log("Entered in unknown option.");
+        }
+
+    })
+
+}
+
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
-    fileNeverSync();
-    scheduleChangeCheck(1000,true);
+    askUserInput();
 });

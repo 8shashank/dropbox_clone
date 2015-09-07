@@ -1,2 +1,3 @@
 helloworld.txt
 test2.txt
+donotsync.txt
