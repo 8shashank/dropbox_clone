@@ -42,6 +42,7 @@ var syncFile = function(fromPath,toPath){
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
+            rl.prompt();
         })
     });
 }
@@ -73,6 +74,7 @@ writePipeline.addAction({
 function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
+
 
     sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
 
