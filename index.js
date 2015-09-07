@@ -55,7 +55,7 @@ function WriteToFile(record) { //write to log file
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath); //being read
     var trgHandler = sync.getHandler(toPath); //being written
-    WriteToFile(fromPath);
+    WriteToFile(toPath);
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
