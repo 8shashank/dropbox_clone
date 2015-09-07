@@ -122,6 +122,8 @@ var userOps = {
     login: login
 };
 
+var connected = false;
+
 function login (username, password) {
     dnodeClient.connect({host:argv.server, port:argv.port},
         function(handler, removeListeners){ // callback function upon connection
@@ -130,6 +132,7 @@ function login (username, password) {
                     delete handler.login;
                     sync.fsHandlers.dnode = handler;
                     if(dnodeClient.state.connectStatus) {
+                        connected = true;
                         rl.setPrompt("[Connected]>");
                     }
                     rl.prompt();
@@ -171,8 +174,15 @@ function getUserInput(){
 
             default:
                 if (userOps.hasOwnProperty(operation)) {
-                    userOps[operation].apply(this, args);
-                } else {
+                    if(connected && operation === "login"){
+                        console.log("you are already logged in.");
+                    }
+                    else{
+                        userOps[operation].apply(this, args);
+                    }
+
+                }
+                else {
                     console.log("Unknown option");
                 }
                 rl.prompt();
