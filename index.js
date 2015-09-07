@@ -24,11 +24,9 @@ var argv = require('yargs')
     .epilog('Apache License V2 2015, Jules White')
     .argv;
 
-
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
