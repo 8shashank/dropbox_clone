@@ -119,7 +119,7 @@ var emailUpdates = function (emailAddress, hours){
     }
 
     if (hours < 0){
-        console.error("Please enter a positive number of hours");
+        console.error('Please enter a positive number of hours');
         return;
     }
 
