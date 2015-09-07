@@ -12,4 +12,6 @@ Added a file called changelog.txt that acts as a log for activity in the test-da
 
 3. Format the date and time being logged
 
-4. 
+4. Remove all the .idea files
+
+5. Added comments for better understanding and helped make the function name more understandable

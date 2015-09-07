@@ -1,4 +1,0 @@
-Description: ActivityLog file to record modifications to both folders (additions/edits).
-
-• Synced .txt log of activity within folders
-• Timestamped changes to files (not including log)
