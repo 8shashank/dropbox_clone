@@ -1,0 +1,6 @@
+Added ability to have different logins
+When creating a new login, the username and password is inserted into a MySQL database. The password is hashed with
+  the MD5 algorithm.
+When logging in, the MySQL database is queried. If the correct username and password is entered, the user's folder in
+  the server folder will sync with the client folder.
+Added user operation to list files that are in the current folder 
