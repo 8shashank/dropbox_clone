@@ -29,18 +29,23 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
+var os = require('os');
+var ip = require("ip");
 
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
-
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
-        })
+            console.log('Now time for a link');
+            var myIP = ip.address();
+            var myPath = toPath.substring(8);
+            console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
+        });
     });
-}
+};
 
 var writePipeline = new Pipeline();
 writePipeline.addAction({
