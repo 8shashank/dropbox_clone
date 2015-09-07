@@ -50,13 +50,13 @@ var syncFile = function(fromPath,toPath){
 var writePipeline = new Pipeline();
 writePipeline.addAction({
     exec:function(data){
-        versions.savePreviousVersions(data.srcPath,data.srcFilesToSave,argv.v);
+        versions.savePreviousVersions(data.srcPath,data.srcFilesToSave,data.srcDataFilesToSave,argv.v);
         return data;
     }
 });
 writePipeline.addAction({
     exec:function(data){
-        versions.savePreviousVersions(data.trgPath,data.trgFilesToSave,argv.v);
+        versions.savePreviousVersions(data.trgPath,data.trgFilesToSave,data.trgDataFilesToSave,argv.v);
         return data;
     }
 });
@@ -91,10 +91,16 @@ function checkForChanges(){
         rslt.trgPath = path2;
 
         if (argv.v >= 1) {
-            sync.getFilesToBeOverwritten(path1,path2,rslt.syncToSrc,rslt.syncToTrg,function(files) {
+            sync.getFilesToBeOverwritten(rslt.srcPath,rslt.trgPath,rslt.syncToSrc,rslt.syncToTrg,function(files){
                 rslt.srcFilesToSave = files.overwriteFiles1;
                 rslt.trgFilesToSave = files.overwriteFiles2;
-                writePipeline.exec(rslt);
+                versions.getCurrentVersionFileData(rslt.srcPath,rslt.srcFilesToSave,function(data1){
+                    versions.getCurrentVersionFileData(rslt.trgPath,rslt.trgFilesToSave,function(data2){
+                        rslt.srcDataFilesToSave = data1;
+                        rslt.trgDataFilesToSave = data2;
+                        writePipeline.exec(rslt);
+                    })
+                });
             });
         } else {
             writePipeline.exec(rslt);
