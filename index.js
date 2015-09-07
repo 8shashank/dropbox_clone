@@ -89,4 +89,8 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     scheduleChangeCheck(1000,true);
 });
 
+//REVIEW COMMENT: this driver code is more streamlined than the original, but there is now seemingly no way to
+//                exit the program. And if there is, it would make sense for this functionality to be in the
+//                driver.
+
 
