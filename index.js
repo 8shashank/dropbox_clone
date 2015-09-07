@@ -2,17 +2,23 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-
+// NOTE: I've removed .demand(['d1','d2']) from the args, can't figure out a way to demand either
+// 'd1' and 'd2', or 'c'
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
     .example('dropbox --directory1 dnode://test-data/folder1 --directory2 file://test-data/folder2', '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
-    .demand(['d1','d2'])
     .alias('d1', 'directory1')
     .nargs('d1', 1)
     .describe('d1', 'The first directory to sync (e.g., dnode://test-data/folder1)')
     .alias('d2', 'directory2')
     .nargs('d2', 1)
     .describe('d2', 'The second directory to sync (e.g., file://test-data/folder2)')
+    .alias('sc', 'setconfiguration')
+    .nargs('sc', 1)
+    .describe('sc', 'Name of configuration to set')
+    .alias('c', 'configuration')
+    .nargs('c', 1)
+    .describe('c', 'The name of a configuration you have set')
     .describe('s', 'The sync server (defaults to 127.0.0.1)')
     .default('s',"127.0.0.1","127.0.0.1")
     .alias('s', 'server')
@@ -64,8 +70,17 @@ writePipeline.addAction({
 });
 
 function checkForChanges(){
-    var path1 = argv.directory1;
-    var path2 = argv.directory2;
+    var path1;
+    var path2;
+    var nameExistingConfig = argv.configuration
+    if (typeof nameExistingConfig !== "undefined") {
+        var paths = rememberSetupConfig();
+        path1 = paths[0];
+        path2 = paths[1];
+    } else {
+        path1 = argv.directory1;
+        path2 = argv.directory2;
+    }
 
     sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
 
@@ -84,8 +99,42 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
+function rememberSetupConfig() {
+    var nameExistingConfig = argv.configuration;
+    var arr = [];
+    if (typeof nameExistingConfig !== "undefined") {
+        var rawData = fs.readFileSync(__dirname + '/config.txt').toString();
+        var tempArr = rawData.split(" ");
+        for (var i = 0; i < tempArr.length; i++) {
+            if (tempArr[i] === nameExistingConfig) {
+                arr.push([tempArr[i + 1]].toString());
+                arr.push([tempArr[i + 2]].toString());
+            }
+        }
+        return arr;
+    }
+}
+
+function createSetupConfig() {
+    var nametoSetConfig = argv.setconfiguration;
+    var path1 = argv.directory1;
+    var path2 = argv.directory2;
+    if (typeof nametoSetConfig !== "undefined") {
+        fs.stat(__dirname + '/config.txt', function (err, stats) {
+            if (err === null) {
+                // this means the file already exists
+                fs.appendFileSync(__dirname + '/config.txt', ' ' + nametoSetConfig + " " + path1 + " " + path2);
+            } else {
+                fs.writeFileSync(__dirname + '/config.txt', nametoSetConfig + " " + path1 + " " + path2);
+            }
+        })
+    }
+}
+
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
+    createSetupConfig();
+    rememberSetupConfig();
     scheduleChangeCheck(1000,true);
 });
 
