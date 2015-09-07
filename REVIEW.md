@@ -8,4 +8,6 @@ Writes to a log file every time the files are synced. Keeps track of which file 
 
 1. Changed to log the file path that is actually being updated
 
-2.
+2. Should not log that the change has occurred until the change has occurred
+
+3. 
