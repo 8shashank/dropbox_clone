@@ -103,7 +103,7 @@ function scheduleChangeCheck(when,repeat){
 function rememberSetupConfig() {
     var nameExistingConfig = argv.configuration;
     var arr = [];
-    if (typeof nameExistingConfig !== "undefined") {
+    if (typeof nameExistingConfig !== "undefined" && typeof nameExistingConfig !== "null") {
         var rawData = fs.readFileSync(__dirname + '/config.txt').toString();
         var tempArr = rawData.split(" ");
         for (var i = 0; i < tempArr.length; i++) {
@@ -121,7 +121,7 @@ function createSetupConfig() {
     var nametoSetConfig = argv.setconfiguration;
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-    if (typeof nametoSetConfig !== "undefined") {
+    if (typeof nametoSetConfig !== "undefined" && typeof nametoSetConfig !== "null") {
         fs.stat(__dirname + '/config.txt', function (err, stats) {
             if (err === null) {
                 // this means the file already exists
