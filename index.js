@@ -73,7 +73,7 @@ function checkForChanges(){
     var path1;
     var path2;
     var nameExistingConfig = argv.configuration
-    if (typeof nameExistingConfig !== "undefined") {
+    if (typeof nameExistingConfig !== "undefined" && typeof nameExistingConfig !== "null") {
         var paths = rememberSetupConfig();
         path1 = paths[0];
         path2 = paths[1];
