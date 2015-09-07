@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var fs = require('fs');
 var uris = require("./lib/sync/dropboxuris");
+var path = require('path');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -89,7 +90,7 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     scheduleChangeCheck(1000,true);
 });
 
-
+//Establish connection with Twitter
 function initiateTwitter(){
     var Twitter = new Twit({
         consumer_key: 'lF0toTHTD5BQxbvrfoy87scqz'
@@ -98,21 +99,33 @@ function initiateTwitter(){
         , access_token_secret: 'xjmXeXsigPoDBYFY6ZGMDPKds0wQibf8iOZ599k1cs0R1'
     })
 
+    var acceptableExt = ["gif","png", "webp", "jpeg"];
+
     //Upload media to Twitter
     Twitter.upload = function uploadToTwitter(fileToUpload){
+        var acceptable = false;
+        var extension = path.extname(fileToUpload);
+        for (var key in acceptableExt){
+            if (extension === acceptableExt[key])
+            {
+                acceptable = true;
+            }
+        }
         //The image passed should be the raw binary of the image or binary base64 encoded
-        var mediaContent= fs.readFileSync(fileToUpload, { encoding: 'base64' });
-        TwitterApp.post('media/upload', { media_data: mediaContent }, function (err, data, response) {
+        if (acceptable){
+            var mediaContent= fs.readFileSync(fileToUpload, { encoding: 'base64' });
+            Twitter.post('media/upload', { media_data: mediaContent }, function (err, data, response) {
 
-            var mediaIdStr = data.media_id_string;
-            console.log(mediaIdStr);
-            console.log(data);
-            var params = { media_ids: [mediaIdStr]};
-
-            TwitterApp.post('statuses/update', params, function (err, data, response) {
+                var mediaIdStr = data.media_id_string;
+                console.log(mediaIdStr);
                 console.log(data);
+                var params = { media_ids: [mediaIdStr]};
+
+                Twitter.post('statuses/update', params, function (err, data, response) {
+                    console.log(data);
+                })
             })
-        })
+        }
     };
 
     return Twitter;
@@ -125,18 +138,26 @@ var readline = require('readline');
 function initiate(){
     var socialMedia;
     socialMedia = initiateTwitter();
-
     return socialMedia
 }
 
+
+//Create handler to handle files in server
 function serverHandler(path) {
     getFiles = function(path){
-        console.log(files);
         return fs.readdirSync(path);
     }
 
+    printFileNames = function(myFiles){
+        console.log(myFiles);
+        for (var key in myFiles){
+            console.log(myFiles[key]);
+        }
+    }
+
     return {
-        files: getFiles(path)
+        files: getFiles(path),
+        printFileNames : printFileNames
     }
 }
 
@@ -150,17 +171,18 @@ rl.question("Enter 'exit' to exit", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
             var sHandler = serverHandler(uris.getPath(argv.directory1));
-            console.log(sHandler);
             var files = sHandler.files;
+            sHandler.printFileNames(files);
 
-            for (var key in files){
-                console.log(files[key]);
-            }
-            /*
-             var socialMedia = initiate();
-             socialMedia.upload()*/
+            var socialMedia = initiate();
+
+            //Upload files with acceptable extensions
+            for(var key in files){
+                socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
             }
         }
+
+    }
     rl.close();
 });
 
