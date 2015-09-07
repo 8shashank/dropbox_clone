@@ -30,6 +30,7 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
+var uris = require('./lib/sync/dropboxuris');
 
 
 var syncFile = function(fromPath,toPath){
@@ -91,7 +92,7 @@ var watcherOpts = {
 
 
 // Only watch local directories
-if(argv.directory1.indexOf('dnode') === -1){
+if(uris.getProtocol(argv.directory1) !== 'dnode'){
     // Removes file/dnode from beginning of path for watchers
     var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
     var watcher1 = chokidar.watch(dir1, watcherOpts);
@@ -105,7 +106,7 @@ if(argv.directory1.indexOf('dnode') === -1){
       });
 }
 
-if(argv.directory2.indexOf('dnode') === -1){
+if(uris.getProtocol(argv.directory2) !== 'dnode'){
     var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
     var watcher2 = chokidar.watch(dir2, watcherOpts);
     watcher2
