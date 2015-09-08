@@ -4,7 +4,7 @@
 
 *Provide a 1-3 paragraph overview of the architecture of the code and the design rationale.*
 
-This code adds to the syncFile function. The added feature keeps a log of what files are being changed. When files have changed, the user is then prompted to type in a username that is then stored in the log file as well. The log file is written in the SyncFile function and more specifically, written in the srcHandler.readFile function. 
+This codes adds a feature that enables the dropbox application to delete files. This is done by creating a user menu in the terminal command line that gives users the option to delete certain files in the folder. This command deletes the file from both folders. To achieve this, two functions were created. One to search the list of files in a folder and the other to delete the file. An extra function was added to implement valid user operations for the command line. 
 
 ## Suggested Reading Materials
 No suggested readings. 
