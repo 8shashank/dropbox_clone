@@ -91,7 +91,7 @@ function scheduleChangeCheck(when,repeat){
 var checkPastDayUpdates = function(path, callback){
     var changedFileList = [];
     var millisInDay = 86400000;
-    var now = (new Date()).getTime();
+    var now = (new Date()).getTime(); // rename variable 'now' to 'today' to make more consistent with variable 'yesterday' to improve clarity
     var yesterday = now - millisInDay;
 
     fs.readdir(path, function (error, fileList){
