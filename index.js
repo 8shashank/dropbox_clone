@@ -124,7 +124,7 @@ function add(fileName) {
     try {
         // adds file to both directories
         handler1.writeFile(path1, 'new File', function(){});
-        handler2.writeFile(path1, 'new File', function(){});
+        handler2.writeFile(path2, 'new File', function(){});
         lastUpdate = new Date();
         console.log('Files added on ' + formatTime(lastUpdate));
     } catch (err) {
