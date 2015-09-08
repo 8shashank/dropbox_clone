@@ -4,13 +4,13 @@
 
 
 var syncFile = function(fromPath,toPath) {
-    timeStamp();
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
+            timeStamp();
         })
     });
 

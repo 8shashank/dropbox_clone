@@ -15,7 +15,7 @@ none come to mind.
 
 2. The third portion of the if statement nested within if(promptedUpdate) could either be removed or made more descriptive. An instance where the operation does not match any of the possible options is already covered at the end of getUserInput(), so if that bit of code is reached it will either double log that issue, or it tells you that promptedUpdate was true and that should only happen for two cases and maybe even that the operation was recognized later but promptedUpdate should have been false. So changing the comment to say something like "case with this operation where 'promptedUpdate == true' was not accounted for" or something along those lines might be more useful for debugging, especially in a bigger project.
 
-3.
+3. This might be wrong but I might actually call timeStamp() after the other console log describing the path so it makes more sense and the timestamp is actually made once the process has been completed.
 
 4. Despite this being a very small project, I would try to do more commits in the future so you can explain more fully what each of the 3 pieces of code does. 
 
