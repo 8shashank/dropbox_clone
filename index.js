@@ -32,6 +32,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 var readline = require('readline');
 
+var noSyncList = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -147,9 +148,8 @@ function writeFile(filenosync, cb){
 // Wrote a function to take in a file name and check if it's in the no sync list.
 // Returns true if file is not found in no sync file. Returns false if it is and no sync.
 function checkNoSyncFile(filename) {
-    var array = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
-    if (array.indexOf(filename) === -1) {
+    if (noSyncList.indexOf(filename) === -1) {
         //console.log(filename + " was not found in log.");
         return false;
     }
