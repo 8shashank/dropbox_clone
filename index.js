@@ -218,3 +218,4 @@ function serverHandler(path) {
     }
     getUserInput("\nEnter 'upload' to upload all files in server folder to twitter or enter a filename to upload individual files\n");
 
+
