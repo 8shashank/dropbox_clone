@@ -45,7 +45,7 @@ var syncFile = function(fromPath,toPath){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
             rl.question("Enter your username: ", function(answer) {
-                rl.close();
+                //Third Improvement: lose the close. Otherwise, the Log will only update once.
                 var shortPath = fromPath.split('/');
                 fs.appendFile('Log.txt', answer + " edited file " + shortPath[shortPath.length - 1] + " "
                     + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
