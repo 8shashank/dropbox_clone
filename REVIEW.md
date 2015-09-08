@@ -13,3 +13,4 @@ There are plans to extend this functionality to Facebook later on.
 
 1. Add FEATURE_README.md to explain what functionality your code is adding. It is a bit unclear.
 
+2. You required 'fb' twice in your facebook.js file. I removed the duplication for you. 
