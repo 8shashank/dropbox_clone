@@ -118,16 +118,22 @@ function add(fileName) {
         return;
     }
     var path1 = argv.directory1 + '/' + fileName;
-    var handler1 = sync.getHandler(path1);
-	
+    var path2 = argv.directory2 + '/' + fileName;
+
+	var handler1 = sync.getHandler(path1);
+	var handler2 = sync.getHandler(path2);
+
 	//fixed here (youngho)
 	var checkPath1 = './' + path1.split('//')[1];
-    try {
-		if(fs.existsSync(checkPath1)){
+    var checkPath2 = './' + path2.split('//')[1];
+
+	try {
+		if(fs.existsSync(checkPath1) || fs.existsSync(checkPath2)){
 			console.log("file already exists so will not create new file.");
 		}else{
        		// adds file to both directories
        		handler1.writeFile(path1, 'new File', function(){});
+			handler2.writeFile(path2, 'new File', function(){});
        		lastUpdate = new Date();
        		console.log('Files added on ' + formatTime(lastUpdate));
 			console.log('Adding ' + fileName);
