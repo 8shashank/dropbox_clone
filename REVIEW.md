@@ -10,3 +10,5 @@ No changes were made to the existing code. The additions consist of a simple web
 1. Change the location of `commentlog.txt`. If the directory `ClientMessageLog` does not exist, attempting to open the file results in an error.
 
 2. Remove redundancy of what is logged to the console and what is written to `commentlog.txt`.
+
+3. Consider using Jade instead of HTML for your website code (see http://jade-lang.com). It is closer in style to other programming languages and allows for more succinct code.
