@@ -14,3 +14,5 @@ For example: It says
 "Shareable link: http://10.66.151.204:8000/est-data/folder2/DSC_2020.jpg".
 
 When it should say "Shareable link: http://10.66.151.204:8000/test-data/folder2/DSC_2020.jpg"
+
+2. You probably do not want to share the link every single time you change something. Keep track of the links you already shared and don't share them again. This can possibly slowdown the program, but you don't want to spam the user.

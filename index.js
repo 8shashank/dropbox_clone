@@ -31,6 +31,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 var os = require('os');
 var ip = require("ip");
 
+var alreadySharedLinks = {};
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -38,10 +39,17 @@ var syncFile = function(fromPath,toPath){
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
-            console.log('Now time for a link');
-            var myIP = ip.address();
+
             var myPath = toPath.substring(toPath.indexOf('//') + 2);
-            console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
+
+            if (!alreadySharedLinks[myPath]) {
+                var myIP = ip.address();
+
+                console.log('Now time for a link');
+                console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
+                
+                alreadySharedLinks[myPath] = true;
+            }
         });
     });
 };
