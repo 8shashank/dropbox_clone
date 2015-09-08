@@ -17,11 +17,11 @@ In code reviews are commented in the following format:
 (Suggested sentence)
 ```
 
-
 Most reviews are suggesting:
-⋅⋅⋅Use of async + callbacks⋅⋅
-⋅⋅⋅Wrapping logic in function⋅⋅
-⋅⋅⋅Some shorter sentences to do job⋅⋅
+
+   Use of async + callbacks⋅⋅
+   Wrapping logic in function⋅⋅
+   Some shorter sentences to do job⋅⋅
 
 
 ### Issues
@@ -41,12 +41,14 @@ What will happen if:
 
 
  * The commit message for file [base64utils.js](https://github.com/cs4278-2015/assignment2-handin/blob/submission/shashanksharma/lib/sync/base64utils.js) is a bit confusing.
-⋅⋅⋅The message suggests that there were some changes in code.
-⋅⋅⋅But the code seems to be untouched.
-⋅⋅⋅Maybe you want to say "revert to previous version" instead?
+
+   - The message suggests that there were some changes in code.
+   - But the code seems to be untouched.
+   - Maybe you want to say "revert to previous version" instead?
         
 
  * In test.js, the function to test "folder1 should need test2.txt and test.txt sync'd to it, but folder2 shouldn't need anything sync'd" is removed.
- ⋅⋅⋅I understand that since test-data changed, this might not work now.
- ⋅⋅⋅But it does not seem to hurt to keep those files and test units.
- ⋅⋅⋅And now this program has no test covering whether the normal compare works.
+
+   - I understand that since test-data changed, this might not work now.
+   - But it does not seem to hurt to keep those files and test units.
+   - And now this program has no test covering whether the normal compare works.
