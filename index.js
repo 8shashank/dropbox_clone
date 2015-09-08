@@ -166,9 +166,12 @@ function getUserInput(){
                 }
                 rl.prompt();
                 break;
-
             default:
-                if (userOps.hasOwnProperty(operation)) {
+                //Prevent multiple login attempts
+                if (operation==="login" && dnodeClient.state.connectStatus){
+                    console.log("Connected");
+                }
+                else if (userOps.hasOwnProperty(operation)) {
                     userOps[operation].apply(this, args);
                 } else {
                     console.log("Unknown option");
