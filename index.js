@@ -146,6 +146,10 @@ function initiate(){
 }
 
 
+
+
+
+
 //Create handler to handle files in server
 function serverHandler(path) {
     getFiles = function(path){
