@@ -1,12 +1,10 @@
 # Review of Nick Sparkman by Matthew Owens
 
-## Overview
-
-*Overview will go here.*
+Nick code implements a feature for copying over files to a backup folder in addition to syncing them between servers. The code for this functionality is included as a part of the writeFile functions in sync.js and sync-client.js. It uses a counter to determine if the backup directory has already been created, and if not, it is automatically created using the 'mkdirp' module. No additional functions or objects were created as a part of this code.
 
 ## Suggested Reading Materials
 
-*Suggested reading materials will go here.*
+None.
 
 ## Suggested Improvements
 
