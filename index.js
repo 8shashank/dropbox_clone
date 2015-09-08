@@ -65,36 +65,23 @@ writePipeline.addAction({
     }
 });
 
-function checkForChanges(){
-    var path1 = argv.directory1;
-    var path2 = argv.directory2;
-
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
-
-        rslt.srcPath = path1;
-        rslt.trgPath = path2;
-
-        writePipeline.exec(rslt);
-    });
-}
-
 var Watcher = (function() {
-    function Watcher(config, dir1, dir2, pipeline, onChange) {
+    function Watcher(config, dir1, dir2, pipeline) {
+
         if (typeof dir !== 'string')
           throw new TypeError('directory argument required');
 
         if (typeof onChange !== 'function')
           throw new TypeError('onChange must be a function');
 
-        var self = this;
-
-        this.onChange = onChange;
-
-        self.checkForChanges = function(path, change) {
-            onChange(path, change);
-            console.log('Watcher detected ', change, ' at path ', path);
-            self.checkForChanges();
-        };
+        this.checkForChanges = function() {
+            sync.compare(dir1, dir2,
+                    sync.filesMatchNameAndSize, function(rslt) {
+                rslt.srcPath = dir1;
+                rslt.trgPath = dir2;
+                pipeline.exec(rslt);
+            });
+        }
 
         function changeDetected(path, config) {
             onChange(path, config);
@@ -114,16 +101,6 @@ var Watcher = (function() {
 
     Watcher.prototype = Object.create(null);
     Watcher.prototype.constructor = Watcher;
-    Watcher.prototype.checkForChanges = function() {
-        var self = this;
-        sync.compare(self.dir1, self.dir2,
-                sync.filesMatchNameAndSize, function(rslt) {
-            rslt.srcPath = dir1;
-            rslt.trgPath = dir2;
-            self.pipeline.exec(rslt);
-        });
-    }
-
 
     return Watcher;
 })();
@@ -196,17 +173,6 @@ function sanitizeDir(dir) {
 
 function connect(options) {
 
-    function onChange(path, change) {
-    }
-
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
-
-        rslt.srcPath = path1;
-        rslt.trgPath = path2;
-
-        writePipeline.exec(rslt);
-    });
-
     var watchConf = {
         ignored: '*.swp',    // Prevents issues when editing files with vim
         ignoreInitial: true, // Prevents checking for changes when 
@@ -216,14 +182,11 @@ function connect(options) {
 
     var dir1 = sanitizeDir(argv.directory1);
     var dir2 = sanitizeDir(argv.directory2);
-
-    var watcher1 = new Watcher(watchConf, dir1, onChange);
-    var watcher2 = new Watcher(watchConf, dir2, onChange);
+    var watcher = new Watcher(watchConf, dir1, dir2, writePipeline);
 
     dnodeClient.connect(options, function(handler){
         sync.fsHandlers.dnode = handler;
-        watcher1.checkForChanges();
-        watcher2.checkForChanges();
+        watcher.checkForChanges();
         getUserInput();
     });
 
