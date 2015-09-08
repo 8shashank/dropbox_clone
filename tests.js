@@ -9,6 +9,12 @@ var Pipeline = require('./lib/sync/pipeline').Pipeline;
 var directory1 = "./test-data/folder1";
 var directory2 = "./test-data/folder2";
 
+/* Your testing is a little bit sparse (no offense meant). To tell you the truth my testing was nonexistent.
+ * I tell you what, though, if you could implement a way to test that the default file name I suggested in the other
+ * module works properly, that should be enough. Bonus points if you find a way to test whether or not the student
+ * received the email you sent them. (I don't know if that's possible.) --LW */
+ */
+
 test({name:"Dropbox URIs"}, function(tester){
     tester.expectThat(
         {
@@ -64,7 +70,7 @@ test({name:"Sync Module"}, function(tester) {
 
                 return hasTest && hasTest2 && nothingNeedsSyncingToFolder2;
             },
-            msg: "folder1 should need test3.txt and test.txt sync'd to it, but folder2 shouldn't need anything sync'd"
+            msg: "folder1 should need test3.txt and originaltest.txt sync'd to it, but folder2 shouldn't need anything sync'd"
         }
     )
 });
@@ -93,7 +99,7 @@ test({name:"Pipeline Module"}, function(tester) {
 
                 return hasResult && hasHistory && resultIs1 && historyHas2Items && historyHasCorrectItems;
             },
-            msg: "folder1 should need test3.txt and test.txt sync'd to it, but folder2 shouldn't need anything sync'd"
+            msg: "folder1 should need test3.txt and originaltest.txt sync'd to it, but folder2 shouldn't need anything sync'd"
         }
     );
 });
