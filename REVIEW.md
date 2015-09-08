@@ -6,6 +6,8 @@ This feature provides an implementation to read a specfile and decide whether of
 
 ## Suggested Improvements
 
+https://github.com/cs4278-2015/assignment2-handin/pull/16
+
 1. Should probably add .idea to .gitignore in order to keep commit history free from dev configs.
 2. fs.readFileSync() only needs the 'utf8' flag to specify reading as a string, no need for toString()
 3. makeX(numCopies) isn't implemented or used anywhere, so it can be removed
