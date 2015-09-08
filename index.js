@@ -70,17 +70,8 @@ writePipeline.addAction({
 });
 
 function checkForChanges(){
-    var path1;
-    var path2;
-    var nameExistingConfig = argv.configuration;
-    if (nameExistingConfig) {
-        var paths = rememberSetupConfig();
-        path1 = paths[0];
-        path2 = paths[1];
-    } else {
-        path1 = argv.directory1;
-        path2 = argv.directory2;
-    }
+    var path1 = argv.directory1;
+    var path2 = argv.directory2;
 
     sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
 
@@ -102,17 +93,16 @@ function scheduleChangeCheck(when,repeat){
 // checks to see if the argv for 'c' has been defined and then calls on that configuration
 function rememberSetupConfig() {
     var nameExistingConfig = argv.configuration;
-    var arr = [];
+
     if (nameExistingConfig) {
         var rawData = fs.readFileSync(__dirname + '/config.txt').toString();
         var tempArr = rawData.split(" ");
         for (var i = 0; i < tempArr.length; i++) {
             if (tempArr[i] === nameExistingConfig) {
-                arr.push([tempArr[i + 1]].toString());
-                arr.push([tempArr[i + 2]].toString());
+                argv.directory1 = ([tempArr[i + 1]].toString());
+                argv.directory2 = ([tempArr[i + 2]].toString());
             }
         }
-        return arr;
     }
 }
 
@@ -135,6 +125,14 @@ function createSetupConfig() {
 
 var ensureDemands = function (callback){
 
+    if (argv.directory1 && argv.directory2 ){
+        callback(null);
+    }
+
+    if (argv.configuration){
+        callback(null);
+    }
+
     if (!argv.directory1 && !argv.directory2 && !argv.configuration){
         callback('\nRun the program with either directory1 and directory2 or a configuration\n');
     }
@@ -150,7 +148,6 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
             process.exit(1);
 
         } else {
-
             createSetupConfig();
             rememberSetupConfig();
             scheduleChangeCheck(1000, true);
