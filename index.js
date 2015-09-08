@@ -5,7 +5,7 @@ var fs = require('fs');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
-    .example('dropbox --directory1 dnode://test-data/folder1 --directory2 file://test-data/folder2', '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
+    .example('dropbox --directory1 dnode://test-data/folder1 --directory2 file://test-data/folder2 --i test.txt test2.txt', '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
     .demand(['d1','d2'])
     .alias('d1', 'directory1')
     .nargs('d1', 1)

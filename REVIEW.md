@@ -25,3 +25,7 @@ ii) --i argument
    --i test.txt test2.txt
    I have not changed the yargs description for this but if you feel this change is fine, pull and merge. 
    If you fine with using just the file names, you can ignore using refineArgs().
+
+4) Found function ignore() that was not used within the code. 
+
+5) added how to use --i in .example of yargs. 
