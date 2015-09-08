@@ -6,11 +6,10 @@
   "scripts": {
     "start": "NODE_PATH=lib node index.js"
   },
-  "bin":
-    {
-      "dropbox": "index.js",
-      "dropbox-server":"lib/sync/sync-server.js"
-    },
+  "bin": {
+    "dropbox": "index.js",
+    "dropbox-server": "lib/sync/sync-server.js"
+  },
   "author": "Jules",
   "license": "Apache 2",
   "dependencies": {
@@ -18,6 +17,7 @@
     "dnode": "^1.2.1",
     "express": "4.13.3",
     "formidable": "1.x",
+    "jade": "^1.11.0",
     "lodash": "^3.10.1",
     "yargs": "^3.19.0"
   }

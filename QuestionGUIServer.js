@@ -3,6 +3,12 @@ var fs = require('fs');
 var formidable = require('formidable');
 var app = express();
 app.use(express.static(__dirname));
+app.set('view engine', 'jade');
+app.set('views', __dirname);
+
+app.get('/', function(req, res) {
+  res.render('index');
+});
 
 /** Honor Citation: this post request based on an example from my Microsoft training guide "Programming in HTML5 with JavaScript and CSS", chapter 3 */
 app.post('/Submit', function(request, response){
