@@ -116,34 +116,27 @@ function del(fileName) {
 // To add valid operations, map user input to the desired function
 var userOps = {
     quit: null,
-    test: function () { console.log('Test'); },
-    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
-    delete: del,
     login: login
 };
 
-var connected = false;
-
 function login (username, password) {
     dnodeClient.connect({host:argv.server, port:argv.port},
-        function(handler, removeListeners){ // callback function upon connection
+        function(handler){ // callback function upon connection
             handler.login(username,password, // try to login upon connected to the server
                 function() {
-                    delete handler.login;
+                    delete handler.login; // upon successful connection, we remove the login action from the handler
+                                          // so that it does not get called on every check iteration
                     sync.fsHandlers.dnode = handler;
                     if(dnodeClient.state.connectStatus) {
-                        connected = true;
                         rl.setPrompt("[Connected]>");
                     }
                     rl.prompt();
+                    userOps.delete = del; // only add delete operation after logged in
                     scheduleChangeCheck(1000, true);
-                    removeListeners();
-
                 },
                 function() {
                     console.log("Login failed");
                     rl.prompt();
-                    removeListeners();
                 });
         });
 }
@@ -175,7 +168,7 @@ function getUserInput(){
 
             default:
                 if (userOps.hasOwnProperty(operation)) {
-                    if(connected && operation === "login"){
+                    if(dnodeClient.state.connectStatus && (operation === "login")){
                         console.log("you are already logged in.");
                     }
                     else{
