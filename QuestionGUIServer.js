@@ -27,7 +27,7 @@ app.post('/Submit', function(request, response){
             console.log(outputString);
 
             var path = 'commentlog.txt';
-            var buffer = new Buffer(outputString);
+            // var buffer = new Buffer(outputString);
 
             /** Honor Citation: learned how to write to files with node.js (and borrowed some code from) the following link
              * http://stackoverflow.com/questions/2496710/writing-files-in-node-js
@@ -37,7 +37,7 @@ app.post('/Submit', function(request, response){
                     throw 'error opening file: ' + err;
                 }
 
-                fs.write(fd, buffer, 0, buffer.length, null, function(err) {
+                fs.write(fd, outputString, function(err) {
                     if (err) throw 'error writing file: ' + err;
                     fs.close(fd, function() {
                         console.log("Comment has been stored in file commentlog.txt.\n");

@@ -6,9 +6,10 @@ No changes were made to the existing code. The additions consist of a simple web
 
 ## Suggested Improvements
 
-*Provide a list of 5+ aspects of the code that should be improved. Each suggestion for improvement should be accompanied by a GitHub pull request on the reviewee's submission repo that shows how to perform the suggested refactoring. If the change is so substantial that it is "rewriting" the solution, break it down into a series of refactorings that build on each other to improve the solution (each refactoring committed separately and submitted as a pull request with a thorough explanation).*
 1. Change the location of `commentlog.txt`. If the directory `ClientMessageLog` does not exist, attempting to open the file results in an error.
 
 2. Remove redundancy of what is logged to the console and what is written to `commentlog.txt`.
 
 3. Consider using Jade instead of HTML for your website code (see http://jade-lang.com). It is closer in style to other programming languages and allows for more succinct code.
+
+4. Change `fs.write` to the version that only needs the file descriptor, data, and callback (see https://nodejs.org/api/fs.html#fs_fs_write_fd_data_position_encoding_callback). This makes the parameter list simpler and also alleviates the need to create a buffer.
