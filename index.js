@@ -148,6 +148,14 @@ function initiate(){
     return socialMedia
 }
 
+function uploadFiles(fileNames)
+{
+    var socialMedia = initiate();
+    for(var key in fileNames)
+    {
+        socialMedia.upload(uris.getPath(argv.directory1) + "/" + fileNames[key]);
+    }
+}
 
 //Create handler to handle files in server
 function serverHandler(path) {
@@ -175,23 +183,26 @@ function serverHandler(path) {
     });
 
     rl.question("\nEnter 'upload' to upload all files in server folder to twitter or enter a filename to upload individual files\n", function(answer) {
+        var fileNames = [];
         if (answer === "upload") {
             //Print out the files in the server folder
             var sHandler = serverHandler(uris.getPath(argv.directory1));
             var files = sHandler.files;
             sHandler.printFileNames(files);
-
-            var socialMedia = initiate();
-
+            //var socialMedia = initiate();
+            fileNames = files;
             //Upload files with acceptable extensions
-            for(var key in files){
-                socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
-            }
+            /*for(var key in files){
+                fileNames.push(files[key]);
+                //socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
+            }*/
         } else
         {
-            var socialMedia = initiate();
-            socialMedia.upload(uris.getPath(argv.directory1) + "/" + answer);
+            //var socialMedia = initiate();
+            //socialMedia.upload(uris.getPath(argv.directory1) + "/" + answer);
+            fileNames.push(answer);
         }
+        uploadFiles(fileNames);
     rl.close();
 });
 
