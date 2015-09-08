@@ -45,7 +45,7 @@ var syncFile = function(fromPath,toPath){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
             /*
-             * For 4th fix:
+             * For 4th improvement:
              *   - create a function to provide the 2nd argument passed to fs.appendFile
              *   - also you'll need to keep track in these files about which files are
              *     added or created when, and whether they existed before this latest update.
@@ -54,6 +54,11 @@ var syncFile = function(fromPath,toPath){
              *   - if you figure out where that's going on, then you can have an if statement for
              *     your different options to concatenate
              *
+             *
+             * For 5th improvement:
+             *   - pass a function to moment().format that returns a string
+             *   - in this function, prompt the user to enter a valid date format.
+             *   - return the user input as a string.
              */
             rl.question("Enter your username: ", function(answer) {
                 //Third Improvement: lose the close. Otherwise, the Log will only update once.
