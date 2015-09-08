@@ -42,7 +42,7 @@ function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
 
-    check.compare(path1,path2,check.fileMatch, function(rslt) {
+    check.compare(path1, path2, check.fileMatch, function(rslt){
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;
@@ -54,13 +54,13 @@ function checkForChanges(){
 function scheduleChangeCheck(when,repeat){
     setTimeout(function(){
         checkForChanges();
-        if(repeat) {scheduleChangeCheck(when,repeat)}
+        if (repeat) {scheduleChangeCheck(when, repeat)}
     },when);
 }
 
 var onConnectionSuccess = function(handler){
     sync.fsHandlers.dnode = handler;
-    scheduleChangeCheck(1000,true);
+    scheduleChangeCheck(1000, true);
 }
 
 var onConnectionError = function(errorMessage){
@@ -72,8 +72,8 @@ var onConnectionError = function(errorMessage){
 
 dnodeClient.connect(
     {
-        host:argv.server,
-        port:argv.port,
+        host: argv.server,
+        port: argv.port,
         username: argv.username,
         credential: encrypt(argv.credential)
     },
