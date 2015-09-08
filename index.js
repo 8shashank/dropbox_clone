@@ -100,16 +100,16 @@ function scheduleChangeCheck(when,repeat){
 function fileNeverSync(){
     console.log("Please enter a file to never sync. ");
 
-    var r1 = readline.createInterface({
+    var rlInterface = readline.createInterface({ // Try to be a little more specific with your naming convention. Ex: 'rlInterface'
         input: process.stdin,
         output: process.stdout
     });
-    r1.setPrompt('File name> ');
-    r1.prompt();
-    r1.on('line', function (line) {console.log("The file you do not want to sync is " + line);
+    rlInterface.setPrompt('File name> ');
+    rlInterface.prompt();
+    rlInterface.on('line', function (line) {console.log("The file you do not want to sync is " + line);
         if(checkNoSyncFile(line)){
             writeFile(line);
-            r1.close();
+            rlInterface.close();
         }
         else{
             console.log(line + " is already in the no sync list.");
@@ -142,9 +142,9 @@ function writeFile(filenosync){
 // Wrote a function to take in a file name and check if it's in the no sync list.
 // Returns true if file is not found in no sync file. Returns false if it is and no sync.
 function checkNoSyncFile(filename) {
-    var array = fs.readFileSync('neversyncfile.txt').toString().split('\n');
+    var noSyncArray = fs.readFileSync('neversyncfile.txt').toString().split('\n'); // Try to be a little more specific with your naming convention. Ex: 'noSyncArray'
 
-    if (array.indexOf(filename) === -1) {
+    if (noSyncArray.indexOf(filename) === -1) {
         //console.log(filename + " was not found in log.");
         return true;
     }
@@ -157,23 +157,23 @@ function checkNoSyncFile(filename) {
 function askUserInput(){
     console.log("Press 1 to add file to no sync log or 2 to sync files. ");
 
-    var r1 = readline.createInterface({
+    var rlInterface = readline.createInterface({ // Try to be a little more specific with your naming convention. Ex: 'rlInterface'
         input: process.stdin,
         output: process.stdout
     });
-    r1.prompt();
-    r1.on('line', function (line) {
+    rlInterface.prompt();
+    rlInterface.on('line', function (line) {
         if(line === "1"){
-            r1.close();
+            rlInterface.close();
             fileNeverSync();
         }
         else if (line === "2"){
-            r1.close(); // Try to always use semi-colons even though they aren't required.
+            rlInterface.close(); // Try to always use semi-colons even though they aren't required.
             scheduleChangeCheck(1000,true);
         }
         else{ // Give the user an option to re-enter input. Maybe he or she just mistyped.
             console.log("Please enter a valid input (1 or 2): ");
-            r1.prompt();
+            rlInterface.prompt();
         }
 
     })
