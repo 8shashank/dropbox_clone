@@ -13,5 +13,4 @@ into the backup directory. If it already has been created, it writes as usual.
 3. sync-client.js needed to require "./base64utils"
 4. small bug: The backup directory created another subfolder called assignment2-handin within assignment2-handin. Think you just wanted to put it in test-data so I changed it.
 5. BUG: Once a directory is created, nothing actually gets written into it. May have something to do with callback asynchronicity but I'm not sure (I'm new to Javascript and don't fully understand callbacks).
-   Frankly, I can't figure out how to read one file and write it to a specific location given these other functions and fs and stuff, but the current solution doesn't do it. Office hours? Sorry!
-   I got it to write a file named "
+   FIX: Not completely done, but it writes to one of the corresponding temp directories. Stuff copied from folder1 into folder2 is put into tmdir but not tmdir2, and stuff copied from folder2 into folder1 is put into tmdir2 but not tmdir1. The temp directories do not have the entire contents of their corresponding folders. Not sure if this is the desired functionality. If it is, great!
