@@ -36,12 +36,10 @@ var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
-    var toFiles = dirHandler(fromPath).files;
-    var fromFiles = dirHandler(toPath).files;
-    //I don't like doing this string comparison to have it ignore files
-    //I feel like there should be a way to set a file to be ignored but I can't find one
-    //if(ignoreList.indexOf(fromPath) === -1 && ignoreList.indexOf(toPath) === -1) {
-      if(check if ignoreList is in toFiles and fromFiles)
+    //var toFiles = dirHandler(fromPath).files;
+    //var fromFiles = dirHandler(toPath).files;
+      //if(/*check if ignoreList is in toFiles and fromFiles*/){
+    if(ignoreList.indexOf(fromPath) === -1 && ignoreList.indexOf(toPath) === -1){
         srcHandler.readFile(fromPath, function (base64Data) {
             trgHandler.writeFile(toPath, base64Data, function () {
                 console.log("Copied " + fromPath + " to " + toPath);
@@ -114,7 +112,7 @@ function del(fileName) {
 }
 
 //Create handler to handle files in directory
-function dirHandler(path) {
+/*function dirHandler(path) {
     getFiles = function(path){
         return fs.readdirSync(path);
     }
@@ -131,10 +129,10 @@ function dirHandler(path) {
         files: getFiles(path),
         printFileNames : printFileNames
     }
-}
+}*/
 
-function ignore(fileName){
-    while(fileName != "done") {
+function ignore(fileName) {
+    //while (fileName != "done") {
         if (!fileName) {
             console.log('Please enter a file to ignore synchronization ');
             return;
@@ -142,7 +140,27 @@ function ignore(fileName){
         ignoreList.push(argv.directory1 + '/' + fileName);
         ignoreList.push(argv.directory2 + '/' + fileName);
         console.log('Ignoring ' + fileName);
+    //}
+}
+function removeFileFromIgnoreList(fileName)
+{
+ for(var i = ignoreList.length-1; i >= 0; i--)
+ {
+     if(ignoreList[i] == fileName)
+     {
+         ignoreList.splice(i, 1);
+     }
+ }
+}
+function unignore(fileName)
+{
+    if (!fileName) {
+        console.log('Please enter a file to stop ignoring synchronization ');
+        return;
     }
+    removeFileFromIgnoreList(argv.directory1 + '/' + fileName);
+    removeFileFromIgnoreList(argv.directory2 + '/' + fileName);
+    console.log('No longer ignoring ' + fileName);
 }
 
 // To add valid operations, map user input to the desired function
@@ -151,8 +169,8 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del,
-    ignore: ignore,
-    unignore: unignore
+    unignore: unignore,
+    ignore: ignore
 };
 
 function getUserInput(){
@@ -193,3 +211,4 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     scheduleChangeCheck(1000,true);
     getUserInput();
 });
+
