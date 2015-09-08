@@ -3,7 +3,7 @@
 var sync = require('./lib/sync/sync');
 var check = require('./lib/sync/check');
 var dnodeClient = require("./lib/sync/sync-client");
-
+var prompt = require('prompt');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -65,19 +65,52 @@ var onConnectionSuccess = function(handler){
 
 var onConnectionError = function(errorMessage){
     console.log(errorMessage);
-    process.exit(1);
-    // #TODO: Find a better way to end the connection
-    // that will not affect server connection.
+    var confirm_retry={
+        name: "retry",
+        message: "Would you like to re-enter your user"+
+        " credentials to try connecting again?",
+        warning: "Please respond with yes or no",
+        default: "no"
+    };
+    var prompt_credentials={
+        properties:{
+            username:{
+                message: "Please enter your username"
+            },
+            password:{
+                hidden: true
+            }
+        }
+    };
+    prompt.get(confirm_retry, function(err, result){
+        if (err || result.retry==="no" || result.retry.toUpperCase()=="NO"){
+            process.exit(1);
+        }
+        else{
+            prompt.get(prompt_credentials, function(err, creds){
+                if (err) {
+                    process.exit(1);
+                }
+                startConnection(creds.username,creds.password);
+            })
+        }
+    });
+};
+
+function startConnection(username, password){
+    dnodeClient.connect(
+        {
+            host:argv.server,
+            port:argv.port,
+            username: argv.username,
+            credential: encrypt(argv.credential)
+        },
+        onConnectionSuccess,
+        onConnectionError);
 }
 
-dnodeClient.connect(
-    {
-        host:argv.server,
-        port:argv.port,
-        username: argv.username,
-        credential: encrypt(argv.credential)
-    },
-    onConnectionSuccess,
-    onConnectionError);
+prompt.start();
+startConnection(argv.username,argv.credential);
+
 
 
