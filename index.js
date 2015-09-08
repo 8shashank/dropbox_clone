@@ -27,6 +27,7 @@ var argv = require('yargs')
 
 
 var sync = require('./lib/sync/sync');
+var sserver = require('./lib/sync/sync-server');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 var os = require('os');
@@ -42,7 +43,7 @@ var syncFile = function(fromPath,toPath){
             console.log('Now time for a link');
             var myIP = ip.address();
             var myPath = toPath.substring(8);
-            console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
+            console.log('Shareable link: http://' + myIP + ':'+sserver.serverport+'/' + myPath);
         });
     });
 };
