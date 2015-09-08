@@ -147,6 +147,7 @@ function login (username, password) {
                 });
         });
 }
+
 function getUserInput(){
     console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
 
@@ -180,7 +181,6 @@ function getUserInput(){
                     else{
                         userOps[operation].apply(this, args);
                     }
-
                 }
                 else {
                     console.log("Unknown option");
