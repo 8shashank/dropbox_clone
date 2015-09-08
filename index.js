@@ -78,57 +78,55 @@ function checkForChanges(){
     });
 }
 
-function changeDetected(change, path){
-    console.log('Watcher detected', change, 'at path', path);
-    checkForChanges();
-}
+var Watcher = (function() {
+    function Watcher(config, dir1, dir2, pipeline, onChange) {
+        if (typeof dir !== 'string')
+          throw new TypeError('directory argument required');
 
-function Watcher(config, dir1, dir2) {
+        if (typeof onChange !== 'function')
+          throw new TypeError('onChange must be a function');
 
-    if (dir1 === undefined || dir2 === undefined)
-      throw new TypeError('two directory arguments required');
+        var self = this;
 
-    // Only watch local directories
-    if(argv.directory1.indexOf('dnode') === -1){
-        // Removes file/dnode from beginning of path for watchers
-        var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
-        var watcher1 = chokidar.watch(dir1, config);
-        watcher1
+        this.onChange = onChange;
+
+        self.checkForChanges = function(path, change) {
+            onChange(path, change);
+            console.log('Watcher detected ', change, ' at path ', path);
+            self.checkForChanges();
+        };
+
+        function changeDetected(path, config) {
+            onChange(path, config);
+            console.log('Watcher detected ', change, ' at path ', path);
+            self.checkForChanges();
+        }
+
+        chokidar.watch(dir, config)
           .on('all', changeDetected)
           .on('error', function(error) {
             console.log('Uncaught error', error);
           })
           .on('ready', function() {
-            console.log('watching', dir1);
+            console.log('watching', dir);
           });
     }
 
-    if(argv.directory2.indexOf('dnode') === -1){
-        var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
-        var watcher2 = chokidar.watch(dir2, config);
-        watcher2
-          .on('all', changeDetected)
-          .on('error', function(error) {
-            console.log('Uncaught error', error);
-          })
-          .on('ready', function() {
-            console.log('watching', dir2);
-          });
+    Watcher.prototype = Object.create(null);
+    Watcher.prototype.constructor = Watcher;
+    Watcher.prototype.checkForChanges = function() {
+        var self = this;
+        sync.compare(self.dir1, self.dir2,
+                sync.filesMatchNameAndSize, function(rslt) {
+            rslt.srcPath = dir1;
+            rslt.trgPath = dir2;
+            self.pipeline.exec(rslt);
+        });
     }
 
-}
 
-Watcher.prototype = Object.create(null);
-Watcher.prototype.constructor = Watcher;
-Watcher.prototype.checkForChanges = function(pipeline) {
-    var self = this;
-    sync.compare(self.dir1, self.dir2,
-            sync.filesMatchNameAndSize, function(rslt) {
-        rslt.srcPath = self.dir1;
-        rslt.trgPath = self.dir2;
-        pipeline.exec(rslt);
-    });
-};
+    return Watcher;
+})();
 
 function del(fileName) {
     if(!fileName){
@@ -190,18 +188,42 @@ function getUserInput(){
     });
 }
 
+function sanitizeDir(dir) {
+    if (indexOf('dnode') === -1)
+        throw new Error('directory must be local');
+    return dir.replace(/^.*?:\/\//, '');
+}
+
 function connect(options) {
 
-    var watcher = new Watcher({
+    function onChange(path, change) {
+    }
+
+    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
+
+        rslt.srcPath = path1;
+        rslt.trgPath = path2;
+
+        writePipeline.exec(rslt);
+    });
+
+    var watchConf = {
         ignored: '*.swp',    // Prevents issues when editing files with vim
         ignoreInitial: true, // Prevents checking for changes when 
                              // first turned on for every file
         persistent: true     // Keeps running until program ends
-    });
+    };
+
+    var dir1 = sanitizeDir(argv.directory1);
+    var dir2 = sanitizeDir(argv.directory2);
+
+    var watcher1 = new Watcher(watchConf, dir1, onChange);
+    var watcher2 = new Watcher(watchConf, dir2, onChange);
 
     dnodeClient.connect(options, function(handler){
         sync.fsHandlers.dnode = handler;
-        checkForChanges();
+        watcher1.checkForChanges();
+        watcher2.checkForChanges();
         getUserInput();
     });
 
