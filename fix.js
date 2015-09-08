@@ -4,6 +4,7 @@
 
 
 var syncFile = function(fromPath,toPath) {
+    timeStamp();
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
