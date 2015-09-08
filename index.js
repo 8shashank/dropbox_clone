@@ -104,14 +104,16 @@ function deleteFile(fName){
         console.log("Please provide a valid filename to delete.");
         return;
     }
-    //Trim() does not remove whitespace for some reason
-    fName = fName.substring(0, fName.length-1);
-    //need to actually get path
+    if (fName.split(" ").length > 1) {
+        fName = fName.substring(0, fName.length-1);
+    }
+
+    //++++++++++++++ #3 +++++++++++++//
+
+    //Search lists first before setting paths and handlers to check
+    //if directories could be empty/avoid unnecessary allocations
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-    var handler1 = sync.getHandler(path1);
-    var handler2 = sync.getHandler(path2);
-
     var inList1 = listSearch(fName, uris.getPath(path1));
     var inList2 = listSearch(fName, uris.getPath(path2));
 
@@ -120,8 +122,16 @@ function deleteFile(fName){
         return;
     }
 
+    //-------------- #3 -------------//
+
+    //Trim() does not remove whitespace for some reason
+
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+
     path1 = path1+"/"+fName;
     path2 = path2+"/"+fName;
+
     try {
         handler1.removeFile(path1, function(){});
         handler2.removeFile(path2, function(){});
@@ -131,7 +141,10 @@ function deleteFile(fName){
         return;
     }
 
-    console.log("Deleting file");
+    //++++++++++++++ #4 +++++++++++++//
+    //more accurate log
+    console.log("File was successfully deleted");
+    //-------------- #4 -------------//
 }
 
 /*
@@ -146,10 +159,7 @@ function deleteFile(fName){
 function listSearch(name, path){
     console.log("searching lists");
     var list = fs.readdirSync(path);
-    //console.log(list);
     for (var i = 0; i < list.length; i++){
-        //console.log(name+" , "+list[i]);
-
         if(list[i] === name) {
             return true;
         }
@@ -190,9 +200,11 @@ function getUserInput(){
                 }
             }
         } else if (userOps.hasOwnProperty(operation)) {
+            console.log(args.length);
             if(operation == 'delete' && args.length > 1) {
                 //+++++++++++++BUGFIX #1++++++++++++++++++//
                 //if deleting and the file has spaces in its name, recombine arguments
+
                 var name ='';
                 for (var i = 0; i < args.length; i++) {
                     var name = name + args[i] + " ";
@@ -200,8 +212,6 @@ function getUserInput(){
                 //WHY DOESN'T IT TRIM
                 name.trim();
                 args[0] = name;
-                console.log(name);
-                userOps[operation].apply(this, args);
                 //------------BUGFIX #1 ----------------//
 
                 //+++++++++++++ #2 ++++++++++++++++++//
@@ -213,9 +223,21 @@ function getUserInput(){
                 //pass in each value through the userOps[operation].apply method
                 //--------------- #2 -----------------//
 
-            } else {
-                userOps[operation].apply(this, args);
             }
+            userOps[operation].apply(this, args);
+            //+++++++++++++++ #5 +++++++++++++++++//
+            //pseudocode for "Are you sure you want to delete" prompt; was having trouble getting it to work
+            /*
+                //this will help make sure to prevent any unwanted deletions
+                rl.question("Are you sure you want to do delete this file?", function(answer) {
+                    answer.toLowerCase();
+                    if (answer === 'y' || answer === "yes") {
+                         userOps[operation].apply(this, args);
+                    }
+                });
+               */
+
+            //--------------- #5 -----------------//
         } else {
             console.log("Unknown option");
         }
