@@ -1,5 +1,13 @@
 # Dropbox Application
 
+## Feature Added
+
+Added the ability to set a file to be ignored from being synced using the code that Collin submitted earlier.
+
+I attempted to find a function that would have the syncronization code permanently ignore a file but fs.unwatch 
+did not work as I hoped. In the code reviews, if someone could help me find a way to do that, that would be best.
+Keeping a list of files to ignore is probably not the best implementation if I can find another way.
+
 ## Overview
 
 This is a very rough implementation of a Dropbox server and client. The client and server
