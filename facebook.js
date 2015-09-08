@@ -3,7 +3,7 @@
  */
 var FB = require('fb');
 
-
+//this is lengthy and awkward
 FB.setAccessToken('CAACEdEose0cBAEVBgHMLSKVtWSHvxQtVXpRNyKODi3ZAyZAk9SMX8LcCM3DHlDgwJJMKdwvFY23hy9WYAep7DW0idae65JUmvYDZB1cZC81nrbqAOAjpaS7z0pia1nGBeCMRFRayLSi4dXsiLWKF5TUb5WerdkcHeu6DtrM8p2Qz47BCDmTnVMRTStkZBd5yZBoGBUnSkeZBQZDZD');
 
 var body = 'My first post using facebook-node-sdk';
