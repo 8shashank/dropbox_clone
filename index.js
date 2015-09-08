@@ -125,24 +125,22 @@ function add(fileName) {
 	//fixed here (youngho)
 	var checkPath1 = './' + path1.split('//')[1];
 	var checkPath2 = './' + path2.split('//')[1];
-	//console.log("path: " + './'+path1.split('//')[1]);
-	//console.log("exists?: " + fs.existsSync('./'+path1.split('//')[1]));
-	if(fs.existsSync(checkPath1) || fs.existsSync(checkpath2)){
-		console.log("file already exists so will not create new file.");
-	}else{
-    	try {
-        	// adds file to both directories
-        	handler1.writeFile(path1, 'new File', function(){});
-        	handler2.writeFile(path1, 'new File', function(){});
-        	lastUpdate = new Date();
-        	console.log('Files added on ' + formatTime(lastUpdate));
-    	} catch (err) {
-        	console.log('Failed to add new file ' + fileName);
-        	console.log(err.message);
-        	return;
-    	}
-    	console.log('Adding ' + fileName);
-	}
+    try {
+		if(fs.existsSync(checkPath1) || fs.existsSync(checkPath2)){
+			console.log("file already exists so will not create new file.");
+		}else{
+       		// adds file to both directories
+       		handler1.writeFile(path1, 'new File', function(){});
+       		handler2.writeFile(path1, 'new File', function(){});
+       		lastUpdate = new Date();
+       		console.log('Files added on ' + formatTime(lastUpdate));
+			console.log('Adding ' + fileName);
+		}
+   	} catch (err) {
+       	console.log('Failed to add new file ' + fileName);
+		console.log(err.message);
+       	return;
+   	}
 }
 
 // returns the last time dropbox was updated
