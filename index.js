@@ -125,7 +125,7 @@ function add(fileName) {
         // adds file to both directories
         handler1.writeFile(path1, 'new File', function(){});
         handler2.writeFile(path1, 'new File', function(){});
-        lastUpdate = new Date();
+        lastUpdate = Date.now().toString();
         console.log('Files added on ' + formatTime(lastUpdate));
     } catch (err) {
         console.log('Failed to add new file ' + fileName);
@@ -146,20 +146,13 @@ function lastUpdated() {
 
 // formats a timestamp into something more readable for the user
 function formatTime(time) {
-    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    var dayOfWeek = time.getDay();
-    var dayName = dayNames[dayOfWeek];
-    var day = time.getDate();
-    var month = time.getMonth();
-    var monthName = monthNames[month];
-    var year = time.getFullYear();
-    var hour = time.getHours();
-    var minute = time.getMinutes();
-    var second = time.getSeconds();
+    //Simple way to get readable timestamp
+    var utc = time;
+    var d = new Date(0);
+    d.setUTCSeconds(utc);
 
-    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' + hour + ':' + minute + '.' + second;
+    var update = d;
 
     return update;
 }
