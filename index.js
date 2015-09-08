@@ -137,7 +137,7 @@ function del(fileName) {
         console.log('Please enter a file to delete');
         return;
     }
-    var path1 = argv.directory1 + '/' + fileName;
+    var path1 = argv.directory1 + '/' + fileName;  // consider making a concatenate-like helper fn for these two lines and the next two to reduce repetition
     var path2 = argv.directory2 + '/' + fileName;
     var handler1 = sync.getHandler(path1);
     var handler2 = sync.getHandler(path2);
