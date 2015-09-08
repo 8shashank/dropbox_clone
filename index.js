@@ -115,32 +115,34 @@ function del(fileName) {
 
 // To add valid operations, map user input to the desired function
 var userOps = {
-    quit: null,
-    test: function () { console.log('Test'); },
-    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
-    delete: del,
-    login: function (username, password) {
+    quit: {exec: null, msg:"Quit the application"} ,
+    test: {exec: function () { console.log('Test'); } , msg: "Test the program" },
+    func: {exec: function (in1, in2) { console.log(in1 + ' and ' + in2); }, msg: "Show two passed in values"},
+    delete: {exec: del, msg: "Pass in a filename to delete it"},
+    login: {exec: function (username, password) {
         dnodeClient.connect({host:argv.server, port:argv.port},
             function(handler, removeListeners){ // callback function upon connection
                 handler.login(username,password, // try to login upon connected to the server
-                function() {
-                    delete handler.login;
-                    sync.fsHandlers.dnode = handler;
-                    if(dnodeClient.state.connectStatus) {
-                        rl.setPrompt("[Connected]>");
-                    }
-                    rl.prompt();
-                    scheduleChangeCheck(1000, true);
-                    removeListeners();
-                },
-                function() {
-                    console.log("Login failed");
-                    rl.prompt();
-                    removeListeners();
-                });
+                    function() {
+                        delete handler.login;
+                        sync.fsHandlers.dnode = handler;
+                        if(dnodeClient.state.connectStatus) {
+                            rl.setPrompt("[Connected]>");
+                        }
+                        rl.prompt();
+                        scheduleChangeCheck(1000, true);
+                        removeListeners();
+                    },
+                    function() {
+                        console.log("Login failed");
+                        rl.prompt();
+                        removeListeners();
+                    });
             });
-    }
+    }, msg: "Log into the dropbox server"}
 };
+
+
 
 function getUserInput(){
     console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
@@ -161,7 +163,7 @@ function getUserInput(){
             case("help"):
                 for (var op in userOps) {
                     if (userOps.hasOwnProperty(op)) {
-                        console.log(' * ' + op);
+                        console.log(' * ' + op + ": "+ userOps[op].msg);
                     }
                 }
                 rl.prompt();
@@ -172,7 +174,7 @@ function getUserInput(){
                     console.log("Connected");
                 }
                 else if (userOps.hasOwnProperty(operation)) {
-                    userOps[operation].apply(this, args);
+                    userOps[operation].exec.apply(this, args);
                 } else {
                     console.log("Unknown option");
                 }
