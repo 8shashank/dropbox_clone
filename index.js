@@ -107,12 +107,14 @@ function initiateTwitter(){
         var acceptable = false;
         var extension = path.extname(fileToUpload);
 
-        for (var key in acceptableExt){
+        /*for (var key in acceptableExt){
             if (extension === acceptableExt[key])
             {
                 acceptable = true;
             }
-        }
+        }*/
+        acceptable = acceptableExt.indexOf(extension) >= 0;
+
         //The image passed should be the raw binary of the image or binary base64 encoded
         if (acceptable){
             var mediaContent= fs.readFileSync(fileToUpload, { encoding: 'base64' });
@@ -166,12 +168,12 @@ function serverHandler(path) {
     }
 }
 
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
+    rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
             var sHandler = serverHandler(uris.getPath(argv.directory1));
