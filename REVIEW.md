@@ -1,4 +1,10 @@
-#Code Review
+#Review of Chris Su by Jonathan Clinton
+
+##Overview
+
+This feature allows the user to upload all of the pictures in their "src" folder to twitter. A function
+waits on the user to type upload or something else. If they type upload, then it iterates over all of the
+files in that folder and if their extensions match a group of acceptable extensions, then it uploads them.
 
 ## Commit 1 - Made a couple of dnode/weak changes to make it runnable on my machine
 
