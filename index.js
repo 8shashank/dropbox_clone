@@ -193,6 +193,7 @@ function getUserInput(){
             rl.close();
             clearTimeout(timer);
             dnodeClient.end();
+            console.log("Dropbox Client successfully disconnected. Application Closed");
             return;
         } else if (operation == 'help') {
             for (var op in userOps) {

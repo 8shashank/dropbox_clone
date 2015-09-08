@@ -18,3 +18,5 @@ The commands are read by a getUserInput() function that takes readline input.
 1. There already exists a simple way to ouput the datetime info from UTC data.
 
 2. 'help' command print-out has been given some information for each additional command.
+
+3. No information given when application is quit, added a console log to let the user know
