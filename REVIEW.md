@@ -2,8 +2,9 @@
 
 ## Overview
 
-The added code adds onto to the UI. Whenever a change is made in the folders, the user is notified of a change and a time stamp is printed.
-A sync update currently only occurs when changes are made. There is code that can be used to
+The added code adds onto to the UI. Whenever a change is made in the folders, the user is notified of a change and a time stamp is printed. The format of print exclaims that a change has been made and releases the time a change had been made.
+
+A sync update currently only occurs when changes are made. There is code that can be used to call an update, but isnt working properly.
 
 ## Suggested Improvements
 
