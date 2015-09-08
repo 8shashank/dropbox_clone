@@ -22,6 +22,7 @@ server node module.
  3. When I was attempting to run this I kept having to install modules that didn't appear to be used. So, my next 
     suggestion would be to uninstall these modules. This could be accomplished by removing require statements and 
     running npm uninstall <module> commands 
-4. Find IP address.
+4. It could be useful to find the IP address to put into the url. I would use a similar implementation to what I used in
+    my own feature, however I would implement it in 
  5. Further explanation of web interface
 

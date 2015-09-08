@@ -87,9 +87,12 @@ function listen(port) {
     };
   }
 
+  var ip = require("ip");
+
   var server = httpServer.createServer(options);
   server.listen(port, host, function () {
-    var canonicalHost = host === '0.0.0.0' ? '127.0.0.1' : host,
+    var myIP = ip.address();
+    var canonicalHost = host === myIP ? '127.0.0.1' : host,
         protocol      = ssl ? 'https:' : 'http:';
 
     log('Starting up http-server, serving '.yellow
