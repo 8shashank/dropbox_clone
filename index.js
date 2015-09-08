@@ -44,6 +44,17 @@ var syncFile = function(fromPath,toPath){
     //OTHERWISE THIS WILL NOT RUN
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
+            /*
+             * For 4th fix:
+             *   - create a function to provide the 2nd argument passed to fs.appendFile
+             *   - also you'll need to keep track in these files about which files are
+             *     added or created when, and whether they existed before this latest update.
+             *       - to be quite honest, I don't really know where the application makes a
+             *         distinction between newly created files and edited existing files. so....
+             *   - if you figure out where that's going on, then you can have an if statement for
+             *     your different options to concatenate
+             *
+             */
             rl.question("Enter your username: ", function(answer) {
                 //Third Improvement: lose the close. Otherwise, the Log will only update once.
                 var shortPath = fromPath.split('/');

@@ -9,5 +9,5 @@ This code creates a Log file of changes made to the files using a readline inter
 1. Not a huge change, but a comment or an edit of the README to specify that your users must have moment installed in order for the server to run would make your code more user-friendly.
 2. It's not easy to tell when your application has finished. A simple console.log output could let your user know that the log has been created.
 3. Bug Fix. Line 47.17 should be erased. If you close the stream, any additional changes to the files won't be registered.
-4. More specific messages. Right now it only says that the file was edited, but if a file is created.
+4. More specific messages. Right now it only says that the file was edited, even if a file is simply created.
 5. You could invite the user to specify the date format.
