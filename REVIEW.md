@@ -13,3 +13,4 @@ This module uses a ".ignore" file that lists files to not sync. It reads that fi
 1. Printing the files that are being synced every second can get overwhelming for the user.
 2. Change the for-in to a regular for loop in the ignoreFiles method in ignore.js. The for-in should be used to iterate through properties of an object, not through elements of an array.
 3. Ignoring files wasn't working (at least for Windows) because there were extra non-ASCII characters at the end of each file name in the .ignore file. I performed a .trim() on each element in the filesToIgnore array in the ignoreFiles method in ignore.js.
+4. Changed the ignoreFiles method to use a callback instead of return a value.
