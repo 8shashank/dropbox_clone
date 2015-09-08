@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42b7bbb1-ab74-4427-8b3e-c8d3382a3619" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REVIEW.md" afterPath="$PROJECT_DIR$/REVIEW.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/sync/sync-client.js" afterPath="$PROJECT_DIR$/lib/sync/sync-client.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test-data/folder2/test.txt" afterPath="$PROJECT_DIR$/test-data/folder2/test.txt" />
-    </list>
+    <list default="true" id="42b7bbb1-ab74-4427-8b3e-c8d3382a3619" name="Default" comment="" />
     <ignored path="assignment2-handin.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,11 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="REVIEW.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/REVIEW.md">
+      <file leaf-file-name="REVIEW..md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/REVIEW..md">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.092016235">
-              <caret line="4" column="95" selection-start-line="4" selection-start-column="95" selection-end-line="4" selection-end-column="95" />
+            <state vertical-scroll-proportion="0.20703654">
+              <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -147,6 +142,7 @@
         <option value="$PROJECT_DIR$/lib/sync/sync-client.js" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/REVIEW.md" />
+        <option value="$PROJECT_DIR$/REVIEW..md" />
       </list>
     </option>
   </component>
@@ -500,14 +496,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/sync/sync.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -556,10 +544,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/REVIEW.md">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.092016235">
-          <caret line="4" column="95" selection-start-line="4" selection-start-column="95" selection-end-line="4" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/REVIEW..md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20703654">
+          <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
           <folding />
         </state>
       </provider>
