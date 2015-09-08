@@ -90,10 +90,11 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
+
 function callFunctionInBothDirectories(fileName, functionName)
 {
     if(!fileName){
-        console.log('Please enter a file to delete');
+        console.log('Please enter a file name as well');
         return;
     }
     var path1 = argv.directory1 + '/' + fileName;
@@ -118,6 +119,7 @@ function callFunctionInBothDirectories(fileName, functionName)
                 throw "Unrecognized function type";
         }
         lastUpdate = new Date();
+        console.log('Files updated on ' + formatTime(lastUpdate));
     } catch (err) {
         console.log(err.message);
         return;
@@ -191,11 +193,11 @@ function formatTime(time) {
     var month = time.getMonth();
     var monthName = monthNames[month];
     var year = time.getFullYear();
-    var hour = time.getHours();
+    /*var hour = time.getHours();
     var minute = time.getMinutes();
-    var second = time.getSeconds();
+    var second = time.getSeconds();*/
 
-    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' + hour + ':' + minute + '.' + second;
+    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' +time.toTimeString(); //+ hour + ':' + minute + '.' + second;
 
     return update;
 }

@@ -17,7 +17,12 @@
 ## Commit 3 - Reduced code duplication
 
     Pulled handler setup code out into a separate function for add and delete functions.
+    Would love to make it take a function pointer/delegate instead of a string and switch statement but
+    I have no idea how to do that in javascript.
 
-## Commit 4 -
+## Commit 4 - Improved update formatting
+
+    Used Date.toTimeStamp() to more cleanly get the Hours, minutes, and seconds for the user. This also
+    fixes the slight bug where leading zeros were getting dropped. Ex: 1:03 being 1:3.
 
 ## Commit 5 -
