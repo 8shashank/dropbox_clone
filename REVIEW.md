@@ -15,8 +15,10 @@ For example: It says
 
 When it should say "Shareable link: http://10.66.151.204:8000/test-data/folder2/DSC_2020.jpg"
 
-2. You probably do not want to share the link every single time you change something. Keep track of the links you already shared and don't share them again. This can possibly slowdown the program, but you don't want to spam the user.
+2. You probably do not want to share the link every single time you change something. Keep track of the links you already shared and don't share them again. This can possibly slowdown the program, but you don't want to spam the user. User experience is important.
 
 3. Be more descriptive on log statements and error statements.
 
 4. Separate your function from core functions to better show what you are doing and to avoid complex functions.
+
+5. Make sure you remove your leftover / unnecessary code. It creates confusion and possibly slows down the program.

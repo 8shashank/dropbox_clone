@@ -28,7 +28,6 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var os = require('os');
 var ip = require("ip");
 
 var alreadySharedLinks = {};
