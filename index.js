@@ -39,7 +39,8 @@ var syncFile = function(fromPath,toPath) {
 
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
-    var time = new Date();
+    var date = new Date();
+    var timeStamp = date.toUTCString()
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
@@ -48,8 +49,7 @@ var syncFile = function(fromPath,toPath) {
     });
 
 
-    console.log("change detected! directories were synced on " + time.getMonth() + "/" + time.getDay() + "/"  +
-        time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+    console.log("change detected! directories were synced on: " + timeStamp);
 
 }
 
@@ -122,7 +122,7 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del
-    update: //define the functionality of update
+   //*****update: //define the functionality of update
 };
 
 function getUserInput(){
@@ -147,18 +147,14 @@ function getUserInput(){
         //In the case you wanted user input to check for sync update
         //you could call the checkForChanges function
         //the put a console.log statement if there are changes needed/notneeded
-        if (promptedUpdate) {
-            if (operation == 'update') {
-                return;
-            } else if (operation == 'exit') {
-                promptedUpdate = false;
-                break; // use a break statement to break out of the if statement.
-            } else {
-                console.log("unknown entry");
-            }
-        }
 
-        if(operation == 'quit') {
+        //if (promptedUpdate) { don't think this is needed
+        if (operation == 'update') {
+                //define functionality of update
+        //}
+        if(operation == 'update'){
+            //define functionality
+        } else if(operation == 'quit') {
             rl.close();
             clearTimeout(timer);
             dnodeClient.end();
