@@ -167,6 +167,15 @@ var userOps = {
     update: lastUpdated
 };
 
+var helpInfo = {
+    quit: "Quits the User Input",
+    test: "Prints out \"test\"",
+    func: "Adds two supplied numbers together",
+    add : "Adds a file to the dropbox with a supplied path",
+    delete: "Deletes a file from the dropbox with a supplied path",
+    update: "Gives the timestamp of the last change to the dropbox"
+}
+
 function getUserInput(){
     console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
 
@@ -188,7 +197,7 @@ function getUserInput(){
         } else if (operation == 'help') {
             for (var op in userOps) {
                 if (userOps.hasOwnProperty(op)) {
-                    console.log(' * ' + op);
+                    console.log(' * ' + op+ ': ' +helpInfo[op.toString()]);
                 }
             }
         } else if (userOps.hasOwnProperty(operation)) {

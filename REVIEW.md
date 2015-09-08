@@ -16,3 +16,5 @@ The commands are read by a getUserInput() function that takes readline input.
 ## Suggested Improvements
 
 1. There already exists a simple way to ouput the datetime info from UTC data.
+
+2. 'help' command print-out has been given some information for each additional command.
