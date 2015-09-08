@@ -90,8 +90,42 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
-function del(fileName) {
+function callFunctionInBothDirectories(fileName, functionName)
+{
     if(!fileName){
+        console.log('Please enter a file to delete');
+        return;
+    }
+    var path1 = argv.directory1 + '/' + fileName;
+    var path2 = argv.directory2 + '/' + fileName;
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+    try {
+        switch(functionName) {
+            case "writeFile":
+                handler1.writeFile(path1,'new File', function () {
+                });
+                handler2.writeFile(path2,'new File', function () {
+                });
+                break;
+            case "deleteFile":
+                handler1.deleteFile(path1, function () {
+                });
+                handler2.deleteFile(path2, function () {
+                });
+                break;
+            default:
+                throw "Unrecognized function type";
+        }
+        lastUpdate = new Date();
+    } catch (err) {
+        console.log(err.message);
+        return;
+    }
+}
+
+function del(fileName) {
+    /*if(!fileName){
         console.log('Please enter a file to delete');
         return;
     }
@@ -107,13 +141,14 @@ function del(fileName) {
     } catch (err) {
         console.log(err.message);
         return;
-    }
+    }*/
+    callFunctionInBothDirectories(fileName, "deleteFile");
     console.log('Deleting ' + fileName);
 }
 
 // allows the user to add a new file to the directories
 function add(fileName) {
-    if (!fileName) {
+    /*if (!fileName) {
         console.log('Please enter a file to add');
         return;
     }
@@ -131,7 +166,8 @@ function add(fileName) {
         console.log('Failed to add new file ' + fileName);
         console.log(err.message);
         return;
-    }
+    }*/
+    callFunctionInBothDirectories(fileName, "writeFile");
     console.log('Adding ' + fileName);
 }
 
