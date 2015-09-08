@@ -122,7 +122,7 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del
-    update: console.log()
+    update: //define the functionality of update
 };
 
 function getUserInput(){
