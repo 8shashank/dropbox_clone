@@ -90,3 +90,6 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
 });
 
 
+//REVIEW COMMENT: the web service in this project is incredible, but it seems index.js (the main driver) no longer
+//                does the bulk of running the application. maybe consider some connection with the http-server in
+//                here?
