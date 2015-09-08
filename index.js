@@ -153,6 +153,7 @@ function uploadFiles(fileNames)
     var socialMedia = initiate();
     for(var key in fileNames)
     {
+        //should double check that that file exists
         socialMedia.upload(uris.getPath(argv.directory1) + "/" + fileNames[key]);
     }
 }
@@ -181,28 +182,39 @@ function serverHandler(path) {
         input: process.stdin,
         output: process.stdout
     });
-
-    rl.question("\nEnter 'upload' to upload all files in server folder to twitter or enter a filename to upload individual files\n", function(answer) {
-        var fileNames = [];
-        if (answer === "upload") {
-            //Print out the files in the server folder
-            var sHandler = serverHandler(uris.getPath(argv.directory1));
-            var files = sHandler.files;
-            sHandler.printFileNames(files);
-            //var socialMedia = initiate();
-            fileNames = files;
-            //Upload files with acceptable extensions
-            /*for(var key in files){
-                fileNames.push(files[key]);
-                //socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
-            }*/
-        } else
+/*
+    I wasn't able to get this to work since I am completely new to javascript but I was hoping to make
+    it so that a user could keep entering files to upload to twitter.
+ */
+    getUserInput = function(message)
+    {
+        rl.question(message, function(answer)
         {
-            //var socialMedia = initiate();
-            //socialMedia.upload(uris.getPath(argv.directory1) + "/" + answer);
-            fileNames.push(answer);
-        }
-        uploadFiles(fileNames);
-    rl.close();
-});
+            if(answer === "quit")
+            {
+                return;
+            }
+
+            var fileNames = [];
+            if (answer === "upload") {
+                //Print out the files in the server folder
+                var sHandler = serverHandler(uris.getPath(argv.directory1));
+                var files = sHandler.files;
+                sHandler.printFileNames(files);
+
+                fileNames = files;
+            }
+            else
+            {
+                //var socialMedia = initiate();
+                fileNames.push(answer);
+            }
+            //upload files with acceptable extensions
+            uploadFiles(fileNames);
+
+            rl.close();
+            getUserInput("\nadditional files? otherwise type \"quit\" to stop\n");
+        });
+    }
+    getUserInput("\nEnter 'upload' to upload all files in server folder to twitter or enter a filename to upload individual files\n");
 
