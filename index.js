@@ -39,15 +39,18 @@ function WriteToFile(record) { //write to log file
     if (!fs.existsSync(path)) { //if a folder doesn't exist, make one
         file.mkdir(path, function (err) {
             if (err) {
-                throw err
+                throw err;
             }
         });
     }
 
-    record = record + ' changed on ' + timeStamp + "\r\n";
+    if(!record){
+        record = record + ' changed on ' + timeStamp + "\r\n";
+    }
+
     file.appendFile('Records/log.txt', record, function (err) { //file name, data type, callback
         if (err){
-            throw err
+            throw err;
         }
     });
 }
