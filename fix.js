@@ -17,11 +17,9 @@ var syncFile = function(fromPath,toPath) {
 }
 
 function timeStamp() {
-    //promptedUpdate = true;
     var time = new Date();
     console.log("change detected! directories were synced on " + time.getMonth() + "/" + time.getDay() + "/"  +
         time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
-    //getUserInput();
 }
 
 
