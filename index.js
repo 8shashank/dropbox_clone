@@ -119,22 +119,34 @@ function createSetupConfig() {
             } else {
                 fs.writeFileSync(__dirname + '/config.txt', nametoSetConfig + " " + path1 + " " + path2);
             }
-        })
+        });
     }
 }
 
 var ensureDemands = function (callback){
 
+    var errorMessage = '\nRun the program with either directory1 and directory2 or a configuration. But not both.\n';
+
+    if (argv.directory1 && argv.directory2 && argv.configuration){
+        return callback(errorMessage);
+    }
+
     if (argv.directory1 && argv.directory2 ){
-        callback(null);
+        return callback(null);
     }
 
     if (argv.configuration){
-        callback(null);
+
+        if (argv.setconfiguration || argv.directory1 || argv.directory2){
+            return callback('\nConfiguration tag should be used alone.\n');
+        } else {
+            return callback(null);
+        }
+
     }
 
     if (!argv.directory1 && !argv.directory2 && !argv.configuration){
-        callback('\nRun the program with either directory1 and directory2 or a configuration\n');
+        return callback(errorMessage);
     }
 
 };

@@ -14,3 +14,5 @@ https://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/
 3. Just use the fact that a defined string is true in your if statements. It will also help detect for null values / empty strings.
 
 4. There is a duplicate call to rememberSetupConfig() that is unnecessary. There is also a duplicate check to see if you should run rememberSetupConfig(). You already check if you should run in the method itself.
+
+5. Added more demand changes. Make sure that the program isn't run with configuration tag and directory tags. Make sure program isn't run with configuration tag and setconfiguration tag.
