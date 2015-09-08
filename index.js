@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-
+var readline = require('readline');
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
     .example('dropbox --directory1 dnode://test-data/folder1 --directory2 file://test-data/folder2', '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
@@ -36,9 +36,12 @@ var syncFile = function(fromPath,toPath){
     var trgHandler = sync.getHandler(toPath);
 
     srcHandler.readFile(fromPath,function(base64Data){
-        trgHandler.writeFile(toPath,base64Data,function(){
-            console.log("Copied "+fromPath+" to "+toPath);
-        })
+        authCheck(authenticate);
+        if (authenticate.authenticated) {
+            trgHandler.writeFile(toPath, base64Data, function () {
+                console.log("Copied " + fromPath + " to " + toPath);
+            })
+        }
     });
 }
 
@@ -97,11 +100,12 @@ prompt.start();
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
+
     //while not authenticated
-    while (!authenticate.authenticated){ // while not authenticated
-        authCheck(authenticate); //check
-        console.log(authenticate.question);
-        prompt.get(['answer'], function(err,result) { //get user input
+    //while (!authenticate.authenticated){ // while not authenticated
+        //authCheck(authenticate); //check
+
+        /*prompt.get(['answer'], function(err,result) { //get user input
             //+++++++++++++++++++Bugfix #2+++++++++++=//
             // added correct error checking
             if (err) {
@@ -109,8 +113,9 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
             }
             authenticate.answer = result.answer;
 
-        });
-    }
+        });*/
+
+    //}
 
     //write the client side here
     scheduleChangeCheck(1000,true);
@@ -121,44 +126,58 @@ function authCheck(authenticate)
 {
     var questions = [
         "What is 4x4?",
-        "What is 3x3?",
     ];
 
     var answers = [
-        "16",
-        "9"
+        "16"
     ];
 
     //if the question is null return the first question
-    if(!questions){
-        authenticate.question === questions[0];
-        authenticate.answer === null;
-        return authenticate;
-    }
 
+    //if(!questions) {
+    // ^^^ this will never be true
+
+    if(!authenticate.question){
+        //Bugfix #4: Triple equals sign does not assign things to variables
+        authenticate.question = questions[0];
+        authenticate.answer = null;
+    }
+    rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
     //verifies question and answer
     if(authenticate.question){
-        for(var i=0; i < questions.length; ++i){
-            if(questions[i] === auenticate.question){
-                if(answers[i] === answer){ //if answer is correct user is authenticated
-                    console.log("Authenticated")
+        //prompt for question before checking if the answer is correct
+        rl.question(authenticate.question, function(answer) {
+            authenticate.answer = answer;
+            if (answer ===16) {
+                authenticate.authenticated = true;
+            }
+        });
+        //this is also an infinite loop.
+        /*for(var i=0; i < questions.length; ++i){
+            //using a map instead of iterating through both arrays of question
+            if(questions[i] === authenticate.question){
+                if(answers[i] === authenticate.answer){ //if answer is correct user is authenticated
+                    console.log("Authenticated");
                     authenticate.authenticated=true;
                     return authenticate;
                 }else{
                     console.log("Incorrect answer: Not authenticated...\n")
                     if(i+1<questions.length){ //moves to next question in array if answer is wrong else goes back to beginning
                         authenticate.question = questions[i+1];
+                        //need to reset i;
+                        i = i +1;
                     }else{
-                        authenticate.question = questions[0];
+                        authenticate.question = questions[0]
+                        i =0;
                     }
-
-                    authenticate.answer=null;
-                    authenticate.authenticated=false;
                     return authenticate;
                 }
 
             }
-        }
+        }*/
     }
 
 
