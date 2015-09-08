@@ -36,9 +36,12 @@ var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
+    var toFiles = dirHandler(fromPath).files;
+    var fromFiles = dirHandler(toPath).files;
     //I don't like doing this string comparison to have it ignore files
     //I feel like there should be a way to set a file to be ignored but I can't find one
-    if(ignoreList.indexOf(fromPath) === -1 && ignoreList.indexOf(toPath) === -1) {
+    //if(ignoreList.indexOf(fromPath) === -1 && ignoreList.indexOf(toPath) === -1) {
+      if(check if ignoreList is in toFiles and fromFiles)
         srcHandler.readFile(fromPath, function (base64Data) {
             trgHandler.writeFile(toPath, base64Data, function () {
                 console.log("Copied " + fromPath + " to " + toPath);
