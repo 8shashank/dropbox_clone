@@ -13,8 +13,9 @@ No suggested readings.
 
 *Provide a list of 5+ aspects of the code that should be improved. Each suggestion for improvement should be accompanied by a GitHub pull request on the reviewee's submission repo that shows how to perform the suggested refactoring. If the change is so substantial that it is "rewriting" the solution, break it down into a series of refactorings that build on each other to improve the solution (each refactoring committed separately and submitted as a pull request with a thorough explanation).*
 
-1. Clean up and delete commented out and unused code. 
-2. 
-3. There is a bug in the boundary condition checking in the manifold handler. This refactoring describes the issue in detail and provides a proposed fix.
-https://github.com/cs4278-2015/assignment2-handin/pull/2
+1. Cleaned up and deleted commented out and unused code. https://github.com/cs4278-2015/assignment2-handin/pull/18
+2. Created a seperate function to write to file. Allows better readability and organization.  
+3. throw error and if statement can be on the same line to save space. 
+4. moved the instantiation of r1 (readline.createInterface function) inside the writeToLog function 
+5. changed '/n' to to '/r/n/' so new line can work on window machines 
 
