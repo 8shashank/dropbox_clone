@@ -1,7 +1,9 @@
 #Review of Liyiming Ke by Shashank Sharma
 
 ##Overview
-The program supports user authentication such that users can create new accounts and the information is saved on the server. It also encrypts the password using SHA-1 so that the password is not stored in plaintext. The implementation is divided into several files according to the objective of the different functions and was very easy to read and understand.
+The program supports user authentication such that users can create new accounts and the information is saved on the server. It added the ability to sync subdirectories as well and not just files. It also encrypts the password using SHA-1 so that the password is not stored in plaintext. The implementation is divided into several files according to the objective of the different functions and was very easy to read and understand.
+
+It also refactors the original program for better separation of concerns, specifically in sync.js. 
 
 ##Possible Improvements
 1. Fixed a bug where Javascript dictionary was being saved as [Object object] instead of being serialized to a file.
