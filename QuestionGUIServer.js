@@ -4,6 +4,7 @@ var formidable = require('formidable');
 var app = express();
 app.use(express.static(__dirname));
 
+
 /** Honor Citation: this post request based on an example from my Microsoft training guide "Programming in HTML5 with JavaScript and CSS", chapter 3 */
 app.post('/Submit', function(request, response){
     var today = new Date();
