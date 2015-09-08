@@ -36,6 +36,8 @@ var syncFile = function(fromPath,toPath){
     var trgHandler = sync.getHandler(toPath);
 
     srcHandler.readFile(fromPath,function(base64Data){
+        // I tried moving the function here. I would suggest going to office hours and ask
+        // how to make this synchronous.
         authCheck(authenticate);
         if (authenticate.authenticated) {
             trgHandler.writeFile(toPath, base64Data, function () {
@@ -124,6 +126,10 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
 //++++++++++ Bugfix #1 -------//
 function authCheck(authenticate)
 {
+    //SUGGESTION #5:
+    //Considering using a map that connects questions to their answers instead of using loops to iterate through arrays.
+    //The loop you were using was infinite. I shortened both arrays for simplicity. You could also randomly generate
+    //two numbers for the math problem you want them to solve and using the program to solve the answer for you. 
     var questions = [
         "What is 4x4?",
     ];
