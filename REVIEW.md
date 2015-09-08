@@ -5,5 +5,7 @@ This code provides the user an option to delete certain files. The main function
 Suggested Reading Materials
 None
 Suggested Improvements
-1.	As stated by Troy, the current code cannot delete files with spaces in their names. I haven°Øt been able to get this to work, but one idea I did get was to maybe extract the file name. Separate the name per space and save those individual bits. Then create a new directory variable with +°±\°± + savedBits. The backslash should allow one to ignore the spaces, but once again, I couldn°Øt get this to work. Might be worth checking out, might not. 
-2.	
+1.	As stated by Troy, the current code cannot delete files with spaces in their names. I haven‚Äôt been able to get this to work, but one idea I did get was to maybe extract the file name. Separate the name per space and save those individual bits. Then create a new directory variable with +‚Äù\‚Äù + savedBits. The backslash should allow one to ignore the spaces, but once again, I couldn‚Äôt get this to work. Might be worth checking out, might not. 
+2.	Try‚Ä¶catch (if I recall) is generally not used as much in javascirpt for error passing. I believe this is handled more so using callbacks. I‚Äôve added in an example as a comment ~line 101 right before a try/catch block. 
+3.	Created a folder1 in test-data
+4.	Changed !fileName to fs.existsSync to allow for synchronous check of file existence.
