@@ -40,7 +40,7 @@ var syncFile = function(fromPath,toPath){
             console.log("Copied "+fromPath+" to "+toPath);
             console.log('Now time for a link');
             var myIP = ip.address();
-            var myPath = toPath.substring(8);
+            var myPath = toPath.substring(toPath.indexOf('//') + 2);
             console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
         });
     });
