@@ -110,4 +110,55 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     scheduleChangeCheck(1000,true);
 });
 
+//++++++++++ Bugfix #1 -------//
+function authCheck(authenticate)
+{
+    var questions = [
+        "What is 4x4?",
+        "What is 3x3?",
+    ];
+
+    var answers = [
+        "16",
+        "9"
+    ];
+
+    //if the question is null return the first question
+    if(!questions){
+        authenticate.question === questions[0];
+        authenticate.answer === null;
+        return authenticate;
+    }
+
+    //verifies question and answer
+    if(authenticate.question){
+        for(var i=0; i < questions.length; ++i){
+            if(questions[i] === auenticate.question){
+                if(answers[i] === answer){ //if answer is correct user is authenticated
+                    console.log("Authenticated")
+                    authenticate.authenticated=true;
+                    return authenticate;
+                }else{
+                    console.log("Incorrect answer: Not authenticated...\n")
+                    if(i+1<questions.length){ //moves to next question in array if answer is wrong else goes back to beginning
+                        authenticate.question = questions[i+1];
+                    }else{
+                        authenticate.question = questions[0];
+                    }
+
+                    authenticate.answer=null;
+                    authenticate.authenticated=false;
+                    return authenticate;
+                }
+
+            }
+        }
+    }
+
+
+    return authenticate;
+
+
+};
+
 
