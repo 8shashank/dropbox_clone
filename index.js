@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var fs = require('fs');
 var readline = require('readline');
+var nodemailer = require('nodemailer');
+
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -37,7 +39,7 @@ var syncFile = function(fromPath,toPath){
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
-            console.log("Copied "+fromPath+" to "+toPath);
+            emailMessager("Copied "+fromPath+" to "+toPath);
         })
     });
 }
@@ -102,12 +104,62 @@ function del(fileName) {
         console.log(err.message);
         return;
     }
-    console.log('Deleting ' + fileName);
+    emailMessager('Deleted ' + fileName);
+}
+
+
+function rename(currentFileName, newFileName) {
+    if(!currentFileName){
+        console.log('Please enter a file to rename');
+        return;
+    }
+    var path1 = argv.directory1 + '/' + currentFileName;
+    var path2 = argv.directory2 + '/' + currentFileName;
+
+    var path1new = argv.directory1 + '/' + newFileName;
+    var path2new = argv.directory2 + '/' + newFileName;
+
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+
+    var handler1new = sync.getHandler(path1new);
+    var handler2new = sync.getHandler(path2new);
+
+    try {
+        handler1.renameFile(path1,path1new , function(){});
+        handler2.renameFile(path2, path2new, function(){});
+    } catch (err) {
+        console.log(err.message);
+        return;
+    }
+    emailMessager('Renamed  ' + currentFileName + " to " + newFileName);
+}
+
+function emailMessager(str) {
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: 'Vanderbilt DropBox  <vanderbilt.dropbox@gmail.com>', // sender address
+        to: 'tazrianrafi@gmail.com', // list of receivers
+        subject: 'Dropbox updated ', // Subject line
+        text: str, // plaintext body
+        html: '<b>' + str + '</b>' // html body
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log('Message sent: ' + info.response);
+        }
+    });
+    console.log(str);
 }
 
 // To add valid operations, map user input to the desired function
 var userOps = {
     quit: null,
+    rename: function (in1, in2) { rename(in1,in2); },
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del
@@ -145,6 +197,23 @@ function getUserInput(){
         rl.prompt();
     });
 }
+
+
+// create reusable transporter object using SMTP transport
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'vanderbilt.dropbox@gmail.com',
+        pass: 'dropthebase'
+    }
+});
+
+// NB! No need to recreate the transporter object. You can use
+// the same transporter object for all e-mails
+
+
+
+
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
