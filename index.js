@@ -51,9 +51,9 @@ var syncFile = function(fromPath,toPath){
                     + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
                     if (err)
                         throw err;
+
                 });
             });
-
             /*fs.stat('Log.txt', function(err, stat) {
                if (err == null) {
                    //file exists
