@@ -2,7 +2,7 @@
 
 ## Overview
 
-Writes to a log file every time the files are synced. Keeps track of which file was changed and when the file was changed. Can easily look back at the log file to see when all changes were made.
+Writes to a log file every time the files are synced. Keeps track of which file was changed and when the file was changed. Can easily look back at the log file to see when all changes were made. It uses a function that is called that will then check to make sure if a folder exists and then adds a string to the log file.
 
 ## Suggested Improvements
 
@@ -12,4 +12,6 @@ Writes to a log file every time the files are synced. Keeps track of which file 
 
 3. renamed variables for better meaning
 
-4. 
+4. Reduced the number of lines of code by removing some variables
+
+5. Removed the second instance of requiring in the fs module

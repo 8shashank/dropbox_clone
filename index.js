@@ -31,13 +31,10 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
 function WriteToLog(filePath) { //write to log file
-    var file = require('fs');
-    var path = 'Records';
-    var date = new Date();
-    var timeStamp = date.toUTCString();
+    var timeStamp = (new Date()).toUTCString();
 
     if (!fs.existsSync(path)) { //if a folder doesn't exist, make one
-        file.mkdir(path, function (err) {
+        file.mkdir('Records', function (err) {
             if (err) {
                 throw err
             }
