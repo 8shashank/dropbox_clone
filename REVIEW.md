@@ -1,4 +1,4 @@
-# Review of \<firstname\> \<lastname\> by \<your\_first\_name\> \<your\_last\_name\> 
+# Review of Taylor Zang by Jon Lee 
 
 ## Overview
 
