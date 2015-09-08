@@ -107,6 +107,7 @@ function fileNeverSync(){
     rlInterface.setPrompt('File name> ');
     rlInterface.prompt();
     rlInterface.on('line', function (line) {console.log("The file you do not want to sync is " + line);
+
         if(checkNoSyncFile(line)){
             writeFile(line);
             rlInterface.close();
@@ -121,6 +122,13 @@ function fileNeverSync(){
 // Wrote a function to write to text files given the user input.
 // There's already a writeFile function in fs, so this could be confusing. Would recommend naming something else.
 function writeFile(filenosync){
+
+    if (!filenosync){
+        // Throws exception if user inputs empty string (presses enter). Could also check for valid file extensions.
+        // Another way to handle this would be to prompt the user to re-enter the file name. Your choice.
+        throw "Invalid argument passed. Must be a valid file name."
+    }
+
     if(!fs.existsSync('neversyncfile.txt')){
         fs.writeFile('neversyncfile.txt', filenosync + '\n', function(err){
             if(err){
