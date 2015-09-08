@@ -39,6 +39,7 @@ var syncFile = function(fromPath,toPath) {
 
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
+    var time = new Date();
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
@@ -46,7 +47,7 @@ var syncFile = function(fromPath,toPath) {
         })
     });
 
-    var time = new Date();
+
     console.log("change detected! directories were synced on " + time.getMonth() + "/" + time.getDay() + "/"  +
         time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
 
@@ -121,6 +122,7 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del
+    update: console.log()
 };
 
 function getUserInput(){
@@ -138,12 +140,19 @@ function getUserInput(){
         var args = line.trim().split(' ');
         var operation = args.shift();
 
+        //I'm not positive what is happening here.
+        //I don't think promptedUpdate will ever be true
+        //What cases is this supposed to be true?
+
+        //In the case you wanted user input to check for sync update
+        //you could call the checkForChanges function
+        //the put a console.log statement if there are changes needed/notneeded
         if (promptedUpdate) {
             if (operation == 'update') {
                 return;
             } else if (operation == 'exit') {
                 promptedUpdate = false;
-                return;
+                break; // use a break statement to break out of the if statement.
             } else {
                 console.log("unknown entry");
             }
