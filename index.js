@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 var _ = require('lodash');
-var fs = require('fs');
+var fs = require('fs');  // I believe if you enable NodeJS Globals (potentially Settings->Languages&Frameworks->Javascript->Libraries), the function will no longer be unresolved.
 var readline = require('readline');
 
 var argv = require('yargs')
