@@ -168,12 +168,12 @@ function askUserInput(){
             fileNeverSync();
         }
         else if (line === "2"){
-            r1.close()
+            r1.close(); // Try to always use semi-colons even though they aren't required.
             scheduleChangeCheck(1000,true);
         }
-        else{
-            r1.close();
-            console.log("Entered in unknown option.");
+        else{ // Give the user an option to re-enter input. Maybe he or she just mistyped.
+            console.log("Please enter a valid input (1 or 2): ");
+            r1.prompt();
         }
 
     })
