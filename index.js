@@ -46,7 +46,7 @@ var syncFile = function(fromPath,toPath){
 
 var shareLinkIfNecessary = function (path){
 
-    var myPath = toPath.substring(path.indexOf('//') + 2);
+    var myPath = path.substring(path.indexOf('//') + 2);
 
     if (!alreadySharedLinks[myPath]) {
         var myIP = ip.address();
