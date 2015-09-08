@@ -120,28 +120,29 @@ function fileNeverSync(){
 
 // Wrote a function to write to text files given the user input.
 function writeFile(filenosync){
-    if(!fs.existsSync('neversyncfile.txt')){
-        fs.writeFile('neversyncfile.txt', filenosync + '\n', function(err){
-            if(err){
-                throw err;
-            }
-            console.log(filenosync + ' added to no sync log.');
-        })
-    }
-    else{
-        fs.appendFile('neversyncfile.txt', filenosync + '\n', function(err)
-        {
-            if(err){
-                throw err;
-            }
-            console.log(filenosync + ' added to no sync log.');
-        })
-    }
+    fs.appendFile('neversyncfile.txt', filenosync + '\n', function(err) {
+        if(err){
+            throw err;
+        }
+        console.log(filenosync + ' added to no sync log.');
+    })
 }
 
 // Wrote a function to take in a file name and check if it's in the no sync list.
 // Returns true if file is not found in no sync file. Returns false if it is and no sync.
 function checkNoSyncFile(filename) {
+    try {
+         var stats = fs.lstatSync('neversyncfile.txt');
+
+         if (!stats.isFile()) {
+             // if stats is a directory (for whatever reason) this will create a file instead
+             fs.writeFileSync('neversyncfile.txt', '');
+         }
+    }
+    catch (e) {
+        console.log ('Storage file does not exist, creating "neversyncfile.txt"');
+        fs.writeFileSync('neversyncfile.txt');
+    }
     var array = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
     if (array.indexOf(filename) === -1) {
