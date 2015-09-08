@@ -30,10 +30,11 @@ Next, you will need to start the client. This will have to be run from a second 
 dropbox --d1 dnode://folder1 --d2 file://folder2
 ```
 
-Finally, you will need to start the web page that will display the directory. In a third terminal window, cd to the directory containing index.js, and run the following:
+Finally, you will need to start the web page that will display the directory. 
+In a third terminal window, cd into node_modules/http-server/bin , and run the following:
 
 ```
-http-server test-data
+node http-server ../../../test-data
 ```
 
 You should see something like the following:
