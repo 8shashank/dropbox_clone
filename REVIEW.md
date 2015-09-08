@@ -1,3 +1,26 @@
+Review of Chris Su by Tazrian Haider Rafi
+
+# Dropbox Application
+
+## Overview
+
+This is a very rough implementation of a Dropbox server and client. The client and server
+coordinate to sync two different directories similar to dropbox.
+
+The Dropbox server accepts connections over a socket and allows clients to read the list of any
+files within its root (or possibly outside), get stats about those files, and read or write to
+those files. The client connects and continually checks the two folders for changes and then
+copies over any changes from one folder that are needed in the other. If the folder passed as
+a command line argument starts with "dnode://", then the client uses the server to obtain information
+about that folder. If the folder starts with "file://", then the client uses local file operations
+to read/sync the directory.
+
+Chris Su added functionality of posting all eligible files to twitter. The list of eligible files include:".gif",".png", ".webp", ".jpeg".
+
+ChrisSu also had unfinished implementation of a similar feature for Facebook.
+
+
+
 Review by Tazrian Haider Rafi:
 
 1. Changed the facebook message to make it more meaningful. This should give users an idea of whats happening.
@@ -10,3 +33,8 @@ Review by Tazrian Haider Rafi:
 
 5. The twitter functions allows for twits to be sent out just one. This is not ideal. One way to circumvent this would be using Collin Jackson's CLI client implementation, and adding this to the list of 
 features, so that it can be invoked multiple times. Update your branch to master to see Collin's changes as they have already been merged to the master. 
+
+
+
+Suggested reading material:
+Documenation for facebook npm package: https://github.com/Thuzi/facebook-node-sdk
