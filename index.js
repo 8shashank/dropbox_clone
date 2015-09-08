@@ -142,9 +142,16 @@ function deleteFile(fName){
 *
 * */
 function listSearch(name, path){
-    console.log("searching lists");
+
     var list = fs.readdirSync(path);
     console.log(list);
+
+    if(list == 0){
+        console.log("folders are empty");
+        return false;
+    }
+
+    console.log("searching lists");
     var found = list.indexOf(name);
     if(found == -1) {
         return false;
