@@ -19,9 +19,9 @@ In code reviews are commented in the following format:
 
 Most reviews are suggesting:
 
-   Use of async + callbacks⋅⋅
-   Wrapping logic in function⋅⋅
-   Some shorter sentences to do job⋅⋅
+   - Use of async + callbacks
+   - Wrapping logic in function
+   - Some shorter sentences to do job
 
 
 ### Issues
