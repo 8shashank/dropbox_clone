@@ -101,7 +101,7 @@ function getList(path){
 * */
 function deleteFile(fName){
     if(!fName) {
-        console.log("Please provide a valid filename to delete.");
+        console.log("Type 'delete [filename]' to delete that particular file.");
         return;
     }
     //need to actually get path
@@ -158,8 +158,6 @@ function listSearch(name, path){
 // To add valid operations, map user input to the desired function
 var userOps = {
     quit: null,
-    test: function () { console.log('Test'); },
-    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: deleteFile
 };
 
