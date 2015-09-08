@@ -1,4 +1,7 @@
 var assert = require('assert'),
+    //REVIEW COMMENT: this may be unnecessary because I'm not sure where your assert function is defined, but it might
+    //                it might be good to implement exception handling so the application can keep running even if it
+    //                fails one of these tests.
     path = require('path'),
     fs = require('fs'),
     vows = require('vows'),
