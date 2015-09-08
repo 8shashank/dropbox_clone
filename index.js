@@ -30,17 +30,18 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
 function writeToLog(path){
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
     rl.question("Enter your username: ", function(answer) {
         rl.close();
         var shortPath = path.split('/');
         fs.appendFile('Log.txt', answer + " edited file " + shortPath[shortPath.length - 1] + " "
-            + moment().format('MMM Do YYYY, h:mm:ss a') + '\n', function(err) {
+            + moment().format('MMM Do YYYY, h:mm:ss a') + '\r\n', function(err) {
             if (err) throw err;
         });
     });
