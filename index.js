@@ -97,6 +97,18 @@ function del(fileName) {
     var path2 = argv.directory2 + '/' + fileName;
     var handler1 = sync.getHandler(path1);
     var handler2 = sync.getHandler(path2);
+    /* Example
+     fs.errExample(item, function (err, fileData) {
+        if (err) {
+
+            return callback(err)
+
+            return recoveryFunction(err)
+
+            throw err
+        }
+        // success case, handle nicely
+    }) */
     try {
         handler1.deleteFile(path1, function(){});
         handler2.deleteFile(path2, function(){});
