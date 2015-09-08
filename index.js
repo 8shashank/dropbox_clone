@@ -28,11 +28,13 @@ var argv = require('yargs')
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
+var ign = require('./lib/sync/ignore');
 
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
+
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
@@ -44,7 +46,8 @@ var syncFile = function(fromPath,toPath){
 var writePipeline = new Pipeline();
 writePipeline.addAction({
     exec:function(data){
-        _.each(data.syncToSrc, function(toSrc){
+        var unignoredFiles = ign.ignoreFiles(data.srcPath,data.syncToSrc);
+        _.each(unignoredFiles, function(toSrc){
             var fromPath = data.trgPath + "/" + toSrc;
             var toPath = data.srcPath + "/" + toSrc;
             syncFile(fromPath,toPath);
@@ -54,7 +57,8 @@ writePipeline.addAction({
 });
 writePipeline.addAction({
     exec:function(data){
-        _.each(data.syncToTrg, function(toTrg){
+        var unignoredFiles = ign.ignoreFiles(data.trgPath,data.syncToTrg);
+        _.each(unignoredFiles, function(toTrg){
             var fromPath = data.srcPath + "/" + toTrg;
             var toPath = data.trgPath + "/" + toTrg;
             syncFile(fromPath,toPath);
