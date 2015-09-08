@@ -97,36 +97,39 @@ function scheduleChangeCheck(when,repeat){
 
 // Want to create a function that will never sync a specified file. User input so far that will
 // write to a text file and keep track of no sync files.
-function fileNeverSync(){
-    console.log("Please enter a file to never sync. ");
+function fileNeverSync(cb){
 
-    var r1 = readline.createInterface({
+    var r2 = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
-    r1.setPrompt('File name> ');
-    r1.prompt();
-    r1.on('line', function (line) {console.log("The file you do not want to sync is " + line);
+
+    console.log("Please enter a file to never sync. ");
+
+    r2.setPrompt('File name> ');
+    r2.prompt();
+    r2.on('line', function (line) {
+        console.log("The file you do not want to sync is " + line);
         if(checkNoSyncFile(line)){
-            writeFile(line);
-            r1.close();
+            writeFile(line, cb);
         }
         else{
             console.log(line + " is already in the no sync list.");
+            cb();
         }
-
-    })
-
+        r2.close();
+    });
 }
 
 // Wrote a function to write to text files given the user input.
-function writeFile(filenosync){
+function writeFile(filenosync, cb){
     if(!fs.existsSync('neversyncfile.txt')){
         fs.writeFile('neversyncfile.txt', filenosync + '\n', function(err){
             if(err){
                 throw err;
             }
             console.log(filenosync + " added to no sync log.");
+            cb();
         })
     }
     else{
@@ -136,6 +139,7 @@ function writeFile(filenosync){
                 throw err;
             }
             console.log(filenosync + " added to no sync log.");
+            cb();
         })
     }
 }
@@ -165,10 +169,11 @@ function askUserInput(){
     r1.prompt();
     r1.on('line', function (line) {
         if(line === "1"){
-            fileNeverSync();
+            r1.close();
+            fileNeverSync(function() { askUserInput(); });
         }
         else if (line === "2"){
-            r1.close()
+            r1.close();
             scheduleChangeCheck(1000,true);
         }
         else{
