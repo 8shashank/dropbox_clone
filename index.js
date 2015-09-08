@@ -171,6 +171,9 @@ function askUserInput(){
                 break;
             case '2':
                 rlInterface.close(); // Try to always use semi-colons even though they aren't required.
+                // A message is printed for user for the other options, so it might be a good idea to print one here.
+                // Otherwise, the user might think something is wrong.
+                console.log("Syncing files.");
                 scheduleChangeCheck(1000, true);
                 break;
             default: // Give the user an option to re-enter input. Maybe he or she just mistyped.
