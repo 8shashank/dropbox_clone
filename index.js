@@ -57,8 +57,6 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
  });
  */
 
-
-
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);

@@ -23,12 +23,14 @@ In code reviews are commented in the following format:
 
 The review includes the following jobs:
    Suggests codes to conduct "compare content feature"
-   Suggest a method to improve the efficiency for onIgnoreList function.
+   Suggest improve the onIgnoreList function.
 
 
 ### Issues
 
-
+	- onIgnoreList function uses Stream to read, which causes an issue because:
+		When onIgnoreList ends, it will return ignore (sync function behavior)
+		ReadStream will act in async, and on("end"), it cannot "return" but has to use callback.
 
 
 
