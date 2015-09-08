@@ -175,6 +175,9 @@ var rl = readline.createInterface({
     output: process.stdout
 });
 
+//This implementation only for file upload just once. Instead, I would use collin jackson's implementation to
+//list this as one of the options under help. that way it can be invoked multiple times. Update to master,
+//as collin's code has alredy been merged with master.
 rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
@@ -189,6 +192,6 @@ rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n"
                 socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
             }
         }
-    rl.close();
+    rl.close(h);
 });
 
