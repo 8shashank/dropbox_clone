@@ -7,7 +7,10 @@ which removes the file from both the nodes being synced, and also has an authent
 It uses the function invocation pattern to pass in  
 pass in user arguments from the command line as an array and invoke the different commands.
 
-##Possible Changes
+##Suggested Reading Material
+There aren't any reading material suggestions.
+
+##Suggested Changes
 I've made a couple of changes to the code in this branch. Feel free to go through them and see if any of them could be applied to your branch.
 
 1. One possible change was to extract the login method outside of the userOps dictionary like all the other methods in the dictionary.
