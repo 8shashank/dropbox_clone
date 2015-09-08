@@ -113,6 +113,7 @@ function initiateTwitter(){
                 acceptable = true;
             }
         }*/
+        //apparently there isn't a contains function so I think this is the next best thing
         acceptable = acceptableExt.indexOf(extension) >= 0;
 
         //The image passed should be the raw binary of the image or binary base64 encoded
@@ -173,7 +174,7 @@ function serverHandler(path) {
         output: process.stdout
     });
 
-    rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
+    rl.question("\nEnter 'upload' to upload all files in server folder to twitter or enter a filename to upload individual files\n", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
             var sHandler = serverHandler(uris.getPath(argv.directory1));
@@ -186,6 +187,10 @@ function serverHandler(path) {
             for(var key in files){
                 socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
             }
+        } else
+        {
+            var socialMedia = initiate();
+            socialMedia.upload(uris.getPath(argv.directory1) + "/" + answer);
         }
     rl.close();
 });
