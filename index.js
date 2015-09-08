@@ -133,11 +133,31 @@ function createSetupConfig() {
     }
 }
 
+var ensureDemands = function (callback){
+
+    if (!argv.directory1 && !argv.directory2 && !argv.configuration){
+        callback('\nRun the program with either directory1 and directory2 or a configuration\n');
+    }
+
+};
+
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
-    createSetupConfig();
-    rememberSetupConfig();
-    scheduleChangeCheck(1000,true);
+
+    ensureDemands(function (error){
+        if (error){
+            console.error(error);
+            process.exit(1);
+
+        } else {
+
+            createSetupConfig();
+            rememberSetupConfig();
+            scheduleChangeCheck(1000, true);
+
+        }
+    });
+
 });
 
 
