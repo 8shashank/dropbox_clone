@@ -103,7 +103,7 @@ function ignore(ignoredFiles, ignoreOptionArgs) {
 function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-
+	console.log("checkforchanges()-ignoredFiles: " + ignoredFiles);
     sync.compare(path1,path2,sync.filesMatchNameAndSize, ignoredFiles, function(rslt) {
 
         rslt.srcPath = path1;
