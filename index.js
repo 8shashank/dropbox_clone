@@ -203,6 +203,16 @@ function getUserInput(){
                 console.log(name);
                 userOps[operation].apply(this, args);
                 //------------BUGFIX #1 ----------------//
+
+                //+++++++++++++ #2 ++++++++++++++++++//
+                //Steps to delete more than one file at once:
+                //Add a function to userOps called deletemultiple
+                //if (operation == 'deletemultiple')
+                //parse each file by finding each word with .txt
+                //make a for loop looping through an array of the multiple .txt files
+                //pass in each value through the userOps[operation].apply method
+                //--------------- #2 -----------------//
+
             } else {
                 userOps[operation].apply(this, args);
             }
