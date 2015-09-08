@@ -33,7 +33,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 function WriteToLog(fileChanged) { //write to log file
     var file = require('fs');
     var recordsPath = 'Records';
-    var dateStamp = new Date();
+    var date = new Date();
     var timeStamp = date.toUTCString();
 
     if (!fs.existsSync(recordsPath)) { //if a folder doesn't exist, make one
@@ -44,10 +44,18 @@ function WriteToLog(fileChanged) { //write to log file
         });
     }
 
+
     if(!fileChanged){
         fileChanged = fileChanged + ' changed on ' + timeStamp + "\r\n";
     }
 
+    //I think it would be helpful to have different log files. Maybe by date or if folders are changed.
+    //You could get user input to change name of log files
+    //You could make a new log file if the folders are changed.
+    //Need to maintain consistency just in case the program is not being launched within the same folder everytime
+    // i.e if you install it universally rather than locally
+
+    //writes to the log
     file.appendFile('Records/log.txt', fileChanged, function (err) { //file name, data type, callback
         if (err){
             throw err;
