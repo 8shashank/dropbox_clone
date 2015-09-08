@@ -151,7 +151,8 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del,
-    ignore: ignore
+    ignore: ignore,
+    unignore: unignore
 };
 
 function getUserInput(){
