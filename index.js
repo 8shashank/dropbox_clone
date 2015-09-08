@@ -34,9 +34,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 var syncFile = function(fromPath,toPath) {
     //promptedUpdate = true;
-    var time = new Date();
-    console.log("change detected! directories were synced on " + time.getMonth() + "/" + time.getDay() + "/"  +
-        time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+
     //getUserInput();
 
     var srcHandler = sync.getHandler(fromPath);
@@ -47,6 +45,10 @@ var syncFile = function(fromPath,toPath) {
             console.log("Copied "+fromPath+" to "+toPath);
         })
     });
+
+    var time = new Date();
+    console.log("change detected! directories were synced on " + time.getMonth() + "/" + time.getDay() + "/"  +
+        time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
 
 }
 
