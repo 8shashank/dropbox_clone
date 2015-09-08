@@ -72,6 +72,7 @@ function checkForChanges(){
         rslt.srcPath = path1;
         rslt.trgPath = path2;
 
+        console.log(JSON.stringify(rslt));
         writePipeline.exec(rslt);
     });
 }

@@ -20,9 +20,10 @@ In code reviews are commented in the following format:
 Most reviews are suggesting:
 
    - Use of async + callbacks
-   - Wrapping logic in function
+   - Wrapping logic in function (for async functions to call)
    - Some shorter sentences to do job
 
+Since there are not many issues to solve, the review requests pull only once.
 
 ### Issues
 
