@@ -2,8 +2,6 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var readline = require('readline');
-
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -32,30 +30,45 @@ var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
-/*
+
 // Tried to create command line interface to let user input directories instead of taking
 // them as argv, but currently not working.
 
- var rl = readline.createInterface({
-     input: process.stdin,
-     output: process.stdout
- });
+// #Review#
+//      The issue is that on(line) will be executed per new line
+//      Therefore the program have to judge whether it's receiving the second line.
+//  Only after the program got 2 directories, close the interface, then run the connect
 
- var directory1 = "";
- var directory2 = "";
+var readline = require('readline');
+var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
- console.log('\nWhat is the path of the first directory you would like to sync?');
+var directory1 = null;
+var directory2 = null;
 
- rl.prompt();
+console.log('\nWhat is the path of the first directory you would like to sync?');
 
- rl.on('line', function(line){
-     directory1 = line;
-     console.log('\nWhat is the path of the second directory you would like to sync?');
-     rl.prompt();
-     directory2 = line;
-     rl.close();
- });
- */
+rl.prompt();
+
+rl.on('line', function(line){
+    if(directory1 === null)
+    {
+        directory1 = line;
+        console.log('\nWhat is the path of the second directory you would like to sync?');
+    }
+    else{
+        directory2 = line;
+        rl.close();
+    }
+}).on('close',function(){
+    dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
+        sync.fsHandlers.dnode = handler;
+        scheduleChangeCheck(1000,true);
+    });
+});
+ 
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -91,9 +104,9 @@ writePipeline.addAction({
 });
 
 function checkForChanges(){
-    var path1 = argv.directory1;
-    var path2 = argv.directory2;
-
+    var path1 = directory1;
+    var path2 = directory2;
+    console.log("HI");
     sync.compare(path1,path2,sync.filesMatchExactly, function(rslt) {
 
         rslt.srcPath = path1;
@@ -110,10 +123,5 @@ function scheduleChangeCheck(when,repeat){
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
 }
-
-dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
-    sync.fsHandlers.dnode = handler;
-    scheduleChangeCheck(1000,true);
-});
 
 
