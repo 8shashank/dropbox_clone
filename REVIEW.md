@@ -1,31 +1,42 @@
 # Code Review
 
-Author: Liyiming Ke.
-Update: 2015/09/07.
+
+- Author: Liyiming Ke.
+
+- Update: 2015/09/07.
+
 
 ### Summary
 
+
 In code reviews are commented in the following format:
-// #Review#
-// (Original sentence)
-//		Comments
-//		Comments
-(Suggested sentence)
+
+- // #Review#
+- // (Original sentence)
+- //		Comments
+- //		Comments
+- (Suggested sentence)
+
 
 Most reviews are suggesting:
-	1. use of async + callbacks
-	2. wrapping logic in function
-	3. some shorter sentences to do job.
+	+ 1. use of async + callbacks
+	+ 2. wrapping logic in function
+	+ 3. some shorter sentences to do job.
+
 
 ### Issues
+
 
 A really important question that I would like to ask is:
 
 What will happen if folder1 has an ignore file preventing sync "1.txt", while folder2 has a file "1.txt" to be sync?
+
 	* The current program will still copy from folder2 to folder1 and overwrite folder1's file.
 	* Is this a desired behavior for this case?
 
+
 ### Other Comments
+
 
  * The commit message for file [base64utils.js](https://github.com/cs4278-2015/assignment2-handin/blob/submission/shashanksharma/lib/sync/base64utils.js) is a bit confusing.
  		The message suggests that there were some changes in code.
