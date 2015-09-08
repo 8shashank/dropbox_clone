@@ -4,7 +4,7 @@
 
 *Provide a 1-3 paragraph overview of the architecture of the code and the design rationale.*
 
-This codes adds a feature that enables the dropbox application to delete files. This is done by creating a user menu in the terminal command line that gives users the option to delete certain files in the folder. This command deletes the file from both folders. To achieve this, two functions were created. One to search the list of files in a folder and the other to delete the file. An extra function was added to implement valid user operations for the command line. 
+This code adds a feature that enables the dropbox application to delete files. This is done by creating a user menu in the terminal command line that gives users the option to delete certain files in the folder. This command deletes the file from both folders. To achieve this, two functions were created. One to search the list of files in a folder and the other to delete the file. An extra function was added to implement valid user operations for the command line. 
 
 ## Suggested Reading Materials
 No suggested readings. 
