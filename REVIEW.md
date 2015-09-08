@@ -5,7 +5,7 @@ The program supports user authentication such that users can create new accounts
 
 It also refactors the original program for better separation of concerns, specifically in sync.js. 
 
-##Possible Improvements
+##Suggested Improvements
 1. Fixed a bug where Javascript dictionary was being saved as [Object object] instead of being serialized to a file.
 2. Instead of using fs.readFileSync and then catching a possible error if it throws, you could use fs.existsSync which handles it better.
 3. Added a check to see if new username being added is falsy(empty string in this case). Only the password was being checked previously.
