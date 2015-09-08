@@ -17,6 +17,7 @@
     "delivery": "0.0.3",
     "dnode": "^1.2.1",
     "lodash": "^3.10.1",
+    "linebyline": "0.1.4",
     "yargs": "^3.19.0"
   }
 }

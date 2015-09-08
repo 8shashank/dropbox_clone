@@ -2,7 +2,9 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var readline = require('readline');
+//var readline = require('readline'); /* Not sure about this, but you may need to add to your package.json dependencies. */
+/* Also, I am not sure that this is the right line. See this URL for more info: https://www.npmjs.com/package/readline */
+var readline = require('linebyline');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -39,6 +41,10 @@ var syncFile = function(fromPath,toPath){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
         })
+        /* This was a good idea, but you don't seem to have fully implemented it. I couldn't get it working in the
+         * server prompt window. For some reason it would only get called when there were files that needed to be
+         * modified in the dropbox. Take that into consideration when you go about fixing it. --LW
+         */
         readLine.question("Please provide your username: ", function(answer) {
             readLine.close();
             fs.appendFile('DirectoryModifications.txt', answer + " modified " + fromPath
@@ -133,9 +139,47 @@ var userOps = {
     delete: del
 };
 
+/* Hi, Tristan --you have modified a big section of code here by taking out the create interface function.
+ * I am not sure exactly what you have broken, because I couldn't get your program to work, but it seems to me
+ * that a good first step would be to restore this part of the code.
+ */
+function getUserInput(){
+    console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
 
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.prompt();
+    rl.on('line', function(line) {
+        var args = line.trim().split(' ');
+        var operation = args.shift();
+
+        if(operation == 'quit') {
+            rl.close();
+            clearTimeout(timer);
+            dnodeClient.end();
+            return;
+        } else if (operation == 'help') {
+            for (var op in userOps) {
+                if (userOps.hasOwnProperty(op)) {
+                    console.log(' * ' + op);
+                }
+            }
+        } else if (userOps.hasOwnProperty(operation)) {
+            userOps[operation].apply(this, args);
+        } else {
+            console.log("Unknown option");
+        }
+        rl.prompt();
+    });
+}
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
     scheduleChangeCheck(1000,true);
+    getUserInput(); /* Tristan, you deleted this line but don't seem to have replaced this call with
+    * something similar to an interpreter-like structure. Replacing this doesn't fix all the problems, but
+    * it got the interpreter somewhat working again */
 });
