@@ -10,7 +10,7 @@ No unit tests were created to check the functionality of the feature.
 
 ## Suggested Improvements
 
-1. Currently non functional because of git errors, fix those.
+1. Currently non functional because of git errors, fixed those.
 
 2. This allows files not in the dropbox folders to be opened if someone knows the path, this could be changed by requiring a specific url path.
 
