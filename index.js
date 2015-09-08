@@ -116,6 +116,7 @@ function fileNeverSync(){
         }
 
     })
+
 }
 
 // Wrote a function to write to text files given the user input.
@@ -164,7 +165,6 @@ function askUserInput(){
     r1.prompt();
     r1.on('line', function (line) {
         if(line === "1"){
-            r1.close();
             fileNeverSync();
         }
         else if (line === "2"){
@@ -172,8 +172,8 @@ function askUserInput(){
             scheduleChangeCheck(1000,true);
         }
         else{
-            r1.close();
             console.log("Entered in unknown option.");
+            r1.prompt();
         }
 
     })
