@@ -169,7 +169,7 @@ function formatTime(time) {
     var minute = time.getMinutes();
     var second = time.getSeconds();
 
-    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' + hour + ':' + minute + '.' + second;
+    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' + hour + ':' + minute + ':' + second;
 
     return update;
 }

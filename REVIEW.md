@@ -41,4 +41,6 @@ suggestion:
 It might be good if in the beginning of the program, a function reads in the most recent file's timestamp and save it in lastupdated variable.
 By this way, even if the program restarts, the update command will consistently show most recent update time.
 
-
+5) changed date format. 
+	I do not know if it was intentional or not but the date format was hour:minute.second
+	So, I changed it to hour:minute:second.
