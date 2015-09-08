@@ -1,5 +1,5 @@
 
-# Review of Frank Cao by \<your\_first\_name\> \<your\_last\_name\> 
+# Review of Eric Yang by Frank Cao
 
 ## Overview
 
