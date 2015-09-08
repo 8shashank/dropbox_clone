@@ -46,22 +46,24 @@ var syncFile = function(fromPath,toPath){
 var writePipeline = new Pipeline();
 writePipeline.addAction({
     exec:function(data){
-        var unignoredFiles = ign.ignoreFiles(data.srcPath,data.syncToSrc);
-        _.each(unignoredFiles, function(toSrc){
-            var fromPath = data.trgPath + "/" + toSrc;
-            var toPath = data.srcPath + "/" + toSrc;
-            syncFile(fromPath,toPath);
+        ign.ignoreFiles(data.srcPath,data.syncToSrc,function(unignoredFiles){
+            _.each(unignoredFiles, function(toSrc){
+                var fromPath = data.trgPath + "/" + toSrc;
+                var toPath = data.srcPath + "/" + toSrc;
+                syncFile(fromPath,toPath);
+            });
         });
         return data;
     }
 });
 writePipeline.addAction({
     exec:function(data){
-        var unignoredFiles = ign.ignoreFiles(data.trgPath,data.syncToTrg);
-        _.each(unignoredFiles, function(toTrg){
-            var fromPath = data.srcPath + "/" + toTrg;
-            var toPath = data.trgPath + "/" + toTrg;
-            syncFile(fromPath,toPath);
+        ign.ignoreFiles(data.trgPath,data.syncToTrg,function(unignoredFiles){
+            _.each(unignoredFiles, function(toTrg){
+                var fromPath = data.srcPath + "/" + toTrg;
+                var toPath = data.trgPath + "/" + toTrg;
+                syncFile(fromPath,toPath);
+            })
         });
         return data;
     }
