@@ -10,8 +10,9 @@ No unit tests were created to check the functionality of the feature.
 
 ## Suggested Improvements
 
-1. This allows files not in the dropbox folders to be opened if someone knows the path, this could be changed by requiring a specific url path.
+1. Currently non functional because of git errors, fix those.
 
-2. Allow the user to assign the port to be used with console input.
+2. This allows files not in the dropbox folders to be opened if someone knows the path, this could be changed by requiring a specific url path.
 
-3. 
+3. Allow the user to assign the port to be used with console input.
+
