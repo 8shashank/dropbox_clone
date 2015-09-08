@@ -2,8 +2,7 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var uris = require("./lib/sync/dropboxuris");
-var path = require('path');
+var readline = require('readline');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -26,21 +25,26 @@ var argv = require('yargs')
     .epilog('Apache License V2 2015, Jules White')
     .argv;
 
-
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
-var Twit = require('twit');
+
+var ignoreList = [];
+
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
-    srcHandler.readFile(fromPath,function(base64Data){
-        trgHandler.writeFile(toPath,base64Data,function(){
-            console.log("Copied "+fromPath+" to "+toPath);
-        })
-    });
+    //I don't like doing this string comparison to have it ignore files
+    //I feel like there should be a way to set a file to be ignored but I can't find one
+    if(ignoreList.indexOf(fromPath) === -1 && ignoreList.indexOf(toPath) === -1) {
+        srcHandler.readFile(fromPath, function (base64Data) {
+            trgHandler.writeFile(toPath, base64Data, function () {
+                console.log("Copied " + fromPath + " to " + toPath);
+            })
+        });
+    }
 }
 
 var writePipeline = new Pipeline();
@@ -49,7 +53,7 @@ writePipeline.addAction({
         _.each(data.syncToSrc, function(toSrc){
             var fromPath = data.trgPath + "/" + toSrc;
             var toPath = data.srcPath + "/" + toSrc;
-            syncFile(fromPath,toPath);
+            syncFile(fromPath, toPath);
         });
         return data;
     }
@@ -59,7 +63,7 @@ writePipeline.addAction({
         _.each(data.syncToTrg, function(toTrg){
             var fromPath = data.srcPath + "/" + toTrg;
             var toPath = data.trgPath + "/" + toTrg;
-            syncFile(fromPath,toPath);
+            syncFile(fromPath, toPath);
         });
         return data;
     }
@@ -73,81 +77,41 @@ function checkForChanges(){
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;
+
         writePipeline.exec(rslt);
     });
 }
 
+var timer;
 function scheduleChangeCheck(when,repeat){
-    setTimeout(function(){
+    timer = setTimeout(function(){
         checkForChanges();
 
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
 }
 
-dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
-    sync.fsHandlers.dnode = handler;
-    scheduleChangeCheck(1000,true);
-});
-
-//Establish connection with Twitter
-function initiateTwitter(){
-    var Twitter = new Twit({
-        consumer_key: 'lF0toTHTD5BQxbvrfoy87scqz'
-        , consumer_secret: 'ERq30rIPQlouR0qpNKrYDudsdpIzplmTxeAhz9C5RivmovZ8bK'
-        , access_token: '3529755022-pSnr3zgRME4H1jK7hR6s109LCg1Ace8205EnmCO'
-        , access_token_secret: 'xjmXeXsigPoDBYFY6ZGMDPKds0wQibf8iOZ599k1cs0R1'
-    })
-
-    var acceptableExt = [".gif",".png", ".webp", ".jpeg"];
-
-    //Upload media to Twitter
-    Twitter.upload = function uploadToTwitter(fileToUpload){
-
-        var acceptable = false;
-        var extension = path.extname(fileToUpload);
-
-        for (var key in acceptableExt){
-            if (extension === acceptableExt[key])
-            {
-                acceptable = true;
-            }
-        }
-        //The image passed should be the raw binary of the image or binary base64 encoded
-        if (acceptable){
-            var mediaContent= fs.readFileSync(fileToUpload, { encoding: 'base64' });
-            Twitter.post('media/upload', { media_data: mediaContent }, function (err, data, response) {
-
-                var mediaIdStr = data.media_id_string;
-                var params = { media_ids: [mediaIdStr]};
-
-                Twitter.post('statuses/update', params, function (err, data, response) {
-                    console.log(fileToUpload + " uploaded.");
-                })
-            })
-        }
-        else
-        {
-            console.log(fileToUpload + " has unsupported format.");
-        }
-    };
-
-    return Twitter;
+function del(fileName) {
+    if(!fileName){
+        console.log('Please enter a file to delete');
+        return;
+    }
+    var path1 = argv.directory1 + '/' + fileName;
+    var path2 = argv.directory2 + '/' + fileName;
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+    try {
+        handler1.deleteFile(path1, function(){});
+        handler2.deleteFile(path2, function(){});
+    } catch (err) {
+        console.log(err.message);
+        return;
+    }
+    console.log('Deleting ' + fileName);
 }
 
-
-var readline = require('readline');
-
-//Will include an option for Facebook in the future
-function initiate(){
-    var socialMedia;
-    socialMedia = initiateTwitter();
-    return socialMedia
-}
-
-
-//Create handler to handle files in server
-function serverHandler(path) {
+//Create handler to handle files in directory
+function dirHandler(path) {
     getFiles = function(path){
         return fs.readdirSync(path);
     }
@@ -166,25 +130,62 @@ function serverHandler(path) {
     }
 }
 
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
-        if (answer === "upload") {
-            //Print out the files in the server folder
-            var sHandler = serverHandler(uris.getPath(argv.directory1));
-            var files = sHandler.files;
-            sHandler.printFileNames(files);
-
-            var socialMedia = initiate();
-
-            //Upload files with acceptable extensions
-            for(var key in files){
-                socialMedia.upload(uris.getPath(argv.directory1) + "/" + files[key]);
-            }
+function ignore(fileName){
+    while(fileName != "done") {
+        if (!fileName) {
+            console.log('Please enter a file to ignore synchronization ');
+            return;
         }
-    rl.close();
-});
+        ignoreList.push(argv.directory1 + '/' + fileName);
+        ignoreList.push(argv.directory2 + '/' + fileName);
+        console.log('Ignoring ' + fileName);
+    }
+}
 
+// To add valid operations, map user input to the desired function
+var userOps = {
+    quit: null,
+    test: function () { console.log('Test'); },
+    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
+    delete: del,
+    ignore: ignore
+};
+
+function getUserInput(){
+    console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
+
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.prompt();
+    rl.on('line', function(line) {
+        var args = line.trim().split(' ');
+        var operation = args.shift();
+
+        if(operation == 'quit') {
+            rl.close();
+            clearTimeout(timer);
+            dnodeClient.end();
+            return;
+        } else if (operation == 'help') {
+            for (var op in userOps) {
+                if (userOps.hasOwnProperty(op)) {
+                    console.log(' * ' + op);
+                }
+            }
+        } else if (userOps.hasOwnProperty(operation)) {
+            userOps[operation].apply(this, args);
+        } else {
+            console.log("Unknown option");
+        }
+        rl.prompt();
+    });
+}
+
+dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
+    sync.fsHandlers.dnode = handler;
+    scheduleChangeCheck(1000,true);
+    getUserInput();
+});
