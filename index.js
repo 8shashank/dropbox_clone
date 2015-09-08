@@ -33,13 +33,12 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
 /*
-
 // Tried to create command line interface to let user input directories instead of taking
 // them as argv, but currently not working.
 
  var rl = readline.createInterface({
- input: process.stdin,
- output: process.stdout
+     input: process.stdin,
+     output: process.stdout
  });
 
  var directory1 = "";
@@ -50,15 +49,11 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
  rl.prompt();
 
  rl.on('line', function(line){
- directory1 = line;
-
- console.log('\nWhat is the path of the second directory you would like to sync?');
-
- rl.prompt();
-
- directory2 = line;
-
- rl.close();
+     directory1 = line;
+     console.log('\nWhat is the path of the second directory you would like to sync?');
+     rl.prompt();
+     directory2 = line;
+     rl.close();
  });
  */
 
@@ -101,7 +96,7 @@ function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
 
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
+    sync.compare(path1,path2,sync.filesMatchExactly, function(rslt) {
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;
