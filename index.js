@@ -40,18 +40,24 @@ var syncFile = function(fromPath,toPath){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
 
-            var myPath = toPath.substring(toPath.indexOf('//') + 2);
-
-            if (!alreadySharedLinks[myPath]) {
-                var myIP = ip.address();
-
-                console.log('Now time for a link');
-                console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
-
-                alreadySharedLinks[myPath] = true;
-            }
+            shareLinkIfNecessary(toPath);
         });
     });
+};
+
+var shareLinkIfNecessary = function (path){
+
+    var myPath = toPath.substring(path.indexOf('//') + 2);
+
+    if (!alreadySharedLinks[myPath]) {
+        var myIP = ip.address();
+
+        console.log('Now time for a link');
+        console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
+
+        alreadySharedLinks[myPath] = true;
+    }
+
 };
 
 var writePipeline = new Pipeline();
