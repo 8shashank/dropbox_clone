@@ -72,8 +72,8 @@ writePipeline.addAction({
 function checkForChanges(){
     var path1;
     var path2;
-    var nameExistingConfig = argv.configuration
-    if (typeof nameExistingConfig !== "undefined") {
+    var nameExistingConfig = argv.configuration;
+    if (nameExistingConfig) {
         var paths = rememberSetupConfig();
         path1 = paths[0];
         path2 = paths[1];
@@ -103,7 +103,7 @@ function scheduleChangeCheck(when,repeat){
 function rememberSetupConfig() {
     var nameExistingConfig = argv.configuration;
     var arr = [];
-    if (typeof nameExistingConfig !== "undefined") {
+    if (nameExistingConfig) {
         var rawData = fs.readFileSync(__dirname + '/config.txt').toString();
         var tempArr = rawData.split(" ");
         for (var i = 0; i < tempArr.length; i++) {
@@ -121,7 +121,7 @@ function createSetupConfig() {
     var nametoSetConfig = argv.setconfiguration;
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-    if (typeof nametoSetConfig !== "undefined") {
+    if (nametoSetConfig) {
         fs.stat(__dirname + '/config.txt', function (err, stats) {
             if (err === null) {
                 // this means the file already exists
