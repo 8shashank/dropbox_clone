@@ -53,7 +53,9 @@ var syncFile = function(fromPath,toPath){
                         throw err;
 
                 });
-             });
+                //second improvement
+                console.log("File has been copied and log has been updated.")
+            });
             /*fs.stat('Log.txt', function(err, stat) {
                if (err == null) {
                    //file exists
