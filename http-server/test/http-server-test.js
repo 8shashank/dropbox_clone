@@ -27,6 +27,8 @@ vows.describe('http-server').addBatch({
         request('http://127.0.0.1:8080/file', this.callback);
       },
       'status code should be 200': function (res) {
+        //REVIEW COMMENT: this testing is thorough but consider logging statements before each assert to make clearer
+        //                which condition wasn't satisfied
         assert.equal(res.statusCode, 200);
       },
       'and file content': {
