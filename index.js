@@ -106,7 +106,8 @@ function fileNeverSync(){
     });
     r1.setPrompt('File name> ');
     r1.prompt();
-    r1.on('line', function (line) {console.log('The file you do not want to sync is ' + line);
+    r1.on('line', function (line) {
+        console.log('The file you do not want to sync is ' + line);
         if(checkNoSyncFile(line)){
             writeFile(line);
             r1.close();
