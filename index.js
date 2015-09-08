@@ -39,7 +39,7 @@ var syncFile = function(fromPath,toPath){
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
-            emailMessager("Copied "+fromPath+" to "+toPath);
+            emailMessager("Copied "+fromPath+" to "+toPath,[]);
         })
     });
 }
@@ -104,7 +104,7 @@ function del(fileName) {
         console.log(err.message);
         return;
     }
-    emailMessager('Deleted ' + fileName);
+    emailMessager('Deleted ' + fileName,[]);
 }
 
 
@@ -116,31 +116,40 @@ function rename(currentFileName, newFileName) {
     var path1 = argv.directory1 + '/' + currentFileName;
     var path2 = argv.directory2 + '/' + currentFileName;
 
-    var path1new = argv.directory1 + '/' + newFileName;
-    var path2new = argv.directory2 + '/' + newFileName;
+    if (fs.existsSync(path1) && fs.existsSync(path2)) {
 
-    var handler1 = sync.getHandler(path1);
-    var handler2 = sync.getHandler(path2);
+        var path1new = argv.directory1 + '/' + newFileName;
+        var path2new = argv.directory2 + '/' + newFileName;
 
-    var handler1new = sync.getHandler(path1new);
-    var handler2new = sync.getHandler(path2new);
+        var handler1 = sync.getHandler(path1);
+        var handler2 = sync.getHandler(path2);
 
-    try {
-        handler1.renameFile(path1,path1new , function(){});
-        handler2.renameFile(path2, path2new, function(){});
-    } catch (err) {
-        console.log(err.message);
-        return;
+        var handler1new = sync.getHandler(path1new);
+        var handler2new = sync.getHandler(path2new);
+
+        try {
+            handler1.renameFile(path1, path1new, function () {
+            });
+            handler2.renameFile(path2, path2new, function () {
+            });
+        } catch (err) {
+            console.log(err.message);
+            return;
+        }
+        emailMessager('Renamed  ' + currentFileName + " to " + newFileName, []);
     }
-    emailMessager('Renamed  ' + currentFileName + " to " + newFileName);
+    else {
+        console.log("File does not exist in directory");
+    }
 }
 
-function emailMessager(str) {
+function emailMessager(str, recipient) {
     // setup e-mail data with unicode symbols
+    var now = new Date(year, month, day, hour, minute, second, millisecond);
     var mailOptions = {
         from: 'Vanderbilt DropBox  <vanderbilt.dropbox@gmail.com>', // sender address
-        to: 'tazrianrafi@gmail.com', // list of receivers
-        subject: 'Dropbox updated ', // Subject line
+        to:  recipient, //'tazrianrafi@gmail.com' // list of receivers
+        subject: 'Dropbox updated '+ now, // Subject line
         text: str, // plaintext body
         html: '<b>' + str + '</b>' // html body
     };
@@ -200,13 +209,15 @@ function getUserInput(){
 
 
 // create reusable transporter object using SMTP transport
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'vanderbilt.dropbox@gmail.com',
-        pass: 'dropthebase'
-    }
-});
+var transporter = function(username, password) {
+    nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: username, //'vanderbilt.dropbox@gmail.com'
+            pass:  password//'dropthebase'
+        }
+    });
+}
 
 // NB! No need to recreate the transporter object. You can use
 // the same transporter object for all e-mails
