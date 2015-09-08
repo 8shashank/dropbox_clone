@@ -47,7 +47,7 @@ var syncFile = function(fromPath,toPath){
 
                 console.log('Now time for a link');
                 console.log('Shareable link: http://' + myIP + ':8000/' + myPath);
-                
+
                 alreadySharedLinks[myPath] = true;
             }
         });
