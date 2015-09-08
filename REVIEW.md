@@ -4,8 +4,7 @@
 The code implements the delete functionality 
 which removes the file from both the nodes being synced, and also has an authentication feature which allows the user to log in using pre-set credentials.
 
-It uses the function invocation pattern to pass in  
-pass in user arguments from the command line as an array and invoke the different commands.
+It uses the function invocation pattern to pass in user arguments from the command line as an array and invoke the different commands.
 
 ##Suggested Reading Material
 There aren't any reading material suggestions.
