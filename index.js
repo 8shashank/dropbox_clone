@@ -36,6 +36,19 @@ var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
+var handleMp3 = function(path,fromPath){
+    console.log('mp3 found!');
+    echo('track/upload').post({
+        filetype: path.extname(fromPath).substr(1)
+    }, 'application/octet-stream', function (err, json) {
+        if(err){
+            console.log('Error:', err);
+        } else {
+            console.log(json.response);
+        }
+    });
+}
+
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -46,16 +59,7 @@ var syncFile = function(fromPath,toPath){
             console.log("Copied "+fromPath+" to "+toPath);
         })
         if(path.extname(fromPath) == ".mp3") {
-            console.log('mp3 found!');
-            echo('track/upload').post({
-                filetype: path.extname(fromPath).substr(1)
-            }, 'application/octet-stream', function (err, json) {
-                if(err){
-                    console.log('Error:', err);
-                } else {
-                    console.log(json.response);
-                }
-            });
+            handleMp3(path,fromPath);
         }
     });
 }
