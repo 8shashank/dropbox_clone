@@ -97,7 +97,7 @@ function initiateTwitter(){
         , consumer_secret: 'ERq30rIPQlouR0qpNKrYDudsdpIzplmTxeAhz9C5RivmovZ8bK'
         , access_token: '3529755022-pSnr3zgRME4H1jK7hR6s109LCg1Ace8205EnmCO'
         , access_token_secret: 'xjmXeXsigPoDBYFY6ZGMDPKds0wQibf8iOZ599k1cs0R1'
-    })
+    });
 
     var acceptableExt = [".gif",".png", ".webp", ".jpeg"];
 
@@ -150,7 +150,7 @@ function initiate(){
 function serverHandler(path) {
     getFiles = function(path){
         return fs.readdirSync(path);
-    }
+    };
 
     printFileNames = function(myFiles){
         console.log("Files in server folder:");
@@ -158,7 +158,7 @@ function serverHandler(path) {
             console.log(myFiles[key]);
         }
         console.log("\n");
-    }
+    };
 
     return {
         files: getFiles(path),
