@@ -171,6 +171,10 @@ var rl = readline.createInterface({
     output: process.stdout
 });
 
+/*
+I think that here you could take in the answer and first check the first 6 chars to see if the answer was upload
+then make a substring of the rest of the answer to determine which specific file is desired.
+ */
 rl.question("\nEnter 'upload' to upload all files in server folder to twitter\n", function(answer) {
         if (answer === "upload") {
             //Print out the files in the server folder
