@@ -104,6 +104,8 @@ function deleteFile(fName){
         console.log("Please provide a valid filename to delete.");
         return;
     }
+    //Trim() does not remove whitespace for some reason
+    fName = fName.substring(0, fName.length-1);
     //need to actually get path
     var path1 = argv.directory1;
     var path2 = argv.directory2;
@@ -144,8 +146,10 @@ function deleteFile(fName){
 function listSearch(name, path){
     console.log("searching lists");
     var list = fs.readdirSync(path);
-    console.log(list);
+    //console.log(list);
     for (var i = 0; i < list.length; i++){
+        //console.log(name+" , "+list[i]);
+
         if(list[i] === name) {
             return true;
         }
@@ -174,7 +178,6 @@ function getUserInput(){
     rl.on('line', function(line) {
         var args = line.trim().split(' ');
         var operation = args.shift();
-
         if(operation == 'quit') {
             rl.close();
             clearTimeout(timer);
@@ -187,7 +190,22 @@ function getUserInput(){
                 }
             }
         } else if (userOps.hasOwnProperty(operation)) {
-            userOps[operation].apply(this, args);
+            if(operation == 'delete' && args.length > 1) {
+                //+++++++++++++BUGFIX #1++++++++++++++++++//
+                //if deleting and the file has spaces in its name, recombine arguments
+                var name ='';
+                for (var i = 0; i < args.length; i++) {
+                    var name = name + args[i] + " ";
+                }
+                //WHY DOESN'T IT TRIM
+                name.trim();
+                args[0] = name;
+                console.log(name);
+                userOps[operation].apply(this, args);
+                //------------BUGFIX #1 ----------------//
+            } else {
+                userOps[operation].apply(this, args);
+            }
         } else {
             console.log("Unknown option");
         }
