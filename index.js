@@ -44,7 +44,7 @@ var syncFile = function(fromPath,toPath){
             fs.appendFile('DirectoryModifications.txt', answer + " modified " + fromPath
                     /* + " (" + calculateFileSizeInBytes(fromPath) + "bytes)"*/ + "\n",
                     function (err) {
-                if (err) {  // Ensure that this will catch the error of null/empty username entered - if it doesn't, maybe create a conditional to address that case.
+                if (err) {  // Ensure that this will catch the error of null or empty username entered - if it doesn't, maybe create a conditional to address that case.
                     throw err; // Consider console.log(err.message) instead.
                 }
             });
