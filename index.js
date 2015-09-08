@@ -119,6 +119,7 @@ function fileNeverSync(){
 }
 
 // Wrote a function to write to text files given the user input.
+// There's already a writeFile function in fs, so this could be confusing. Would recommend naming something else.
 function writeFile(filenosync){
     if(!fs.existsSync('neversyncfile.txt')){
         fs.writeFile('neversyncfile.txt', filenosync + '\n', function(err){
@@ -163,19 +164,19 @@ function askUserInput(){
     });
     rlInterface.prompt();
     rlInterface.on('line', function (line) {
-        if(line === "1"){
-            rlInterface.close();
-            fileNeverSync();
+        switch (line) { // Switch statement is cleaner and uses fewer lines.
+            case '1':
+                rlInterface.close();
+                fileNeverSync();
+                break;
+            case '2':
+                rlInterface.close(); // Try to always use semi-colons even though they aren't required.
+                scheduleChangeCheck(1000, true);
+                break;
+            default: // Give the user an option to re-enter input. Maybe he or she just mistyped.
+                console.log("Please enter a valid input (1 or 2): ");
+                rlInterface.prompt();
         }
-        else if (line === "2"){
-            rlInterface.close(); // Try to always use semi-colons even though they aren't required.
-            scheduleChangeCheck(1000,true);
-        }
-        else{ // Give the user an option to re-enter input. Maybe he or she just mistyped.
-            console.log("Please enter a valid input (1 or 2): ");
-            rlInterface.prompt();
-        }
-
     })
 
 }
