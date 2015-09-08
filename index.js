@@ -26,28 +26,12 @@ var argv = require('yargs')
     .nargs('a', 1)
     .describe('a', 'Selective syncing boolean flag (i.e. 1: sync is on; 0: sync is off; defaults to 1)')
     .default('a', 1)
-
-    // yargs does not seem able to handle a flexible amount of responses for one argument. hardcoded 3.
-
-    // ignore1
-    .alias('i1', 'ignore1')
-    .nargs('i1', 1)
-    .describe('i1', 'Indicate a file in a directory to ignore from sync process (e.g. //test-data/folder1')
-    .default('i1', null)
-
-    // ignore2
-    .alias('i2', 'ignore2')
-    .nargs('i2', 1)
-    .describe('i2', 'Indicate another file in a directory to ignore from sync process (e.g. //test-data/folder1')
-    .default('i2', null)
-
-    // ignore3
-    .alias('i3', 'ignore3')
-    .nargs('i3', 1)
-    .describe('i3', 'Indicate another file in a directory to ignore from sync process (e.g. //test-data/folder1')
-    .default('i3', null)
-    .argv;
-
+	//fixed here(youngho)
+	.array('i')
+	.alias('i', 'ignore')
+	.describe('i',"Indicate a file in a dirrectory to ignore from sync process (e.g. //test-data/folder1")
+	.default('i', null)
+	.argv;
 
 var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
@@ -88,25 +72,24 @@ writePipeline.addAction({
 });
 
 //hardcoding for instance of <=3 arguments due to yargs capabilities
-var ignoreOptionArgs = [argv.ignore1, argv.ignore2, argv.ignore3];
+var ignoreOptionArgs = argv.i;
 
-//abstracted away from above hardcoding to allow a better/flexible solution, possibly.
-var ignoredFiles = [];
-function ignore(ignoredFiles, ignoreOptionArgs) {
-	console.log("ignore()");
-	for (j=0; j<ignoreOptionArgs.length; j++) {
-        if (ignoreOptionArgs[j]) {
-            ignoredFiles.push(ignoreOptionArgs[j]);
-        }
-    }
+function refineArgs(arr){
+	var newArr = [];
+	for(var i in arr){
+		if(arr[i] != null){
+			var parts = arr[i].split('/');
+			newArr.push(parts[parts.length - 1]);
+		}
+	}
+	return newArr;
 }
 
 function checkForChanges(){
-	console.log("checkforchanges()");
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-	console.log("ignoreoptionargs: " + ignoreOptionArgs);
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, ignoredFiles, function(rslt) {
+	//should pass in ignoreOptionArgs instead of ignoredFiles because ignoredFiles is empty when entering this function.
+    sync.compare(path1,path2,sync.filesMatchNameAndSize, refineArgs(ignoreOptionArgs), function(rslt) {
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;

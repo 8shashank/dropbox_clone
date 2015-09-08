@@ -6,12 +6,16 @@ By passing the argument -i <filename>(//test-data/folder1/test1.txt) the program
 
 ##Suggested Reading Materials
 
-None
+1) https://www.npmjs.com/package/yargs => look for .array
 
-## Suggested Improvements
-1) When the program is ran without the -i argument, all files should sync. However, for some reasons not known, test.txt is not synced. 
-2) The commands to run the program is not described in any of the files. Currently not able to check if -i argument works
-=> found out how to run the command. 
-	ex) dropbox --d1 dnode://test-data/folder1 --d2://test-data/folder2 --i1 <file path>
-	The ignore argument however does not seem to 'ignore' the actual file. Still syncs. 
-3) fixed argument 'i' -> 'i1' for consistency.
+## Suggested Improvements(some fixed by youngho)
+1) When the program is ran without the -i argument, all files should sync. However, for some reasons not known, test.txt is not synced.  
+
+2) Changed yargs. By using .array('<option name>') you can get the inputs as an array.
+	ex) ... --i test.txt test2.txt  will result in ['test.txt', 'test2.txt']
+
+3) Added refineArgs() function to refine argument. (//test-data/folder1/test.txt -> test.txt)
+   However, since the program only uses the file name and not the path, I believe it might be easier for the user to just input file name only.
+   --i test.txt test2.txt
+   I have not changed the yargs description for this but if you feel this change is fine, pull and merge. 
+   If you fine with using just the file names, you can ignore using refineArgs().
