@@ -23,6 +23,8 @@ server node module.
     suggestion would be to uninstall these modules. This could be accomplished by removing require statements and 
     running npm uninstall <module> commands 
 4. It could be useful to find the IP address to put into the url. I would use a similar implementation to what I used in
-    my own feature, however I would implement it in 
- 5. Further explanation of web interface
+    my own feature, however I would implement it in the http-server file. 
+ 5. Finally, I found the web interface to be confusing with the exposed hashes. I think finding a way to safely remove 
+    this from the module could be beneficial, especially for the lay user. This is something I don't know how to fix 
+    myself, so I will add comments of possible suggestions.
 

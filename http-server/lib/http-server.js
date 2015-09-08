@@ -43,6 +43,10 @@ var HTTPServer = exports.HTTPServer = function (options) {
     res.emit('next');
   });
 
+  /*
+  I think that somewhere in the following 20 lines of code is where this issue could be resolved, and I think a
+  simple deletion will fix it, but I do not understand it enough to fix it safely
+   */
   if (options.cors) {
     this.headers['Access-Control-Allow-Origin'] = '*';
     this.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
