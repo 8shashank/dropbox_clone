@@ -1,22 +1,22 @@
-# Review of \<firstname\> \<lastname\> by \<your\_first\_name\> \<your\_last\_name\> 
+# Review of Li Yi Ming Ke by Frank Cao 
 
 ## Overview
 
-*Provide a 1-3 paragraph overview of the architecture of the code and the design rationale.*
-
-Example: This code uses the reactor-pattern to dispatch service events to a series of service handlers. The service handler interface is specified as a Java interface allowing users of the application to extend the available services by creating a Java object that implements this interface. An event pre-processor is used to extract the “service type” header from events and then lookup the appropriate service handler using the type name. Service handlers are stored in a central HandlerRegistry and bound to service types, which are strings. 
-
-The code’s unit testing methodology is to create one unit test per concrete class. No unit tests are provided for classes that are primarily simple data structures with getters/setters. The unit tests are designed to call each of the methods on the test subject. No apparent boundary value analysis or other approach was used to devise the unit tests.
+This could adds authentication functionality, it also encrypts the user's creditionals through the use of the module 'crypto'.
 
 ## Suggested Reading Materials
 
-*Optionally, provide links to any reading materials that you believe would be beneficial to the reviewee.*
-
-Please see Martin Fowler's discussion of Anti Patterns http://martinfowler.com/bliki/AntiPattern.html.
+Stack Overflow Discussion on Callbacks vs Promises
+https://stackoverflow.com/questions/9391396/node-js-control-flow-callbacks-or-promises
 
 ## Suggested Improvements
 
-*Provide a list of 5+ aspects of the code that should be improved. Each suggestion for improvement should be accompanied by a GitHub pull request on the reviewee's submission repo that shows how to perform the suggested refactoring. If the change is so substantial that it is "rewriting" the solution, break it down into a series of refactorings that build on each other to improve the solution (each refactoring committed separately and submitted as a pull request with a thorough explanation).*
+1. Changed all double quotes to single quotes for code consistency.
 
-1. There is a bug in the boundary condition checking in the manifold handler. This refactoring describes the issue in detail and provides a proposed fix.
-https://github.com/cs4278-2015/assignment2-handin/pull/2
+2. Fixed formatting on function headers with commas (added spaces in between paramters). Fixed formatting that involves colons as well, adding spaces wherever it makes sense.
+
+3. In the function compare in check.js there is a is a double nested callback to decently complex blocks of code. Promises are a very nice way to avoid callback hell in javascript. It's not a clearly better methodology though, so I didn't replace the callbacks with promises.
+
+4. If the user enters in directories that do not exist, the server will crash and the program will appear like it's working fine. I've added a check to check.js that will check to make sure the user's entries are actual directories and if they are not valid paths, the program will crash with an error that will spit out. This way the server does not crash either when the user enters something incorrect.
+
+5. The package.json file was missing the module 'crypto', if a user wanted to use the module and used the command 'npm install', they would not be able to use crypto.
