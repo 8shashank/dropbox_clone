@@ -2,8 +2,8 @@
 
 var _ = require('lodash');
 var fs = require('fs');
-var chokidar = require('chokidar');
 var readline = require('readline');
+var Watcher = require('./watch');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -64,46 +64,6 @@ writePipeline.addAction({
         return data;
     }
 });
-
-var Watcher = (function() {
-    function Watcher(config, dir1, dir2, pipeline) {
-
-        if (typeof dir !== 'string')
-          throw new TypeError('directory argument required');
-
-        if (typeof onChange !== 'function')
-          throw new TypeError('onChange must be a function');
-
-        this.checkForChanges = function() {
-            sync.compare(dir1, dir2,
-                    sync.filesMatchNameAndSize, function(rslt) {
-                rslt.srcPath = dir1;
-                rslt.trgPath = dir2;
-                pipeline.exec(rslt);
-            });
-        }
-
-        function changeDetected(path, config) {
-            onChange(path, config);
-            console.log('Watcher detected ', change, ' at path ', path);
-            self.checkForChanges();
-        }
-
-        chokidar.watch(dir, config)
-          .on('all', changeDetected)
-          .on('error', function(error) {
-            console.log('Uncaught error', error);
-          })
-          .on('ready', function() {
-            console.log('watching', dir);
-          });
-    }
-
-    Watcher.prototype = Object.create(null);
-    Watcher.prototype.constructor = Watcher;
-
-    return Watcher;
-})();
 
 function del(fileName) {
     if(!fileName){
@@ -191,3 +151,5 @@ function connect(options) {
     });
 
 }
+
+connect({host:argv.server, port:argv.port});
