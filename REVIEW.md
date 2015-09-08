@@ -25,4 +25,9 @@
     Used Date.toTimeStamp() to more cleanly get the Hours, minutes, and seconds for the user. This also
     fixes the slight bug where leading zeros were getting dropped. Ex: 1:03 being 1:3.
 
-## Commit 5 -
+## Commit 5 - Making update correct across runnings of the program
+
+    It might be good to have it loop over all the files in the directories checking time stamps
+    and just return the most recent as the most recently edited. I am not sure exactly how to do
+    that though but I would assume that it shouldn't be too difficult for someone more
+    competent than I am at javascript.

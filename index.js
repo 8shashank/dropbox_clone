@@ -90,7 +90,7 @@ function scheduleChangeCheck(when,repeat){
     },when);
 }
 
-
+//This would be much improved if I could figure out how to make functionName a delegate/function pointer
 function callFunctionInBothDirectories(fileName, functionName)
 {
     if(!fileName){
@@ -178,6 +178,13 @@ function lastUpdated() {
     if (lastUpdate) {
         console.log('Files last updated on ' + formatTime(lastUpdate));
     } else {
+        /*
+        It might be good to make this check timestamps for when files are edited
+        so that it will work across runnings of the program without having to
+        persist our most recent change time stamp
+
+        I am not really sure how to do that though
+         */
         console.log('No files have been changed');
     }
 }
