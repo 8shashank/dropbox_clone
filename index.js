@@ -30,10 +30,10 @@ var argv = require('yargs')
     // yargs does not seem able to handle a flexible amount of responses for one argument. hardcoded 3.
 
     // ignore1
-    .alias('i', 'ignore')
-    .nargs('i', 1)
-    .describe('i', 'Indicate a file in a directory to ignore from sync process (e.g. //test-data/folder1')
-    .default('i', null)
+    .alias('i1', 'ignore1')
+    .nargs('i1', 1)
+    .describe('i1', 'Indicate a file in a directory to ignore from sync process (e.g. //test-data/folder1')
+    .default('i1', null)
 
     // ignore2
     .alias('i2', 'ignore2')
@@ -93,7 +93,8 @@ var ignoreOptionArgs = [argv.ignore1, argv.ignore2, argv.ignore3];
 //abstracted away from above hardcoding to allow a better/flexible solution, possibly.
 var ignoredFiles = [];
 function ignore(ignoredFiles, ignoreOptionArgs) {
-    for (j=0; j<ignoreOptionArgs.length; j++) {
+	console.log("ignore()");
+	for (j=0; j<ignoreOptionArgs.length; j++) {
         if (ignoreOptionArgs[j]) {
             ignoredFiles.push(ignoreOptionArgs[j]);
         }
@@ -101,9 +102,10 @@ function ignore(ignoredFiles, ignoreOptionArgs) {
 }
 
 function checkForChanges(){
+	console.log("checkforchanges()");
     var path1 = argv.directory1;
     var path2 = argv.directory2;
-	console.log("checkforchanges()-ignoredFiles: " + ignoredFiles);
+	console.log("ignoreoptionargs: " + ignoreOptionArgs);
     sync.compare(path1,path2,sync.filesMatchNameAndSize, ignoredFiles, function(rslt) {
 
         rslt.srcPath = path1;
