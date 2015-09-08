@@ -22,6 +22,30 @@ var argv = require('yargs')
     .nargs('p', 1)
     .default('p',5004,"5004")
     .epilog('Apache License V2 2015, Jules White')
+    .alias('a', 'active')
+    .nargs('a', 1)
+    .describe('a', 'Selective syncing boolean flag (i.e. 1: sync is on; 0: sync is off; defaults to 1)')
+    .default('a', 1)
+
+    // yargs does not seem able to handle a flexible amount of responses for one argument. hardcoded 3.
+
+    // ignore1
+    .alias('i', 'ignore')
+    .nargs('i', 1)
+    .describe('i', 'Indicate a file in a directory to ignore from sync process (e.g. //test-data/folder1')
+    .default('i', null)
+
+    // ignore2
+    .alias('i2', 'ignore2')
+    .nargs('i2', 1)
+    .describe('i2', 'Indicate another file in a directory to ignore from sync process (e.g. //test-data/folder1')
+    .default('i2', null)
+
+    // ignore3
+    .alias('i3', 'ignore3')
+    .nargs('i3', 1)
+    .describe('i3', 'Indicate another file in a directory to ignore from sync process (e.g. //test-data/folder1')
+    .default('i3', null)
     .argv;
 
 
@@ -39,7 +63,7 @@ var syncFile = function(fromPath,toPath){
             console.log("Copied "+fromPath+" to "+toPath);
         })
     });
-}
+};
 
 var writePipeline = new Pipeline();
 writePipeline.addAction({
@@ -63,11 +87,24 @@ writePipeline.addAction({
     }
 });
 
+//hardcoding for instance of <=3 arguments due to yargs capabilities
+var ignoreOptionArgs = [argv.ignore1, argv.ignore2, argv.ignore3];
+
+//abstracted away from above hardcoding to allow a better/flexible solution, possibly.
+var ignoredFiles = [];
+function ignore(ignoredFiles, ignoreOptionArgs) {
+    for (j=0; j<ignoreOptionArgs.length; j++) {
+        if (ignoreOptionArgs[j]) {
+            ignoredFiles.push(ignoreOptionArgs[j]);
+        }
+    }
+}
+
 function checkForChanges(){
     var path1 = argv.directory1;
     var path2 = argv.directory2;
 
-    sync.compare(path1,path2,sync.filesMatchNameAndSize, function(rslt) {
+    sync.compare(path1,path2,sync.filesMatchNameAndSize, ignoredFiles, function(rslt) {
 
         rslt.srcPath = path1;
         rslt.trgPath = path2;
@@ -78,10 +115,17 @@ function checkForChanges(){
 
 function scheduleChangeCheck(when,repeat){
     setTimeout(function(){
-        checkForChanges();
+        if (syncIsActive()) {
+            checkForChanges();
+        }
 
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
+}
+
+//made this a function in case something more powerful were to be implemented in the future
+function syncIsActive() {
+    return argv.a;
 }
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
