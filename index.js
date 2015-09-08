@@ -52,7 +52,7 @@ writePipeline.addAction({
             //console.log("data: " + data + " toSrc: " + toSrc + " fromPath " + fromPath);
             var toPath = data.srcPath + "/" + toSrc;
             //console.log("data: " + data + " toSrc: " + toSrc + " trgPath " + toPath);
-            if(checkNoSyncFile(toSrc)){
+            if(!checkNoSyncFile(toSrc)){
                 syncFile(fromPath,toPath);
             }
         });
@@ -66,7 +66,7 @@ writePipeline.addAction({
             //console.log("data: " + data + " totrg: " + toTrg + " fromPath " + fromPath);
             var toPath = data.trgPath + "/" + toTrg;
             //console.log("data: " + data + " totrg: " + toTrg + " trgPath " + toPath);
-            if(checkNoSyncFile(toTrg)){
+            if(!checkNoSyncFile(toTrg)){
                 syncFile(fromPath,toPath);
             }
         });
@@ -110,7 +110,7 @@ function fileNeverSync(cb){
     r2.prompt();
     r2.on('line', function (line) {
         console.log("The file you do not want to sync is " + line);
-        if(checkNoSyncFile(line)){
+        if(!checkNoSyncFile(line)){
             writeFile(line, cb);
         }
         else{
@@ -151,11 +151,11 @@ function checkNoSyncFile(filename) {
 
     if (array.indexOf(filename) === -1) {
         //console.log(filename + " was not found in log.");
-        return true;
+        return false;
     }
     else {
         //console.log(filename + " was found in log and will not be synced.");
-        return false;
+        return true;
     }
 }
 
