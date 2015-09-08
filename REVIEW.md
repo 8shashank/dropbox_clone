@@ -9,3 +9,4 @@ This code implements a file log for the Dropbox application. The code is easily 
 
 1. Writing to the log should be done after the files copied over is completed. Or writing "attempting to X change" and then have a completed one.
 2. Make sure the there is a "record" (or element) that is being modified and check if it's not null
+3. Changed naming to clarify variables use.
