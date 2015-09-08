@@ -83,12 +83,16 @@ function changeDetected(change, path){
     checkForChanges();
 }
 
-function Watcher(options) {
+function Watcher(config, dir1, dir2) {
+
+    if (dir1 === undefined || dir2 === undefined)
+      throw new TypeError('two directory arguments required');
+
     // Only watch local directories
     if(argv.directory1.indexOf('dnode') === -1){
         // Removes file/dnode from beginning of path for watchers
         var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
-        var watcher1 = chokidar.watch(dir1, options);
+        var watcher1 = chokidar.watch(dir1, config);
         watcher1
           .on('all', changeDetected)
           .on('error', function(error) {
@@ -101,7 +105,7 @@ function Watcher(options) {
 
     if(argv.directory2.indexOf('dnode') === -1){
         var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
-        var watcher2 = chokidar.watch(dir2, options);
+        var watcher2 = chokidar.watch(dir2, config);
         watcher2
           .on('all', changeDetected)
           .on('error', function(error) {
@@ -111,15 +115,20 @@ function Watcher(options) {
             console.log('watching', dir2);
           });
     }
+
 }
 
-var watcher = new Watcher({
-  ignored: '*.swp',   // Prevents issues when editing files with vim
-  ignoreInitial: true, // Prevents checking for changes when 
-                       // first turned on for every file
-  persistent: true    // Keeps running until program ends
-});
-
+Watcher.prototype = Object.create(null);
+Watcher.prototype.constructor = Watcher;
+Watcher.prototype.checkForChanges = function(pipeline) {
+    var self = this;
+    sync.compare(self.dir1, self.dir2,
+            sync.filesMatchNameAndSize, function(rslt) {
+        rslt.srcPath = self.dir1;
+        rslt.trgPath = self.dir2;
+        pipeline.exec(rslt);
+    });
+};
 
 function del(fileName) {
     if(!fileName){
@@ -181,8 +190,19 @@ function getUserInput(){
     });
 }
 
-dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
-    sync.fsHandlers.dnode = handler;
-    checkForChanges();
-    getUserInput();
-});
+function connect(options) {
+
+    var watcher = new Watcher({
+        ignored: '*.swp',    // Prevents issues when editing files with vim
+        ignoreInitial: true, // Prevents checking for changes when 
+                             // first turned on for every file
+        persistent: true     // Keeps running until program ends
+    });
+
+    dnodeClient.connect(options, function(handler){
+        sync.fsHandlers.dnode = handler;
+        checkForChanges();
+        getUserInput();
+    });
+
+}
