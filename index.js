@@ -83,40 +83,43 @@ function changeDetected(change, path){
     checkForChanges();
 }
 
-var watcherOpts = {
+function Watcher(options) {
+    // Only watch local directories
+    if(argv.directory1.indexOf('dnode') === -1){
+        // Removes file/dnode from beginning of path for watchers
+        var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
+        var watcher1 = chokidar.watch(dir1, options);
+        watcher1
+          .on('all', changeDetected)
+          .on('error', function(error) {
+            console.log('Uncaught error', error);
+          })
+          .on('ready', function() {
+            console.log('watching', dir1);
+          });
+    }
+
+    if(argv.directory2.indexOf('dnode') === -1){
+        var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
+        var watcher2 = chokidar.watch(dir2, options);
+        watcher2
+          .on('all', changeDetected)
+          .on('error', function(error) {
+            console.log('Uncaught error', error);
+          })
+          .on('ready', function() {
+            console.log('watching', dir2);
+          });
+    }
+}
+
+var watcher = new Watcher({
   ignored: '*.swp',   // Prevents issues when editing files with vim
-  ignoreInitial: true,// Prevents checking for changes when first turned on for every file
+  ignoreInitial: true, // Prevents checking for changes when 
+                       // first turned on for every file
   persistent: true    // Keeps running until program ends
-};
+});
 
-
-// Only watch local directories
-if(argv.directory1.indexOf('dnode') === -1){
-    // Removes file/dnode from beginning of path for watchers
-    var dir1 = argv.directory1.replace(/^.*?:\/\//, '');
-    var watcher1 = chokidar.watch(dir1, watcherOpts);
-    watcher1
-      .on('all', changeDetected)
-      .on('error', function(error) {
-        console.log('Uncaught error', error);
-      })
-      .on('ready', function() {
-        console.log('watching', dir1);
-      });
-}
-
-if(argv.directory2.indexOf('dnode') === -1){
-    var dir2 = argv.directory2.replace(/^.*?:\/\//, '');
-    var watcher2 = chokidar.watch(dir2, watcherOpts);
-    watcher2
-      .on('all', changeDetected)
-      .on('error', function(error) {
-        console.log('Uncaught error', error);
-      })
-      .on('ready', function() {
-        console.log('watching', dir2);
-      });
-}
 
 function del(fileName) {
     if(!fileName){
