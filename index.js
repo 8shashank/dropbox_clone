@@ -45,7 +45,7 @@ var syncFile = function(fromPath,toPath){
                     /* + " (" + calculateFileSizeInBytes(fromPath) + "bytes)"*/ + "\n",
                     function (err) {
                 if (err) {
-                    throw err;
+                    throw err; // Consider console.log(err.message) instead.
                 }
             });
         });
