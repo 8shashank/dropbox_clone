@@ -22,3 +22,15 @@ function timeStamp() {
         time.getFullYear() + " at " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
     //getUserInput();
 }
+
+
+if (promptedUpdate) {
+    if (operation == 'update') {
+        return;
+    } else if (operation == 'exit') {
+        promptedUpdate = false;
+        return;
+    } else {
+        console.log("case with this operation where 'promptedUpdate == true' was not accounted for");
+    }
+}

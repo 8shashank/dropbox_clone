@@ -13,7 +13,7 @@ none come to mind.
 
 1. The date-generating portion of the the code could be factored out into a timeStamp method
 
-2. 
+2. The third portion of the if statement nested within if(promptedUpdate) could either be removed or made more descriptive. An instance where the operation does not match any of the possible options is already covered at the end of getUserInput(), so if that bit of code is reached it will either double log that issue, or it tells you that promptedUpdate was true and that should only happen for two cases and maybe even that the operation was recognized later but promptedUpdate should have been false. So changing the comment to say something like "case with this operation where 'promptedUpdate == true' was not accounted for" or something along those lines might be more useful for debugging, especially in a bigger project.
 
 3.
 
