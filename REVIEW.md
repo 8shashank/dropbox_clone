@@ -16,3 +16,4 @@ N/A
 2. Removed IDE data directory and updated .gitignore to prevent it from being added in the future
 3. Added error handling to echo post call
 4. Factored out echo call to helper method
+5. Added more logging to error on echo call and changed echo apikey to a valid value

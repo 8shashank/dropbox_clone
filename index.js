@@ -6,7 +6,7 @@ var readline = require('readline');
 var path = require('path');
 var echojs = require('echojs');
 var echo = echojs({
-    key: process.env.GIRJJZYYBBGSDR2TD
+    key: 'GIRJJZYYBBGSDR2TD'
 });
 
 
@@ -36,13 +36,13 @@ var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
-var handleMp3 = function(path,fromPath){
+var handleMp3 = function(path,fromPath,b){
     console.log('mp3 found!');
     echo('track/upload').post({
         filetype: path.extname(fromPath).substr(1)
-    }, 'application/octet-stream', function (err, json) {
+    }, 'application/octet-stream', b, function (err, json) {
         if(err){
-            console.log('Error:', err);
+            console.log('Error:', err, json);
         } else {
             console.log(json.response);
         }
@@ -53,13 +53,12 @@ var handleMp3 = function(path,fromPath){
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
-
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
         })
         if(path.extname(fromPath) == ".mp3") {
-            handleMp3(path,fromPath);
+            handleMp3(path,fromPath,base64Data);
         }
     });
 }
