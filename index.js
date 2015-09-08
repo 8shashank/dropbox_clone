@@ -89,7 +89,8 @@ function scheduleChangeCheck(when,repeat){
 }
 
 function del(fileName) {
-    if(!fileName){
+
+    if(!fs.existsSync   (fileName)){
         console.log('Please enter a file to delete');
         return;
     }
