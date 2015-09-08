@@ -8,6 +8,8 @@ app.use(express.static(__dirname));
 app.post('/Submit', function(request, response){
     var today = new Date();
 
+    
+
     var myHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Poor Man\'s Dropbox</title>' +
         '<link rel="stylesheet" type="text/css" href="/assets/basicstyle.css"/></head><body><header>' +
         '<h1 id="heading">Poor Man\'s Dropbox</h1><h3 id="wittyremark">"Quality Source Control...on a budget!"</h3>' +
