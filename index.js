@@ -39,7 +39,7 @@ var syncFile = function(fromPath,toPath){
         trgHandler.writeFile(toPath,base64Data,function(){
             console.log("Copied "+fromPath+" to "+toPath);
         })
-        readLine.question("Please provide your username: ", function(answer) {
+        readLine.question("Please provide your username: ", function(answer) { // Potentially reword "provide" to "enter" for just an extra smidge of clarity.
             readLine.close();
             fs.appendFile('DirectoryModifications.txt', answer + " modified " + fromPath
                     /* + " (" + calculateFileSizeInBytes(fromPath) + "bytes)"*/ + "\n",
