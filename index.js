@@ -129,7 +129,7 @@ function deleteFile(fName){
         return;
     }
 
-    console.log("Deleting file");
+    console.log("File Deleted");
 }
 
 /*
@@ -145,12 +145,11 @@ function listSearch(name, path){
     console.log("searching lists");
     var list = fs.readdirSync(path);
     console.log(list);
-    for (var i = 0; i < list.length; i++){
-        if(list[i] === name) {
-            return true;
-        }
+    var found = list.indexOf(name);
+    if(found == -1) {
+        return false;
     }
-    return false;
+    return true;
 }
 //END MY CONTRIBUTION
 
