@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var fs = require('fs');
+var readline = require('readline');
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
@@ -29,6 +30,8 @@ var sync = require('./lib/sync/sync');
 var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
+// keeps track of the last time dropbox was updated
+var lastUpdate = null;
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -36,7 +39,9 @@ var syncFile = function(fromPath,toPath){
 
     srcHandler.readFile(fromPath,function(base64Data){
         trgHandler.writeFile(toPath,base64Data,function(){
+            lastUpdate = new Date();
             console.log("Copied "+fromPath+" to "+toPath);
+            console.log("Files updated on " + formatTime(lastUpdate));
         })
     });
 }
@@ -76,17 +81,134 @@ function checkForChanges(){
     });
 }
 
+var timer;
 function scheduleChangeCheck(when,repeat){
-    setTimeout(function(){
+    timer = setTimeout(function(){
         checkForChanges();
 
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
 }
 
+function del(fileName) {
+    if(!fileName){
+        console.log('Please enter a file to delete');
+        return;
+    }
+    var path1 = argv.directory1 + '/' + fileName;
+    var path2 = argv.directory2 + '/' + fileName;
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+    try {
+        handler1.deleteFile(path1, function(){});
+        handler2.deleteFile(path2, function(){});
+        lastUpdate = new Date();
+        console.log('Files deleted on ' + formatTime(lastUpdate));
+    } catch (err) {
+        console.log(err.message);
+        return;
+    }
+    console.log('Deleting ' + fileName);
+}
+
+// allows the user to add a new file to the directories
+function add(fileName) {
+    if (!fileName) {
+        console.log('Please enter a file to add');
+        return;
+    }
+    var path1 = argv.directory1 + '/' + fileName;
+    var path2 = argv.directory2 + '/' + fileName;
+    var handler1 = sync.getHandler(path1);
+    var handler2 = sync.getHandler(path2);
+    try {
+        // adds file to both directories
+        handler1.writeFile(path1, 'new File', function(){});
+        handler2.writeFile(path1, 'new File', function(){});
+        lastUpdate = new Date();
+        console.log('Files added on ' + formatTime(lastUpdate));
+    } catch (err) {
+        console.log('Failed to add new file ' + fileName);
+        console.log(err.message);
+        return;
+    }
+    console.log('Adding ' + fileName);
+}
+
+// returns the last time dropbox was updated
+function lastUpdated() {
+    if (lastUpdate) {
+        console.log('Files last updated on ' + formatTime(lastUpdate));
+    } else {
+        console.log('No files have been changed');
+    }
+}
+
+// formats a timestamp into something more readable for the user
+function formatTime(time) {
+    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    var dayOfWeek = time.getDay();
+    var dayName = dayNames[dayOfWeek];
+    var day = time.getDate();
+    var month = time.getMonth();
+    var monthName = monthNames[month];
+    var year = time.getFullYear();
+    var hour = time.getHours();
+    var minute = time.getMinutes();
+    var second = time.getSeconds();
+
+    var update = dayName + ' ' + monthName + ' ' + day + ', ' + year + ' at ' + hour + ':' + minute + '.' + second;
+
+    return update;
+}
+
+// To add valid operations, map user input to the desired function
+var userOps = {
+    quit: null,
+    test: function () { console.log('Test'); },
+    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
+    add : add,
+    delete: del,
+    update: lastUpdated
+};
+
+function getUserInput(){
+    console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
+
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.prompt();
+    rl.on('line', function(line) {
+        var args = line.trim().split(' ');
+        var operation = args.shift();
+
+        if(operation == 'quit') {
+            rl.close();
+            clearTimeout(timer);
+            dnodeClient.end();
+            return;
+        } else if (operation == 'help') {
+            for (var op in userOps) {
+                if (userOps.hasOwnProperty(op)) {
+                    console.log(' * ' + op);
+                }
+            }
+        } else if (userOps.hasOwnProperty(operation)) {
+            userOps[operation].apply(this, args);
+        } else {
+            console.log("Unknown option");
+        }
+        rl.prompt();
+    });
+}
+
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
+    getUserInput();
     scheduleChangeCheck(1000,true);
 });
-
-
