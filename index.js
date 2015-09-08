@@ -2,12 +2,12 @@
 
 var sync = require('./lib/sync/sync');
 var check = require('./lib/sync/check');
-var dnodeClient = require("./lib/sync/sync-client");
+var dnodeClient = require('./lib/sync/sync-client");
 
 
 var argv = require('yargs')
     .usage('Usage: dropbox [options]')
-    .example('dropbox -u username -c credential --d1 dnode://test-data/folder1 --d2 file://test-data/folder2', 
+    .example('dropbox -u username -c credential --d1 dnode://test-data/folder1 --d2 file://test-data/folder2',
             '(after launching the dropbox-server) listen for beacon signals with the given receiver id and reporting websocket url')
     .demand(['u','c','d1','d2'])
     .alias('u', 'username')
@@ -23,13 +23,13 @@ var argv = require('yargs')
     .nargs('d2', 1)
     .describe('d2', 'The local directory to sync')
     .describe('s', 'The sync server (defaults to 127.0.0.1)')
-    .default('s',"127.0.0.1","127.0.0.1")
+    .default('s','127.0.0.1","127.0.0.1")
     .alias('s', 'server')
     .nargs('s', 1)
     .describe('p', 'The base port to connect to on the sync server')
     .alias('p', 'port')
     .nargs('p', 1)
-    .default('p',5004,"5004")
+    .default('p',5004,'5004")
     .epilog('Apache License V2 2015, Jules White')
     .argv;
 
