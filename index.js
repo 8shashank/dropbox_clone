@@ -102,7 +102,13 @@ dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
         authCheck(authenticate); //check
         console.log(authenticate.question);
         prompt.get(['answer'], function(err,result) { //get user input
+            //+++++++++++++++++++Bugfix #2+++++++++++=//
+            // added correct error checking
+            if (err) {
+                throw err;
+            }
             authenticate.answer = result.answer;
+
         });
     }
 
