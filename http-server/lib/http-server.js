@@ -113,3 +113,6 @@ HTTPServer.prototype.close = function () {
 exports.createServer = function (options) {
   return new HTTPServer(options);
 };
+
+//REVIEW COMMENT: appropriate error logging might be helpful here to a user. this may not apply, but if the
+//                cache request times out or the appropriate port isn't available.
