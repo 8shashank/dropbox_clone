@@ -63,25 +63,27 @@ var onConnectionSuccess = function(handler){
     scheduleChangeCheck(1000,true);
 }
 
+var confirm_retry = {
+    name: "retry",
+    message: "Would you like to re-enter your user" +
+        " credentials to try connecting again?",
+    warning: "Please respond with yes or no",
+    default: "no"
+};
+
+var prompt_credentials = {
+    properties: {
+        username: {
+            message: "Please enter your username"
+        },
+        password: {
+            hidden: true
+        }
+    }
+};
+
 var onConnectionError = function(errorMessage){
     console.log(errorMessage);
-    var confirm_retry={
-        name: "retry",
-        message: "Would you like to re-enter your user"+
-        " credentials to try connecting again?",
-        warning: "Please respond with yes or no",
-        default: "no"
-    };
-    var prompt_credentials={
-        properties:{
-            username:{
-                message: "Please enter your username"
-            },
-            password:{
-                hidden: true
-            }
-        }
-    };
     prompt.get(confirm_retry, function(err, result){
         if (err || result.retry==="no" || result.retry.toUpperCase()=="NO"){
             process.exit(1);
