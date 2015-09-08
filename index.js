@@ -119,29 +119,34 @@ var userOps = {
     test: function () { console.log('Test'); },
     func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     delete: del,
-    login: function (username, password) {
-        dnodeClient.connect({host:argv.server, port:argv.port},
-            function(handler, removeListeners){ // callback function upon connection
-                handler.login(username,password, // try to login upon connected to the server
+    login: login
+};
+
+var connected = false;
+
+function login (username, password) {
+    dnodeClient.connect({host:argv.server, port:argv.port},
+        function(handler, removeListeners){ // callback function upon connection
+            handler.login(username,password, // try to login upon connected to the server
                 function() {
                     delete handler.login;
                     sync.fsHandlers.dnode = handler;
                     if(dnodeClient.state.connectStatus) {
+                        connected = true;
                         rl.setPrompt("[Connected]>");
                     }
                     rl.prompt();
                     scheduleChangeCheck(1000, true);
                     removeListeners();
+
                 },
                 function() {
                     console.log("Login failed");
                     rl.prompt();
                     removeListeners();
                 });
-            });
-    }
-};
-
+        });
+}
 function getUserInput(){
     console.log('\nInput a command. Type "help" for available commands or "quit" to quit\n');
 
@@ -169,8 +174,15 @@ function getUserInput(){
 
             default:
                 if (userOps.hasOwnProperty(operation)) {
-                    userOps[operation].apply(this, args);
-                } else {
+                    if(connected && operation === "login"){
+                        console.log("you are already logged in.");
+                    }
+                    else{
+                        userOps[operation].apply(this, args);
+                    }
+
+                }
+                else {
                     console.log("Unknown option");
                 }
                 rl.prompt();
