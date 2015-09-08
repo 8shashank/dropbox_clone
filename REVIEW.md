@@ -10,4 +10,5 @@ This code implements a file log for the Dropbox application. The code is easily 
 1. Writing to the log should be done after the files copied over is completed. Or writing "attempting to X change" and then have a completed one.
 2. Make sure the there is a "record" (or element) that is being modified and check if it's not null
 3. Changed naming to clarify variables use.
-4. Would be cool to implement edge cases for when the program isn't launched in the same folder/having multiple logs/having different log names
+4. Would be cool to implement edge cases for when the program isn't launched in the same folder
+5. User input or location checking to keep records always in the same folder (it changes if launch was in a different folder)
