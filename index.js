@@ -32,6 +32,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 var readline = require('readline');
 
+var noSyncList = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
@@ -52,7 +53,7 @@ writePipeline.addAction({
             //console.log("data: " + data + " toSrc: " + toSrc + " fromPath " + fromPath);
             var toPath = data.srcPath + "/" + toSrc;
             //console.log("data: " + data + " toSrc: " + toSrc + " trgPath " + toPath);
-            if(checkNoSyncFile(toSrc)){
+            if(!checkNoSyncFile(toSrc)){
                 syncFile(fromPath,toPath);
             }
         });
@@ -66,7 +67,7 @@ writePipeline.addAction({
             //console.log("data: " + data + " totrg: " + toTrg + " fromPath " + fromPath);
             var toPath = data.trgPath + "/" + toTrg;
             //console.log("data: " + data + " totrg: " + toTrg + " trgPath " + toPath);
-            if(checkNoSyncFile(toTrg)){
+            if(!checkNoSyncFile(toTrg)){
                 syncFile(fromPath,toPath);
             }
         });
@@ -97,35 +98,39 @@ function scheduleChangeCheck(when,repeat){
 
 // Want to create a function that will never sync a specified file. User input so far that will
 // write to a text file and keep track of no sync files.
-function fileNeverSync(){
-    console.log("Please enter a file to never sync. ");
+function fileNeverSync(cb){
 
-    var r1 = readline.createInterface({
+    var r2 = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
-    r1.setPrompt('File name> ');
-    r1.prompt();
-    r1.on('line', function (line) {console.log("The file you do not want to sync is " + line);
-        if(checkNoSyncFile(line)){
-            writeFile(line);
-            r1.close();
+
+    console.log("Please enter a file to never sync. ");
+
+    r2.setPrompt('File name> ');
+    r2.prompt();
+    r2.on('line', function (line) {
+        console.log("The file you do not want to sync is " + line);
+        if(!checkNoSyncFile(line)){
+            writeFile(line, cb);
         }
         else{
             console.log(line + " is already in the no sync list.");
+            cb();
         }
-
-    })
+        r2.close();
+    });
 }
 
 // Wrote a function to write to text files given the user input.
-function writeFile(filenosync){
+function writeFile(filenosync, cb){
     if(!fs.existsSync('neversyncfile.txt')){
         fs.writeFile('neversyncfile.txt', filenosync + '\n', function(err){
             if(err){
                 throw err;
             }
             console.log(filenosync + " added to no sync log.");
+            cb();
         })
     }
     else{
@@ -135,6 +140,7 @@ function writeFile(filenosync){
                 throw err;
             }
             console.log(filenosync + " added to no sync log.");
+            cb();
         })
     }
 }
@@ -142,15 +148,14 @@ function writeFile(filenosync){
 // Wrote a function to take in a file name and check if it's in the no sync list.
 // Returns true if file is not found in no sync file. Returns false if it is and no sync.
 function checkNoSyncFile(filename) {
-    var array = fs.readFileSync('neversyncfile.txt').toString().split('\n');
 
-    if (array.indexOf(filename) === -1) {
+    if (noSyncList.indexOf(filename) === -1) {
         //console.log(filename + " was not found in log.");
-        return true;
+        return false;
     }
     else {
         //console.log(filename + " was found in log and will not be synced.");
-        return false;
+        return true;
     }
 }
 
@@ -165,15 +170,15 @@ function askUserInput(){
     r1.on('line', function (line) {
         if(line === "1"){
             r1.close();
-            fileNeverSync();
+            fileNeverSync(function() { askUserInput(); });
         }
         else if (line === "2"){
-            r1.close()
+            r1.close();
             scheduleChangeCheck(1000,true);
         }
         else{
-            r1.close();
             console.log("Entered in unknown option.");
+            r1.prompt();
         }
 
     })
