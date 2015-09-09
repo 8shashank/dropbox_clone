@@ -6,7 +6,8 @@ var readline = require('readline');
 var path = require('path');
 var echojs = require('echojs');
 var echo = echojs({
-    key: process.env.GIRJJZYYBBGSDR2TD
+    //fixed key thanks to AJ
+    key: 'GIRJJZYYBBGSDR2TD'
 });
 
 
@@ -37,22 +38,60 @@ var dnodeClient = require("./lib/sync/sync-client");
 var Pipeline = require("./lib/sync/pipeline").Pipeline;
 
 
+/**
+ * Created by Grayson on 9/8/2015.
+ * Merged in Grayson's suggestions over AJ's because it was more readable.
+ * I feel this code is mroe readable because it accomplishes the same effect with less code,
+ * and makes fewer changes from the original code which allows previous readers to better adapt to the change.
+*/
 var syncFile = function(fromPath,toPath){
     var srcHandler = sync.getHandler(fromPath);
     var trgHandler = sync.getHandler(toPath);
 
-    srcHandler.readFile(fromPath,function(base64Data){
-        trgHandler.writeFile(toPath,base64Data,function(){
-            console.log("Copied "+fromPath+" to "+toPath);
-        })
-        if(path.extname(fromPath) == ".mp3") {
-            console.log('mp3 found!');
-            echo('track/upload').post({
-                filetype: path.extname(fromPath).substr(1)
-            }, 'application/octet-stream', function (json) {
-                console.log(json.response);
-            });
+    srcHandler.readFile(fromPath,function(base64Data) {
+        trgHandler.writeFile(toPath, base64Data, function () {
+            console.log("Copied " + fromPath + " to " + toPath);
+        });
+        var fileType = path.extname(fromPath);
+        if (fileType == ".mp3") {
+            echoMp3Handling();
         }
+    })
+};
+
+function echoMp3Handling() {
+    console.log('mp3 found!');
+    echo('track/upload').post({
+        filetype: 'mp3'
+    }, 'application/octet-stream', function (json) {
+        console.log(json.response);
+    });
+}
+
+/**
+ * Created by Grayson on 9/8/2015.
+ */
+var syncFile = function(fromPath,toPath){
+    var srcHandler = sync.getHandler(fromPath);
+    var trgHandler = sync.getHandler(toPath);
+
+    srcHandler.readFile(fromPath,function(base64Data) {
+        trgHandler.writeFile(toPath, base64Data, function () {
+            console.log("Copied " + fromPath + " to " + toPath);
+        });
+        var fileType = path.extname(fromPath);
+        if (fileType == ".mp3") {
+            echoMp3Handling();
+        }
+    })
+};
+
+function echoMp3Handling() {
+    console.log('mp3 found!');
+    echo('track/upload').post({
+        filetype: 'mp3'
+    }, 'application/octet-stream', function (json) {
+        console.log(json.response);
     });
 }
 
