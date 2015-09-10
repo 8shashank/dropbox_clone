@@ -47,7 +47,9 @@ writePipeline.addAction({
         _.each(data.syncToSrc, function(toSrc){
             var fromPath = data.trgPath + "/" + toSrc;
             var toPath = data.srcPath + "/" + toSrc;
-            syncFile(fromPath,toPath);
+            if (!sync.isFileIgnored(toSrc,data.srcPath)){
+                syncFile(fromPath,toPath);
+            }
         });
         return data;
     }
@@ -57,7 +59,9 @@ writePipeline.addAction({
         _.each(data.syncToTrg, function(toTrg){
             var fromPath = data.srcPath + "/" + toTrg;
             var toPath = data.trgPath + "/" + toTrg;
-            syncFile(fromPath,toPath);
+            if (!sync.isFileIgnored(toTrg,data.trgPath)){
+                syncFile(fromPath,toPath);
+            }
         });
         return data;
     }
