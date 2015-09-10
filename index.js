@@ -114,22 +114,23 @@ var emailUpdates = function (emailAddress, hours){
                 'For example: "emailupdates bob@bob.com 15" \n' +
                 'Bob will get an email giving him his updates for the past 15 hours. \n' +
                 'If you do not enter a number of hours, it will default to 24 hours.';
-        console.log(errorMessage);
+        console.error(errorMessage);
         return;
     }
 
     if (hours < 0){
-        console.log("Please enter a positive number of hours");
+        console.error('Please enter a positive number of hours');
         return;
     }
 
-    var path = uris.getPath(argv.directory1);
+    var path1 = uris.getPath(argv.directory1);
+    var path2 = uris.getPath(argv.directory2);
 
     if (!hours){
         hours = 24;
     }
 
-    updateEmailer.emailUpdates(path, emailAddress, hours);
+    updateEmailer.emailUpdates(path1, path2, emailAddress, hours);
 };
 
 // To add valid operations, map user input to the desired function
