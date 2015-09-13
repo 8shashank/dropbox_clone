@@ -52,7 +52,10 @@ writePipeline.addAction({
         _.each(data.syncToSrc, function(toSrc){
             var fromPath = data.trgPath + "/" + toSrc;
             var toPath = data.srcPath + "/" + toSrc;
-            syncFile(fromPath,toPath);
+            //If file is ignored in destination, do not sync it
+            if (!sync.isFileIgnored(toSrc,data.srcPath)){
+                syncFile(fromPath,toPath);
+            }
         });
         return data;
     }
@@ -62,7 +65,9 @@ writePipeline.addAction({
         _.each(data.syncToTrg, function(toTrg){
             var fromPath = data.srcPath + "/" + toTrg;
             var toPath = data.trgPath + "/" + toTrg;
-            syncFile(fromPath,toPath);
+            if (!sync.isFileIgnored(toTrg,data.trgPath)){
+                syncFile(fromPath,toPath);
+            }
         });
         return data;
     }
@@ -77,6 +82,7 @@ function checkForChanges(){
         rslt.srcPath = path1;
         rslt.trgPath = path2;
 
+        console.log(JSON.stringify(rslt));
         writePipeline.exec(rslt);
     });
 }
@@ -160,8 +166,6 @@ function formatTime(time) {
 // To add valid operations, map user input to the desired function
 var userOps = {
     quit: null,
-    test: function () { console.log('Test'); },
-    func: function (in1, in2) { console.log(in1 + ' and ' + in2); },
     add : add,
     delete: del,
     update: lastUpdated
@@ -169,8 +173,6 @@ var userOps = {
 
 var helpInfo = {
     quit: "Quits the User Input",
-    test: "Prints out \"test\"",
-    func: "Adds two supplied numbers together",
     add : "Adds a file to the dropbox with a supplied path",
     delete: "Deletes a file from the dropbox with a supplied path",
     update: "Gives the timestamp of the last change to the dropbox"
