@@ -4,13 +4,13 @@
   "description": "A Dropbox-like app",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=lib node index.js"
+    "start": "NODE_PATH=lib node index.js",
+    "test": "mocha test"
   },
-  "bin":
-    {
-      "dropbox": "index.js",
-      "dropbox-server":"lib/sync/sync-server.js"
-    },
+  "bin": {
+    "dropbox": "index.js",
+    "dropbox-server": "lib/sync/sync-server.js"
+  },
   "author": "Jules",
   "license": "Apache 2",
   "dependencies": {
@@ -18,5 +18,8 @@
     "dnode": "^1.2.1",
     "lodash": "^3.10.1",
     "yargs": "^3.19.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0"
   }
 }
