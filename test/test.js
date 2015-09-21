@@ -3,8 +3,6 @@ var fs = require("fs");
 var expect = require('chai').expect;
 var dnode=require('dnode');
 var dropboxIgnore="_.dropboxignore";
-//var syncClient=require('../lib/sync/sync-client');
-//var syncServer=require('../lib/sync/sync-server');
 
 describe('dropboxURIs', function(){
     var uris = require("../lib/sync/dropboxuris");
@@ -28,6 +26,31 @@ describe('dropboxURIs', function(){
         });
     });
 
+});
+
+describe('base64utils', function(){
+    var base64utils=require('../lib/sync/base64utils');
+
+    before(function(){
+        fs.mkdirSync("test-temp");
+        fs.writeFileSync("test-temp/test.txt", "testing");
+        fs.writeFileSync("test-temp/test2.txt");
+    });
+
+    after(function(){
+        fs.unlinkSync("test-temp/test2.txt");
+        fs.unlinkSync("test-temp/test.txt");
+        fs.rmdirSync("test-temp");
+    });
+
+    it('Should decode base64 correctly', function(){
+        expect(base64utils.readBase64Encoded("test-temp/test.txt")).to.equal(new Buffer("testing").toString("base64"));
+    });
+
+    it('Should encode base64 correctly', function(){
+        base64utils.writeFromBase64Encoded(new Buffer("testing").toString("base64"), "test-temp/test2.txt");
+        expect(fs.readFileSync('test-temp/test2.txt','utf8')).to.equal("testing");
+    });
 });
 
 describe('sync', function()
@@ -96,7 +119,7 @@ describe('sync', function()
 
         it('Should return falsy value such as undefined if second file is undefined', function(){
             expect(sync.filesMatchName(stat1,undefined)).to.not.be.ok;
-        })
+        });
 
         it('Files having different sizes should not match', function(){
             expect(sync.filesMatchNameAndSize(stat1,stat2)).to.not.equal.true;
@@ -124,7 +147,7 @@ describe('sync-driver', function(){
         };
 
         var folder1=argv.directory1;
-        var folder2=argv.directory2
+        var folder2=argv.directory2;
 
         before(function() {
             fs.mkdirSync(mainFolder);
@@ -168,21 +191,21 @@ describe('sync-driver', function(){
         it('should not sync ignoreme12.txt to folder2', function(){
             syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder2)).to.not.include("ignoreme12.txt");
-        })
+        });
 
         //This file is present in both folders
         it('should not sync ignoreme11.txt to or from folder2', function(){
             syncDriver.checkForChanges(sync,argv);
             expect(fs.readFileSync(folder2+"/ignoreme11.txt", {encoding: 'utf8'})).to.not.include("folder1");
             expect(fs.readFileSync(folder1+"/ignoreme11.txt", {encoding: 'utf8'})).to.not.include("folder2");
-        })
+        });
 
         //This file is ignored in folder1 but not present there
         it('should not sync ignoreme21.txt to folder1', function(){
             syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder1)).to.not.include("ignoreme21.txt");
-        })
-    })
+        });
+    });
 
     //When only one folder has a dropboxIgnore
     describe('#checkForChanges#2', function(){
@@ -265,7 +288,7 @@ describe('pipeline', function(){
         var pipeline=new Pipeline();
         pipeline.addAction(action1);
         assert(pipeline.exec(testNum).result===action1.exec(testNum));
-    })
+    });
 
     it('Pipeline should execute all actions', function(){
         var pipeline=new Pipeline();
