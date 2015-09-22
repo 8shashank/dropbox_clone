@@ -1,7 +1,6 @@
 var assert = require("assert");
 var fs = require("fs");
 var expect = require('chai').expect;
-var dnode=require('dnode');
 var dropboxIgnore="_.dropboxignore";
 
 describe('dropboxURIs', function(){
@@ -71,25 +70,26 @@ describe('sync', function()
             fs.rmdirSync("test-temp/folder2");
             fs.rmdirSync("test-temp");
         });
+        
+        var handler=sync.getHandler('file');
+        
+        //Checking if handler above would have returned undefined
+        it('should automatically create a localFS handler mapped to the file protocol', function () {
+            expect(sync.getHandler('file')).to.not.be.undefined;
+        });
 
         it('should have the localFs handler notify the callback when the write is complete', function (done) {
-            var handler = sync.getHandler('file');
-
             handler.writeFile("test-temp/folder1/test.txt","",function(){
                 done();
             });
         });
         it('should have the localFs handler notify callback when stat is complete', function(done){
-            var handler=sync.getHandler('file');
-
             handler.stat("test-temp/folder1/", function(){
                 done();
             });
 
         });
         it('should have the localFs handler notify the callback when the read is complete', function (done) {
-            var handler = sync.getHandler('file');
-
             handler.readFile("test-temp/folder1/test.txt",function(){
                 done();
             });
@@ -99,17 +99,6 @@ describe('sync', function()
                 expect(result.syncToTrg).to.include("test.txt");
             });
         });
-
-        it('should automatically create a localFS handler mapped to the file protocol', function () {
-            // should we test this
-            assert('file' in sync.fsHandlers);
-
-            // or should we test this
-            assert(sync.getHandler('file'));
-
-            expect(true).to.not.equal(false);
-        });
-
     });
 
     describe('#comparisons', function(){
@@ -162,6 +151,7 @@ describe('sync-driver', function(){
 
             fs.writeFileSync(folder1+"/"+dropboxIgnore, "ignoreme11.txt\nignoreme12.txt\nignoreme21.txt");
             fs.writeFileSync(folder2+"/"+dropboxIgnore, "ignoreme21.txt");
+            syncDriver.checkForChanges(sync,argv);
         });
 
         after(function(){
@@ -182,27 +172,23 @@ describe('sync-driver', function(){
         });
 
         it('should have test.txt synced to folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             var files=fs.readdirSync(folder2);
             expect(files).to.include("test.txt");
         });
 
         //This file is present in folder1 but not in folder2.
         it('should not sync ignoreme12.txt to folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder2)).to.not.include("ignoreme12.txt");
         });
 
         //This file is present in both folders
         it('should not sync ignoreme11.txt to or from folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readFileSync(folder2+"/ignoreme11.txt", {encoding: 'utf8'})).to.not.include("folder1");
             expect(fs.readFileSync(folder1+"/ignoreme11.txt", {encoding: 'utf8'})).to.not.include("folder2");
         });
 
         //This file is ignored in folder1 but not present there
         it('should not sync ignoreme21.txt to folder1', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder1)).to.not.include("ignoreme21.txt");
         });
     });
@@ -319,20 +305,6 @@ describe('sync server/client', function(){
         host: "127.0.0.1"
     };
 
-    it('Server should be connectable', function(done){
-        var server=require('../lib/sync/sync-server');
-        var port = options.port;
-        var host = options.host;
-
-        var d = dnode({},{weak:false});
-        var conn = d.connect(host,port);
-
-        conn.on('remote', function (remote) {
-            d.end();
-            done();
-        });
-    });
-
     it('dnode handler should have all required functions', function(done){
         var server=require('../lib/sync/sync-server');
         var client=require('../lib/sync/sync-client');
@@ -344,6 +316,6 @@ describe('sync server/client', function(){
             expect(typeof handler.deleteFile).to.equal("function");
             expect(typeof handler.stat).to.equal("function");
             done();
-        })
+        });
     });
 });
