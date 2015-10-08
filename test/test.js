@@ -94,11 +94,13 @@ describe('sync', function()
                 done();
             });
         });
+
         it('should correctly identify a simple file that is not in the target directory', function () {
             sync.compare("test-temp/folder1","test-temp/folder2",sync.filesMatchNameAndSize,function(result){
                 expect(result.syncToTrg).to.include("test.txt");
             });
         });
+
     });
 
     describe('#comparisons', function(){
@@ -212,6 +214,7 @@ describe('sync-driver', function(){
             fs.writeFileSync(folder1+"/test11.txt","folder1");
             fs.writeFileSync(folder1+"/test12.txt");
             fs.writeFileSync(folder1+""+"/"+dropboxIgnore, "test11.txt");
+            syncDriver.checkForChanges(sync,argv);
         });
 
         after(function(){
@@ -225,17 +228,14 @@ describe('sync-driver', function(){
         });
 
         it('should sync test12.txt to folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder2)).to.include("test12.txt");
         });
 
         it('should not sync test11.txt to folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder2)).to.not.include("test11.txt");
         });
 
         it('should not sync dropboxIgnore file to folder2', function(){
-            syncDriver.checkForChanges(sync,argv);
             expect(fs.readdirSync(folder2)).to.not.include("_.dropboxignore");
         })
     })
@@ -246,14 +246,6 @@ describe('pipeline', function(){
     var action1={exec: function(num){ return num + 1;}};
     var action2={exec: function(num) {return num * 3;}};
     var testNum=5;
-
-    it('should include exec function', function(){
-        expect(Pipeline.prototype.hasOwnProperty("exec")).to.be.true;
-    });
-
-    it('should include addAction function', function(){
-        expect(Pipeline.prototype.hasOwnProperty("addAction")).to.be.true;
-    });
 
     it('Pipeline should only accept action with exec function', function(){
         var pipeline=new Pipeline();

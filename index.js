@@ -34,7 +34,7 @@ var Pipeline = require("./lib/sync/pipeline").Pipeline;
 var timer;
 function scheduleChangeCheck(when,repeat){
     timer = setTimeout(function(){
-        syncDriver.checkForChanges(sync,argv);
+        syncDriver.checkForChanges(argv);
 
         if(repeat){scheduleChangeCheck(when,repeat)}
     },when);
@@ -102,6 +102,7 @@ function getUserInput(){
 
 dnodeClient.connect({host:argv.server, port:argv.port}, function(handler){
     sync.fsHandlers.dnode = handler;
+    syncDriver.setSyncObject(sync);
     scheduleChangeCheck(1000,true);
     getUserInput();
 });
